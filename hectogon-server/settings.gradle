@@ -1,0 +1,4 @@
+include ':hectogon-commons'
+project(':hectogon-commons').projectDir = new File(settingsDir, '../hectogon-commons')
+
+
