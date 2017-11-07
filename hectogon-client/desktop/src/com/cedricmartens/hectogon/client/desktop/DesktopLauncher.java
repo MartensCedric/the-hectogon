@@ -1,8 +1,8 @@
-package com.cedricmartens.desktop;
+package com.cedricmartens.hectogon.client.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.cedricmartens.Game;
+import com.cedricmartens.hectogon.client.core.Game;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
