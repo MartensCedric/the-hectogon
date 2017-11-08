@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketInChat;
+import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 import com.cedricmartens.hectogon.client.core.screens.StageScreen;
 
@@ -34,17 +35,6 @@ public class Hectogon extends Game
 
 		this.screens = new Stack<Screen>();
 		this.pushScreen(new MainMenuScreen());
-
-		try {
-			Socket socket = new Socket("127.0.0.1", 6666);
-			Packet packetChat = new PacketInChat("This is a test", 0, 0, ChatType.GLOBAL);
-			Packet.writeHeader(PacketInChat.class, socket.getOutputStream());
-			packetChat.writeTo(socket.getOutputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
 	}
 
 	public void pushScreen(Screen screen)

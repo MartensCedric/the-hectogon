@@ -1,10 +1,12 @@
 package com.cedricmartens.commons.networking;
 
+import com.cedricmartens.commons.networking.authentification.PacketInLogin;
+
 public enum  PacketType
 {
     //Add packets here
     IN_CHAT(PacketInChat.class),
-    IN_CHAT_PM(PacketInChatPrivate.class)
+    IN_LOGIN(PacketInLogin.class)
     ;
     private Class<? extends Packet> type;
 

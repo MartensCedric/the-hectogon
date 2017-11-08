@@ -5,39 +5,29 @@ import com.cedricmartens.commons.networking.Packet;
 
 import java.io.*;
 
-/**
- * Created by 1544256 on 2017-11-08.
- */
-public class PacketOutLogin extends Packet {
+public class PacketOutRegister extends Packet
+{
 
-    private LoginStatus loginStatus;
+    private RegisterStatus registerStatus;
     private String token;
 
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);
+        int registerCode = dataInputStream.readInt();
 
-        int responseCode = dataInputStream.readInt();
-        if(responseCode < 0 || responseCode >= LoginStatus.values().length)
-            throw new InvalidPacketDataException(responseCode + " is not a valid value for LoginStatus");
+        if(registerCode < 0 || registerCode >= RegisterStatus.values().length)
+            throw new InvalidPacketDataException(registerCode + " is not a valid value for RegisterStatus");
 
 
-        loginStatus = LoginStatus.values()[dataInputStream.readInt()];
+        registerStatus = RegisterStatus.values()[registerCode];
         token = dataInputStream.readUTF();
     }
 
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeInt(loginStatus.ordinal());
+        dataOutputStream.writeInt(registerStatus.ordinal());
         dataOutputStream.writeUTF(token);
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

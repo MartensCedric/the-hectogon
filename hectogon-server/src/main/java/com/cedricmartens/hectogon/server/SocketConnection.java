@@ -3,12 +3,14 @@ package com.cedricmartens.hectogon.server;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketInChat;
+import com.cedricmartens.commons.networking.authentification.LoginStatus;
 import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class SocketConnection implements SocketListener {
 
@@ -16,7 +18,7 @@ public class SocketConnection implements SocketListener {
 
     private Socket socket;
     private int playerId = ANONYMOUS_PLAYER;
-    private boolean listening;
+    private boolean listening = true;
 
     public SocketConnection(Socket socket) {
         this.socket = socket;
@@ -40,6 +42,8 @@ public class SocketConnection implements SocketListener {
 
     @Override
     public void listen(Server server) {
+
+        System.out.println("Listening to socket : " + socket.getInetAddress());
         while (listening)
         {
             try {
@@ -50,14 +54,24 @@ public class SocketConnection implements SocketListener {
                 {
                     PacketInLogin packetInLogin = (PacketInLogin) packet;
                     AuthentificationService authService = Authentificator.getAuthentificationService();
-                    authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
+                    LoginStatus loginStatus = authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
+
+                    if(loginStatus == LoginStatus.OK)
+                    {
+                        System.out.println("Logged in!");
+                    }
 
                 }else if(packet instanceof PacketInChat)
                 {
                     PacketInChat packetInChat = (PacketInChat) packet;
+                    System.out.println(packetInChat.getMessage());
                 }
 
-            } catch (IOException e) {
+            }catch (SocketException socketException)
+            {
+                listening = false;
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
