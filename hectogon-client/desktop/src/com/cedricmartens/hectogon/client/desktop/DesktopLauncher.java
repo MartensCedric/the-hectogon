@@ -2,11 +2,13 @@ package com.cedricmartens.hectogon.client.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.cedricmartens.hectogon.client.core.Game;
+import com.cedricmartens.hectogon.client.core.Hectogon;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Game(), config);
+		config.width = 960;
+		config.height = 540;
+		new LwjglApplication(new Hectogon(), config);
 	}
 }
