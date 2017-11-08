@@ -1,15 +1,28 @@
 package com.cedricmartens.hectogon.server;
 
-import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.networking.Packet;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Match
 {
-    private List<User> users;
+    private List<SocketConnection> connections;
 
-    public Match()
+    public Match(List<SocketConnection> connections)
     {
+        this.connections = connections;
+    }
 
+    public void sendToEveryone(Packet packet)
+    {
+        for(int i = 0; i < connections.size(); i++)
+        {
+            try {
+                connections.get(i).sendPacket(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

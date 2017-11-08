@@ -35,6 +35,7 @@ public class Hectogon extends Game
 
 		this.screens = new Stack<Screen>();
 		this.pushScreen(new MainMenuScreen());
+		
 	}
 
 	public void pushScreen(Screen screen)

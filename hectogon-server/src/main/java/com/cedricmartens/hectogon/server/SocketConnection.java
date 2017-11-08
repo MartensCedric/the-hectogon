@@ -40,6 +40,11 @@ public class SocketConnection implements SocketListener {
         this.playerId = playerId;
     }
 
+    public void sendPacket(Packet packet) throws IOException {
+        Packet.writeHeader(packet.getClass(), socket.getOutputStream());
+        packet.writeTo(socket.getOutputStream());
+    }
+
     @Override
     public void listen(Server server) {
 
@@ -67,12 +72,9 @@ public class SocketConnection implements SocketListener {
                     System.out.println(packetInChat.getMessage());
                 }
 
-            }catch (SocketException socketException)
-            {
-                listening = false;
-            }
-            catch (IOException e) {
+            }catch (IOException e) {
                 e.printStackTrace();
+                listening = false;
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {

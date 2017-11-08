@@ -39,6 +39,7 @@ public class Server implements Runnable
                 new Thread(() -> socketConnection.listen(this)).run();
             } catch (IOException e) {
                 e.printStackTrace();
+                listening = false;
             }
         }
     }
