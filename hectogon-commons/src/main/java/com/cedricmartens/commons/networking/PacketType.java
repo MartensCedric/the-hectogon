@@ -17,7 +17,7 @@ public enum  PacketType
     public static Class<? extends Packet> getById(int id)
     {
         if(id <= Packet.NO_ID || id >= values().length)
-            throw new IllegalArgumentException(); //TODO custom ex
+            throw new IllegalArgumentException();
 
         return values()[id].type;
     }
