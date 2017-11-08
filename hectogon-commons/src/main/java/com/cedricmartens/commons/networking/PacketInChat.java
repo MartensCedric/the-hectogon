@@ -9,20 +9,18 @@ public class PacketInChat extends Packet
     private String message;
     private int senderId;
     private ChatType chatType;
-    private int matchId;
 
     public PacketInChat()
     {
         super();
     }
 
-    public PacketInChat(String message, int senderId, int matchId, ChatType chatType)
+    public PacketInChat(String message, int senderId, ChatType chatType)
     {
         super();
         this.message = message;
         this.senderId = senderId;
         this.chatType = chatType;
-        this.matchId = matchId;
     }
 
     @Override
@@ -36,7 +34,6 @@ public class PacketInChat extends Packet
             throw new InvalidPacketDataException(chatType + " is not a valid value for chatType");
 
         this.chatType = ChatType.values()[chatType];
-        this.matchId = dataInputStream.readInt();
     }
 
     @Override
@@ -45,7 +42,6 @@ public class PacketInChat extends Packet
         dataOutputStream.writeUTF(message);
         dataOutputStream.writeInt(senderId);
         dataOutputStream.writeInt(chatType.ordinal());
-        dataOutputStream.writeInt(matchId);
     }
 
     public String getMessage() {

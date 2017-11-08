@@ -1,22 +1,10 @@
 package com.cedricmartens.hectogon.client.core;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.cedricmartens.commons.chat.ChatType;
-import com.cedricmartens.commons.networking.Packet;
-import com.cedricmartens.commons.networking.PacketInChat;
-import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
-import com.cedricmartens.hectogon.client.core.screens.StageScreen;
-
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Stack;
 
 public class Hectogon extends Game
@@ -35,7 +23,6 @@ public class Hectogon extends Game
 
 		this.screens = new Stack<Screen>();
 		this.pushScreen(new MainMenuScreen());
-		
 	}
 
 	public void pushScreen(Screen screen)

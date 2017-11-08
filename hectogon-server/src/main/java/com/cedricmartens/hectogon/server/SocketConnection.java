@@ -5,6 +5,8 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketInChat;
 import com.cedricmartens.commons.networking.authentification.LoginStatus;
 import com.cedricmartens.commons.networking.authentification.PacketInLogin;
+import com.cedricmartens.commons.networking.authentification.PacketInRegister;
+import com.cedricmartens.commons.networking.authentification.RegisterStatus;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
 
@@ -66,7 +68,19 @@ public class SocketConnection implements SocketListener {
                         System.out.println("Logged in!");
                     }
 
-                }else if(packet instanceof PacketInChat)
+                }else if(packet instanceof PacketInRegister)
+                {
+                    PacketInRegister packetInRegister = (PacketInRegister) packet;
+                    AuthentificationService authService = Authentificator.getAuthentificationService();
+                    RegisterStatus registerStatus = authService.register(packetInRegister.getUsername(),
+                            packetInRegister.getEmail(), packetInRegister.getPassword());
+
+                    if(registerStatus == RegisterStatus.OK)
+                    {
+                        System.out.println("Registered!");
+                    }
+                }
+                else if(packet instanceof PacketInChat)
                 {
                     PacketInChat packetInChat = (PacketInChat) packet;
                     System.out.println(packetInChat.getMessage());
