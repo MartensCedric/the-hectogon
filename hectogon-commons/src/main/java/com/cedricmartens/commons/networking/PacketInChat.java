@@ -23,12 +23,17 @@ public class PacketInChat extends Packet
     }
 
     @Override
-    public void readFrom(InputStream inputStream) throws IOException {
+    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         this.message = dataInputStream.readUTF();
         this.senderId = dataInputStream.readInt();
         int chatType = dataInputStream.readInt();
-        //TODO custom ex
+
+        if(chatType < 0 || chatType >= ChatType.values().length)
+        {
+            throw new InvalidPacketDataException(chatType + " is not a valid value for chatType");
+        }
+
         this.chatType = ChatType.values()[chatType];
     }
 
@@ -50,5 +55,14 @@ public class PacketInChat extends Packet
 
     public ChatType getChatType() {
         return chatType;
+    }
+
+    @Override
+    public String toString() {
+        return "PacketInChat{" +
+                "message='" + message + '\'' +
+                ", senderId=" + senderId +
+                ", chatType=" + chatType +
+                '}';
     }
 }

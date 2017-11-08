@@ -2,7 +2,7 @@ package com.cedricmartens.hectogon.client.core.util;
 
 import java.security.MessageDigest;
 
-public class MathUtil
+public class AuthentificationUtil
 {
     public static String sha256(String base) {
         try{
@@ -20,5 +20,15 @@ public class MathUtil
         } catch(Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String saltString(String salt, String base)
+    {
+        return sha256(salt + base);
+    }
+
+    public static String hash(String base, String salt)
+    {
+        return saltString(salt, sha256(base));
     }
 }

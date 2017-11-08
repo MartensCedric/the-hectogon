@@ -9,7 +9,7 @@ public abstract class Packet
 
     public Packet(){}
 
-    public abstract void readFrom(InputStream inputStream) throws IOException;
+    public abstract void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException;
     public abstract void writeTo(OutputStream outputStream) throws IOException;
 
     public static void writeHeader(Class<? extends Packet> packet, OutputStream outputStream) throws IOException {

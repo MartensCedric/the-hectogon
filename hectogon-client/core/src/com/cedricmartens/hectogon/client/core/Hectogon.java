@@ -31,6 +31,8 @@ public class Hectogon extends Game
 
 		assetManager = new AssetManager();
 		assetManager.finishLoading();
+
+		this.screens = new Stack<Screen>();
 		this.pushScreen(new MainMenuScreen());
 	/**
 		try {

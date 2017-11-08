@@ -14,7 +14,7 @@ public class PacketInChatPrivate extends PacketInChat {
     }
 
     @Override
-    public void readFrom(InputStream inputStream) throws IOException {
+    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         super.readFrom(inputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         recipientId = dataInputStream.readInt();
@@ -29,5 +29,12 @@ public class PacketInChatPrivate extends PacketInChat {
 
     public int getRecipientId() {
         return recipientId;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\nPacketInChatPrivate{" +
+                "recipientId=" + recipientId +
+                '}';
     }
 }
