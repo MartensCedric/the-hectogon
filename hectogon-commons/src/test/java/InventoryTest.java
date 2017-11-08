@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class InventoryTest {
 
-    @Test(timeout = 500)
+    @Test(timeout = 1000)
     public void testAddItem()
     {
         Inventory inventory = new Inventory(4);
@@ -24,7 +24,7 @@ public class InventoryTest {
         assertEquals(6, inventory.getQuantity(Item.arr_wood));
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testAddItemOnMultipleStacks()
     {
         Inventory inventory = new Inventory(5);
@@ -38,7 +38,7 @@ public class InventoryTest {
         assertEquals(3, inventory.stackCount(Item.arr_wood));
     }
 
-    @Test(timeout = 500)
+    @Test(timeout = 1000)
     public void testAddItemOnIncompleteStacks()
     {
         Inventory inventory = new Inventory(5);
@@ -48,7 +48,7 @@ public class InventoryTest {
         assertEquals(3, inventory.stackCount(Item.arr_wood));
     }
 
-    @Test(expected = InventoryOperationException.class, timeout = 500)
+    @Test(expected = InventoryOperationException.class, timeout = 1000)
     public void testAddItemInventoryFullKO()
     {
         Inventory inventory = new Inventory(5);
@@ -68,7 +68,7 @@ public class InventoryTest {
         new Inventory(0);
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testCapacityForItemOK()
     {
         Inventory inventory = new Inventory(5);
@@ -79,7 +79,7 @@ public class InventoryTest {
         assertEquals(3, inventory.getCapacityForItem(Item.swd_wood));
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testRemoveItemSimpleOK()
     {
         Inventory inventory = new Inventory(5);
@@ -88,7 +88,7 @@ public class InventoryTest {
         assertEquals(11, inventory.getQuantity(Item.arr_wood));
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testRemoveItemMultipleStackOK()
     {
         Inventory inventory = new Inventory(5);
@@ -97,7 +97,7 @@ public class InventoryTest {
         assertEquals(15, inventory.getQuantity(Item.arr_wood));
     }
 
-    @Test(timeout = 500)
+    @Test(timeout = 1000)
     public void testRemoveItemAtOK()
     {
         Inventory inventory = new Inventory(5);
@@ -106,20 +106,20 @@ public class InventoryTest {
         Assert.assertEquals(16, inventory.getQuantity(Item.arr_wood), 0);
     }
 
-    @Test(timeout = 500, expected = InventoryOperationException.class)
+    @Test(timeout = 1000, expected = InventoryOperationException.class)
     public void testRemoveItemAtKO()
     {
         Inventory inventory = new Inventory(5);
         inventory.removeItemAt(3);
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testIsEmpty()
     {
         Assert.assertTrue(new Inventory(5).isEmpty());
     }
 
-    @Test (timeout = 500)
+    @Test (timeout = 1000)
     public void testIsEmptyAfterManipulation()
     {
         Inventory inv = new Inventory(5);

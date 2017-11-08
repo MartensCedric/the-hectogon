@@ -1,11 +1,14 @@
-package com.cedricmartens.commons.networking;
+package com.cedricmartens.commons.networking.authentification;
+
+import com.cedricmartens.commons.networking.InvalidPacketDataException;
+import com.cedricmartens.commons.networking.Packet;
 
 import java.io.*;
 
 /**
  * Created by Cedric Martens on 2017-11-08.
  */
-public class PacketLogin extends Packet
+public class PacketInLogin extends Packet
 {
     String username;
     String password;
@@ -15,6 +18,7 @@ public class PacketLogin extends Packet
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         this.setUsername(dataInputStream.readUTF());
         this.setPassword(dataInputStream.readUTF());
+        dataInputStream.close();
     }
 
     @Override
@@ -22,6 +26,7 @@ public class PacketLogin extends Packet
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeUTF(getUsername());
         dataOutputStream.writeUTF(getPassword());
+        dataOutputStream.close();
     }
 
     public String getUsername() {

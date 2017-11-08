@@ -18,6 +18,7 @@ public class PacketInChatPrivate extends PacketInChat {
         super.readFrom(inputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         recipientId = dataInputStream.readInt();
+        dataInputStream.close();
     }
 
     @Override
@@ -25,6 +26,7 @@ public class PacketInChatPrivate extends PacketInChat {
         super.writeTo(outputStream);
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(recipientId);
+        dataOutputStream.close();
     }
 
     public int getRecipientId() {

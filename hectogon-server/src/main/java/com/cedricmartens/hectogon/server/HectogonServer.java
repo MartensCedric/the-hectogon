@@ -1,5 +1,6 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketInChat;
 
@@ -30,6 +31,8 @@ public class HectogonServer
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvalidPacketDataException e) {
             e.printStackTrace();
         }
         System.out.println("Hello World!");
