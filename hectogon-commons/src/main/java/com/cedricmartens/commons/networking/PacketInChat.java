@@ -9,17 +9,19 @@ public class PacketInChat extends Packet
     private String message;
     private int senderId;
     private ChatType chatType;
+    private int matchId;
 
     public PacketInChat()
     {
         super();
     }
 
-    public PacketInChat(String message, int senderId, ChatType chatType)
+    public PacketInChat(String message, int senderId, int matchId, ChatType chatType)
     {
         this.message = message;
         this.senderId = senderId;
         this.chatType = chatType;
+        this.matchId = matchId;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class PacketInChat extends Packet
         }
 
         this.chatType = ChatType.values()[chatType];
+        this.matchId = dataInputStream.readInt();
         dataInputStream.close();
     }
 
@@ -45,6 +48,7 @@ public class PacketInChat extends Packet
         dataOutputStream.writeUTF(message);
         dataOutputStream.writeInt(senderId);
         dataOutputStream.writeInt(chatType.ordinal());
+        dataOutputStream.writeInt(matchId);
         dataOutputStream.close();
     }
 

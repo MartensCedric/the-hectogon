@@ -34,17 +34,17 @@ public class Hectogon extends Game
 
 		this.screens = new Stack<Screen>();
 		this.pushScreen(new MainMenuScreen());
-	/**
+
 		try {
 			Socket socket = new Socket("127.0.0.1", 6666);
-			Packet packetChat = new PacketInChat("This is a test", 0, ChatType.GLOBAL);
+			Packet packetChat = new PacketInChat("This is a test", 0, 0, ChatType.GLOBAL);
 			Packet.writeHeader(PacketInChat.class, socket.getOutputStream());
 			packetChat.writeTo(socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-	 **/
+
 	}
 
 	public void pushScreen(Screen screen)

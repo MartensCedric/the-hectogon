@@ -5,6 +5,7 @@
 - Ranged combat
 - Match/Lobby
 - Chat
+- Authentification
 
 ## December 2017
 - Melee combat

@@ -17,7 +17,6 @@ public class Server implements Runnable
         socketConnections = new ArrayList<>();
         try {
             serverSocket = new ServerSocket(port);
-            new Thread(this).run();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,6 +31,7 @@ public class Server implements Runnable
                 Socket socket = serverSocket.accept();
                 SocketConnection socketConnection = new SocketConnection(socket);
                 socketConnections.add(socketConnection);
+                new Thread(() -> socketConnection.listen(this));
             } catch (IOException e) {
                 e.printStackTrace();
             }
