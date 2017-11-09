@@ -17,11 +17,30 @@ public class MainMenuScreen extends StageScreen
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0.25f, 0.25f, 0.25f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Skin skin = new Skin(Gdx.files.internal("skins/message.json"));
-        Label label = new Label("Hey guys it's Maxmoefoe", skin);
-        getStage().addActor(label);
+        Label labelLong = new Label("This may be the longest message bubble every created because this is a very long message bubble", skin);
+        labelLong.setX(200);
+        labelLong.setY(500);
+
+        getStage().addActor(labelLong);
+
+        Label labelHi = new Label("Hi", skin);
+        labelHi.setX(200);
+        labelHi.setY(700);
+
+        getStage().addActor(labelHi);
+
+        Label labelWrapped = new Label("This may be the longest message bubble every created because this is a very long message bubble, BUT THIS TIME IT'S WRAPPED", skin);
+        labelWrapped.setWrap(true);
+        labelWrapped.setWidth(480);
+        labelWrapped.setHeight(labelWrapped.getPrefHeight());
+        labelWrapped.setDebug(true);
+        labelWrapped.setX(200);
+        labelWrapped.setY(100);
+
+        getStage().addActor(labelWrapped);
 
         super.render(delta);
     }

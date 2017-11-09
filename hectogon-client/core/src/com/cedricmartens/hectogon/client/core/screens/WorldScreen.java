@@ -5,7 +5,6 @@ public class WorldScreen extends StageScreen{
     public WorldScreen()
     {
         super();
-
     }
     @Override
     public void pause() {
