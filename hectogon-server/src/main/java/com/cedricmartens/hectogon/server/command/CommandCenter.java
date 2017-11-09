@@ -19,7 +19,22 @@ public class CommandCenter implements Runnable
         Scanner reader = new Scanner(System.in);
         while (running)
         {
-            String command = reader.next();
+            String input = reader.nextLine();
+
+            String[] splittedInput = input.split(" ");
+            String command = splittedInput[0];
+            String[] arguments = Command.NO_ARGS;
+
+            if(splittedInput.length > 1)
+            {
+                arguments = new String[splittedInput.length - 1];
+
+                for(int i = 1; i < splittedInput.length; i++)
+                {
+                    arguments[i - 1] = splittedInput[i];
+                }
+            }
+
             Class<?> commandClass = null;
             try {
                 commandClass = Class.forName(getFullCommandName(command));
@@ -35,7 +50,7 @@ public class CommandCenter implements Runnable
             try {
                 Object object = ctor.newInstance();
                 Command comm = (Command) object;
-                comm.execute(Command.NO_ARGS);
+                comm.execute(arguments);
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -61,6 +76,6 @@ public class CommandCenter implements Runnable
         String finalCommand = commandAlias.charAt(0) + lowerCases;
 
 
-        return getClass().getPackage() + "." + finalCommand + "Command";
+        return getClass().getPackage().getName() + "." + finalCommand + "Command";
     }
 }

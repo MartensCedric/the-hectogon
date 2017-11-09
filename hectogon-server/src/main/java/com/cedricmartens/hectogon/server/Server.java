@@ -25,8 +25,8 @@ public class Server implements Runnable
     }
 
     @Override
-    public void run() {
-
+    public void run()
+    {
         System.out.println("Server is listening to connecting sockets on port : " + port);
 
         while (listening)
