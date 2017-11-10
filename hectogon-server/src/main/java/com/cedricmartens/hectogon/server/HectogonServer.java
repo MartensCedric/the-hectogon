@@ -1,6 +1,5 @@
 package com.cedricmartens.hectogon.server;
 
-
 import com.cedricmartens.hectogon.server.command.CommandCenter;
 
 public class HectogonServer

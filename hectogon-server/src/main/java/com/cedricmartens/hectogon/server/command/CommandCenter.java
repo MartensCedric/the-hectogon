@@ -1,5 +1,7 @@
 package com.cedricmartens.hectogon.server.command;
 
+import com.cedricmartens.hectogon.server.Server;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
@@ -9,9 +11,10 @@ import java.util.Scanner;
  */
 public class CommandCenter implements Runnable
 {
-    private boolean running;
+    private boolean running = true;
+    public static Server server;
     public CommandCenter() {
-        running = true;
+
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.cedricmartens.hectogon.server.messaging.MessagingService;
 import com.cedricmartens.hectogon.server.messaging.Messenger;
 
 /**
- * Created by 1544256 on 2017-11-09.
+ * Created by Cedric Martens on 2017-11-09.
  */
 public class MessageCommand extends Command{
 
@@ -27,7 +27,7 @@ public class MessageCommand extends Command{
             user.setUserId(0);
             user.setUsername("Loomy");
 
-            messagingService.sendGlobal(user, null, contents);
+            messagingService.sendGlobal(user, CommandCenter.server.getMatchById(0), contents);
 
         }else{
             throw new RuntimeException();

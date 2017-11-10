@@ -1,5 +1,7 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.hectogon.server.command.CommandCenter;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -35,7 +37,7 @@ public class Server implements Runnable
         {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("New connection @" + socket.getInetAddress());
+                System.out.println("New connection from" + socket.getInetAddress());
                 SocketConnection socketConnection = new SocketConnection(socket);
                 socketConnections.add(socketConnection);
                 new Thread(() -> socketConnection.listen(this)).run();
