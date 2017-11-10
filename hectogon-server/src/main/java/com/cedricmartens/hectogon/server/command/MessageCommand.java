@@ -1,20 +1,33 @@
 package com.cedricmartens.hectogon.server.command;
 
+import com.cedricmartens.commons.User;
+import com.cedricmartens.hectogon.server.Match;
+import com.cedricmartens.hectogon.server.messaging.MessagingService;
+import com.cedricmartens.hectogon.server.messaging.Messenger;
+
 /**
  * Created by 1544256 on 2017-11-09.
  */
 public class MessageCommand extends Command{
+
     @Override
     void execute(String[] args) {
 
         if(args.length > 0)
         {
+            String contents = "";
             for(int i = 0; i < args.length - 1; i++)
             {
-                System.out.print(args[i] + " ");
+                contents += args[i] + " ";
             }
 
-            System.out.print(args[args.length - 1]);
+            contents += args[args.length - 1];
+            MessagingService messagingService = Messenger.getMessagingService();
+            User user = new User();
+            user.setUserId(0);
+            user.setUsername("Loomy");
+
+            messagingService.sendGlobal(user, null, contents);
 
         }else{
             throw new RuntimeException();

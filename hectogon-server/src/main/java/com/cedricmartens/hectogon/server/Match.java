@@ -8,11 +8,17 @@ import java.util.List;
 public class Match
 {
     private List<SocketConnection> connections;
+    private int matchId;
 
-    public Match(List<SocketConnection> connections)
+    public Match(int matchId, List<SocketConnection> connections)
     {
         this.connections = connections;
     }
+
+    public int getMatchId() {
+        return matchId;
+    }
+
 
     public void sendToEveryone(Packet packet)
     {

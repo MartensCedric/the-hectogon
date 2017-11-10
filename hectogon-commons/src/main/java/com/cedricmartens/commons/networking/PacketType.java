@@ -5,7 +5,7 @@ import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 public enum  PacketType
 {
     //Add packets here
-    IN_CHAT(PacketInChat.class),
+    IN_CHAT(PacketChat.class),
     IN_LOGIN(PacketInLogin.class)
     ;
     private Class<? extends Packet> type;

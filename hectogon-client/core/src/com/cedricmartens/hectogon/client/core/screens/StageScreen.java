@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-import static com.cedricmartens.hectogon.client.core.Hectogon.WIDTH;
 import static com.cedricmartens.hectogon.client.core.Hectogon.HEIGHT;
+import static com.cedricmartens.hectogon.client.core.Hectogon.WIDTH;
 
 /**
  * Created by Cedric Martens on 2017-04-26.

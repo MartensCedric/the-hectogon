@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
+
 import java.util.Stack;
 
 public class Hectogon extends Game

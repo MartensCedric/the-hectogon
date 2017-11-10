@@ -9,6 +9,7 @@ import java.util.List;
 public class Server implements Runnable
 {
     private List<SocketConnection> socketConnections;
+    private List<Match> matches;
     private boolean listening = true;
     private ServerSocket serverSocket;
     private int port;
@@ -17,6 +18,7 @@ public class Server implements Runnable
     {
         this.port = port;
         socketConnections = new ArrayList<>();
+        this.matches = new ArrayList<>();
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -42,5 +44,15 @@ public class Server implements Runnable
                 listening = false;
             }
         }
+    }
+
+    public Match getMatchById(int matchId) {
+        for(Match match : matches)
+        {
+            if(match.getMatchId() == matchId)
+                return match;
+        }
+
+        throw new IllegalStateException();
     }
 }

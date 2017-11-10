@@ -2,7 +2,7 @@ package com.cedricmartens.hectogon.server;
 
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
-import com.cedricmartens.commons.networking.PacketInChat;
+import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.authentification.LoginStatus;
 import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 import com.cedricmartens.commons.networking.authentification.PacketInRegister;
@@ -12,7 +12,6 @@ import com.cedricmartens.hectogon.server.auth.Authentificator;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class SocketConnection implements SocketListener {
 
@@ -80,9 +79,9 @@ public class SocketConnection implements SocketListener {
                         System.out.println("Registered!");
                     }
                 }
-                else if(packet instanceof PacketInChat)
+                else if(packet instanceof PacketChat)
                 {
-                    PacketInChat packetInChat = (PacketInChat) packet;
+                    PacketChat packetInChat = (PacketChat) packet;
                     System.out.println(packetInChat.getMessage());
                 }
 

@@ -4,18 +4,18 @@ import com.cedricmartens.commons.chat.ChatType;
 
 import java.io.*;
 
-public class PacketInChat extends Packet
+public class PacketChat extends Packet
 {
     private String message;
     private int senderId;
     private ChatType chatType;
 
-    public PacketInChat()
+    public PacketChat()
     {
         super();
     }
 
-    public PacketInChat(String message, int senderId, ChatType chatType)
+    public PacketChat(String message, int senderId, ChatType chatType)
     {
         super();
         this.message = message;
@@ -58,7 +58,7 @@ public class PacketInChat extends Packet
 
     @Override
     public String toString() {
-        return "PacketInChat{" +
+        return "PacketChat{" +
                 "message='" + message + '\'' +
                 ", senderId=" + senderId +
                 ", chatType=" + chatType +
