@@ -3,6 +3,7 @@ package com.cedricmartens.hectogon.client.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 import java.util.Stack;
@@ -19,6 +20,13 @@ public class Hectogon extends Game
 	public void create () {
 
 		assetManager = new AssetManager();
+		assetManager.load("test.png", Texture.class);
+		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
+		assetManager.load("icons/perks/hunter_perk.png", Texture.class);
+		assetManager.load("icons/perks/tank_perk.png", Texture.class);
+		assetManager.load("items/bow_wood.png", Texture.class);
+		assetManager.load("items/bomb.png", Texture.class);
+		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.finishLoading();
 
 		this.screens = new Stack<Screen>();
