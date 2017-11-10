@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 
@@ -19,7 +20,7 @@ public class Hectogon extends Game
 	
 	@Override
 	public void create () {
-
+		//TODO Create Game/SceneManager
 		assetManager = new AssetManager();
 		assetManager.load("test.png", Texture.class);
 		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
@@ -28,6 +29,7 @@ public class Hectogon extends Game
 		assetManager.load("items/bow_wood.png", Texture.class);
 		assetManager.load("items/bomb.png", Texture.class);
 		assetManager.load("tiles/grass_tile.png", Texture.class);
+		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
 		assetManager.finishLoading();
 
 		this.screens = new Stack<Screen>();

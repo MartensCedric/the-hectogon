@@ -3,6 +3,11 @@ package com.cedricmartens.hectogon.client.core.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 
 public class MainMenuScreen extends StageScreen
 {
@@ -11,6 +16,17 @@ public class MainMenuScreen extends StageScreen
     public MainMenuScreen() {
         super();
         batch = new SpriteBatch();
+
+        Skin skin = UiUtil.getDefaultSkin();
+        TextButton txtButtonConnect = new TextButton("Connect", skin);
+        txtButtonConnect.addListener(new ClickListener()
+             {
+                 @Override
+                 public void clicked(InputEvent event, float x, float y) {
+                     super.clicked(event, x, y);
+                 }
+             }
+        );
     }
 
     @Override
