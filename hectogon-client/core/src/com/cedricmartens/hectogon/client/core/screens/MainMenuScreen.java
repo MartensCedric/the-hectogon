@@ -23,7 +23,8 @@ public class MainMenuScreen extends StageScreen
         txtButtonConnect.addListener(new ClickListener()
              {
                  @Override
-                 public void clicked(InputEvent event, float x, float y) {
+                 public void clicked(InputEvent event, float x, float y)
+                 {
                      MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(MainMenuScreen.this.getSceneManager()));
                  }
              }
