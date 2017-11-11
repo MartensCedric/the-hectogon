@@ -5,9 +5,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.cedricmartens.hectogon.client.core.game.SceneManager;
 
-import static com.cedricmartens.hectogon.client.core.Hectogon.HEIGHT;
-import static com.cedricmartens.hectogon.client.core.Hectogon.WIDTH;
+import static com.cedricmartens.hectogon.client.core.game.Hectogon.HEIGHT;
+import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 
 /**
  * Created by Cedric Martens on 2017-04-26.
@@ -16,11 +17,13 @@ public abstract class StageScreen implements Screen
 {
     private Stage stage;
     private OrthographicCamera camera;
+    private SceneManager sceneManager;
 
-    public StageScreen() {
+    public StageScreen(SceneManager sceneManager) {
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         stage = new Stage(new StretchViewport(WIDTH, HEIGHT));
         Gdx.input.setInputProcessor(getStage());
+        this.sceneManager = sceneManager;
     }
 
     @Override
@@ -46,4 +49,9 @@ public abstract class StageScreen implements Screen
     public OrthographicCamera getCamera() {
         return camera;
     }
+
+    public SceneManager getSceneManager() {
+        return sceneManager;
+    }
+
 }

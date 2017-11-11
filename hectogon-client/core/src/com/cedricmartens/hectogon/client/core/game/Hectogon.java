@@ -1,26 +1,21 @@
-package com.cedricmartens.hectogon.client.core;
+package com.cedricmartens.hectogon.client.core.game;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.cedricmartens.hectogon.client.core.game.SceneManager;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 
-import java.util.Stack;
-
-public class Hectogon extends Game
+public class Hectogon extends SceneManager
 {
 	public static final int WIDTH = 1920;
 	public static final int HEIGHT = 1080;
 
 	private AssetManager assetManager;
-	private Stack<Screen> screens;
 	
 	@Override
-	public void create () {
-		//TODO Create Game/SceneManager
+	public void create ()
+	{
+		super.create();
 		assetManager = new AssetManager();
 		assetManager.load("test.png", Texture.class);
 		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
@@ -32,25 +27,7 @@ public class Hectogon extends Game
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
 		assetManager.finishLoading();
 
-		this.screens = new Stack<Screen>();
-		this.pushScreen(new MainMenuScreen());
-	}
-
-	public void pushScreen(Screen screen)
-	{
-		this.screens.push(screen);
-		super.setScreen(screen);
-	}
-
-	public void popScreen()
-	{
-		if(this.screens.size() <= 1)
-		{
-			throw new GdxRuntimeException("Cannot pop the last screen!");
-		}
-
-		this.screens.pop();
-		this.setScreen(screens.peek());
+		this.pushScreen(new MainMenuScreen(this));
 	}
 
 	@Override
