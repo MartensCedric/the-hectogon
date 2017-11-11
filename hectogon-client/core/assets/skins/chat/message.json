@@ -3,6 +3,9 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	munro14mono: {
 		file: munro14mono.fnt
 	}
+	munro24mono: {
+		file: munro24mono.fnt
+	}
 	munro32mono: {
 		file: munro32mono.fnt
 	}
@@ -20,6 +23,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: munro32mono
 		fontColor: Black
 		background: msg_bubble
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: {
+		font: munro24mono
+		fontColor: Black
+		background: chatbox
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
