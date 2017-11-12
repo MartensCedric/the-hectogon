@@ -23,17 +23,14 @@ public class CommandCenter implements Runnable
         while (running)
         {
             String input = reader.nextLine();
-
             String[] splittedInput = input.split(" ");
             String command = splittedInput[0];
             String[] arguments = Command.NO_ARGS;
 
-            if(splittedInput.length > 1)
-            {
+            if (splittedInput.length > 1) {
                 arguments = new String[splittedInput.length - 1];
 
-                for(int i = 1; i < splittedInput.length; i++)
-                {
+                for (int i = 1; i < splittedInput.length; i++) {
                     arguments[i - 1] = splittedInput[i];
                 }
             }

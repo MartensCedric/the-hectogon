@@ -3,8 +3,7 @@ package com.cedricmartens.hectogon.server.messaging;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.PacketChat;
-import com.cedricmartens.hectogon.server.Match;
-import com.cedricmartens.hectogon.server.Server;
+import com.cedricmartens.hectogon.server.match.Match;
 
 public class MessagingMatch implements MessagingService {
 

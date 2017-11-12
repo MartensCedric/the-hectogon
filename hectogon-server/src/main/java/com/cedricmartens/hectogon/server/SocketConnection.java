@@ -10,6 +10,7 @@ import com.cedricmartens.commons.networking.authentification.PacketInRegister;
 import com.cedricmartens.commons.networking.authentification.RegisterStatus;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
+import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.messaging.Messenger;
 
 import java.io.IOException;
@@ -90,9 +91,13 @@ public class SocketConnection implements SocketListener {
                     User user = new User();
                     user.setUserId(packetInChat.getSenderId());
                     user.setUsername("Someone");
-                    Messenger.getMessagingService().sendLocal(
-                            user, server.getMatchById(0),
-                            packetInChat.getMessage());
+                    try {
+                        Messenger.getMessagingService().sendLocal(
+                                user, server.getMatchById(0),
+                                packetInChat.getMessage());
+                    } catch (NoMatchFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }catch (IOException e) {

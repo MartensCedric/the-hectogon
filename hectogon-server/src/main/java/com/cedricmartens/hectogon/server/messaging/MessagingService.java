@@ -1,7 +1,7 @@
 package com.cedricmartens.hectogon.server.messaging;
 
 import com.cedricmartens.commons.User;
-import com.cedricmartens.hectogon.server.Match;
+import com.cedricmartens.hectogon.server.match.Match;
 
 public interface MessagingService
 {

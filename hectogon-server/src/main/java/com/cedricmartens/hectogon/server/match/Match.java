@@ -1,6 +1,7 @@
-package com.cedricmartens.hectogon.server;
+package com.cedricmartens.hectogon.server.match;
 
 import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.hectogon.server.SocketConnection;
 
 import java.io.IOException;
 import java.util.List;

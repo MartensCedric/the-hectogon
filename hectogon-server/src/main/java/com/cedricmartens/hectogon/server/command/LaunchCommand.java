@@ -9,7 +9,11 @@ public class LaunchCommand extends Command
 {
     @Override
     void execute(String[] args) {
-        if(args.length > 0)
+
+        if(CommandCenter.server != null)
+        {
+            System.out.println("Server already started!");
+        }else if(args.length > 0)
         {
             int port = Integer.parseInt(args[0]);
             CommandCenter.server = new Server(port);

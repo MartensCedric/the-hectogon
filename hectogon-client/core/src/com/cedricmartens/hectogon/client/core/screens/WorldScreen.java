@@ -45,6 +45,8 @@ public class WorldScreen extends StageScreen{
             socket = new Socket("127.0.0.1", 6666);
             final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
             chatInput.setWidth(Hectogon.WIDTH / 2.5f);
+            chatInput.setX(15);
+            chatInput.setY(15);
             chatInput.setOnSendAction(new OnSend() {
                 @Override
                 public void send() {

@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.commons.User;
-import com.cedricmartens.hectogon.server.Match;
 import com.cedricmartens.hectogon.server.messaging.MessagingService;
 import com.cedricmartens.hectogon.server.messaging.Messenger;
 

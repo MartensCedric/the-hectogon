@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server;
 
-import com.cedricmartens.hectogon.server.command.CommandCenter;
+import com.cedricmartens.hectogon.server.match.Match;
+import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -48,13 +49,13 @@ public class Server implements Runnable
         }
     }
 
-    public Match getMatchById(int matchId) {
+    public Match getMatchById(int matchId) throws NoMatchFoundException {
         for(Match match : matches)
         {
             if(match.getMatchId() == matchId)
                 return match;
         }
 
-        throw new IllegalStateException();
+        throw new NoMatchFoundException();
     }
 }
