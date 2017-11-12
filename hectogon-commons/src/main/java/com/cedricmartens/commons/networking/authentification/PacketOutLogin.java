@@ -22,7 +22,7 @@ public class PacketOutLogin extends Packet {
             throw new InvalidPacketDataException(responseCode + " is not a valid value for LoginStatus");
 
 
-        loginStatus = LoginStatus.values()[dataInputStream.readInt()];
+        loginStatus = LoginStatus.values()[responseCode];
         token = dataInputStream.readUTF();
     }
 
@@ -31,6 +31,14 @@ public class PacketOutLogin extends Packet {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(loginStatus.ordinal());
         dataOutputStream.writeUTF(token);
+    }
+
+    public LoginStatus getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(LoginStatus loginStatus) {
+        this.loginStatus = loginStatus;
     }
 
     public String getToken() {

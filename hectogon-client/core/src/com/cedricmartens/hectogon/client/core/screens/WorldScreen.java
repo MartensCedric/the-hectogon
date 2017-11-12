@@ -1,8 +1,10 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
@@ -26,70 +28,69 @@ public class WorldScreen extends StageScreen{
     private SpriteBatch batch;
     private OrthographicCamera worldCamera;
     private boolean listening;
+    private AssetManager assetManager;
+    private Socket socket;
+
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
+        this.socket = gameManager.socket;
         this.listening = true;
-        this.map = new Map(gameManager.assetManager);
+        this.assetManager = gameManager.assetManager;
+        this.map = new Map(this.assetManager);
         this.batch = new SpriteBatch();
         this.worldCamera = new OrthographicCamera();
         this.worldCamera.setToOrtho(false);
-        this.worldCamera.zoom = 0.25f;
+        this.worldCamera.zoom = 0.5f;
+        this.worldCamera.position.x = 0;
+        this.worldCamera.position.y = 0;
         this.worldCamera.update();
 
-        final Socket socket;
-        try {
-            socket = new Socket("127.0.0.1", 6666);
-            final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
-            chatInput.setWidth(Hectogon.WIDTH / 2.5f);
-            chatInput.setX(15);
-            chatInput.setY(15);
-            chatInput.setOnSendAction(new OnSend() {
-                @Override
-                public void send() {
-                    if (chatInput.getText().length() > 0) {
-                        PacketChat packetChat = new PacketChat(chatInput.getText(), 0, ChatType.LOCAL);
-                        try {
-                            Packet.writeHeader(PacketChat.class, socket.getOutputStream());
-                            packetChat.writeTo(socket.getOutputStream());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+        final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
+        chatInput.setWidth(Hectogon.WIDTH / 2.5f);
+        chatInput.setX(15);
+        chatInput.setY(15);
+        chatInput.setOnSendAction(new OnSend() {
+            @Override
+            public void send() {
+                if (chatInput.getText().length() > 0) {
+                    PacketChat packetChat = new PacketChat(chatInput.getText(), 0, ChatType.LOCAL);
+                    try {
+                        Packet.writeHeader(PacketChat.class, socket.getOutputStream());
+                        packetChat.writeTo(socket.getOutputStream());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
-            });
-            getStage().addActor(chatInput);
+            }
+        });
+        getStage().addActor(chatInput);
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (listening) {
-                        try {
-                            Packet packet = Packet.readHeader(socket.getInputStream());
-                            packet.readFrom(socket.getInputStream());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (listening) {
+                    try {
+                        Packet packet = Packet.readHeader(socket.getInputStream());
+                        packet.readFrom(socket.getInputStream());
 
-                            if (packet instanceof PacketChat) {
-                                PacketChat packetChat = (PacketChat) packet;
-                                System.out.println(packetChat.getMessage());
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (InvalidPacketDataException e) {
-                            e.printStackTrace();
+                        if (packet instanceof PacketChat) {
+                            PacketChat packetChat = (PacketChat) packet;
+                            System.out.println(packetChat.getMessage());
                         }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (InvalidPacketDataException e) {
+                        e.printStackTrace();
                     }
                 }
-            });
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     @Override
@@ -99,6 +100,7 @@ public class WorldScreen extends StageScreen{
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
         map.render(batch);
+        batch.draw(assetManager.get("interactive/chest.png", Texture.class), 0,0);
         this.batch.end();
         super.render(delta);
     }

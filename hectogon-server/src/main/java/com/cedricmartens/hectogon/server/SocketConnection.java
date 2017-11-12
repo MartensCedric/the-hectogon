@@ -4,10 +4,7 @@ import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
-import com.cedricmartens.commons.networking.authentification.LoginStatus;
-import com.cedricmartens.commons.networking.authentification.PacketInLogin;
-import com.cedricmartens.commons.networking.authentification.PacketInRegister;
-import com.cedricmartens.commons.networking.authentification.RegisterStatus;
+import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
@@ -67,10 +64,12 @@ public class SocketConnection implements SocketListener {
                     AuthentificationService authService = Authentificator.getAuthentificationService();
                     LoginStatus loginStatus = authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
 
-                    if(loginStatus == LoginStatus.OK)
-                    {
-                        System.out.println("Logged in!");
-                    }
+                    PacketOutLogin packetOutLogin = new PacketOutLogin();
+                    packetOutLogin.setLoginStatus(loginStatus);
+                    packetOutLogin.setToken("token");
+                    Packet.writeHeader(PacketOutLogin.class, socket.getOutputStream());
+                    packetOutLogin.writeTo(socket.getOutputStream());
+
 
                 }else if(packet instanceof PacketInRegister)
                 {

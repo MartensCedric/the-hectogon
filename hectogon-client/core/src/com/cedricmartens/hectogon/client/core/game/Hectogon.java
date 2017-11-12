@@ -30,6 +30,7 @@ public class Hectogon extends SceneManager
 		assetManager.load("items/bomb.png", Texture.class);
 		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
+		assetManager.load("interactive/chest.png", Texture.class);
 		assetManager.finishLoading();
 
 		this.pushScreen(new MainMenuScreen(gameManager));

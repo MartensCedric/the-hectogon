@@ -1,7 +1,7 @@
 package com.cedricmartens.commons.networking.authentification;
 
 /**
- * Created by 1544256 on 2017-11-08.
+ * Created by Cedric Martens on 2017-11-08.
  */
 public enum LoginStatus
 {
