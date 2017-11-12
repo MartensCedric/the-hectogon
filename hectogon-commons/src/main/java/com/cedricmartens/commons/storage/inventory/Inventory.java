@@ -1,9 +1,11 @@
 package com.cedricmartens.commons.storage.inventory;
 
+import java.util.Iterator;
+
 /**
  * Created by Cedric Martens on 05/03/17.
  */
-public class Inventory
+public class Inventory implements Iterable<InventorySlot>
 {
     private int slotCount;
     private InventorySlot[] slots;
@@ -225,11 +227,6 @@ public class Inventory
         return false;
     }
 
-    public InventorySlot[] getSlots()
-    {
-        return slots;
-    }
-
     private void addItem(InventorySlot slot)
     {
         for(int i = 0; i < getSlotCount(); i++)
@@ -276,5 +273,22 @@ public class Inventory
         }
 
         return str;
+    }
+
+    @Override
+    public Iterator<InventorySlot> iterator() {
+        return new Iterator<InventorySlot>() {
+
+            private int i = 0;
+            @Override
+            public boolean hasNext() {
+                return i < Inventory.this.slots.length;
+            }
+
+            @Override
+            public InventorySlot next() {
+                return Inventory.this.slots[i++];
+            }
+        };
     }
 }

@@ -8,11 +8,14 @@ import java.util.List;
 
 public class Match
 {
+    private static final int MAX_SLOTS = 100;
     private List<SocketConnection> connections;
     private int matchId;
+    private boolean hasStarted;
 
     public Match(int matchId, List<SocketConnection> connections)
     {
+        this.hasStarted = false;
         this.connections = connections;
     }
 
@@ -20,6 +23,10 @@ public class Match
         return matchId;
     }
 
+    public void addPlayer(SocketConnection connection)
+    {
+        this.connections.add(connection);
+    }
 
     public void sendToEveryone(Packet packet)
     {
@@ -31,5 +38,11 @@ public class Match
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean canJoin()
+    {
+        //TODO improve this
+        return !hasStarted && connections.size() < MAX_SLOTS;
     }
 }

@@ -48,6 +48,7 @@ public class Map
 
     public void render(SpriteBatch spriteBatch)
     {
+        //TODO don't make an entity render itself
         int textureW = mapData[0][0].getTexture().getWidth();
         int textureH = mapData[0][0].getTexture().getHeight();
 
