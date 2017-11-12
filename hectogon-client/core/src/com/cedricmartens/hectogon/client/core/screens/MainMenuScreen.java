@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.cedricmartens.hectogon.client.core.game.GameManager;
 import com.cedricmartens.hectogon.client.core.game.SceneManager;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 
@@ -14,8 +15,8 @@ public class MainMenuScreen extends StageScreen
 {
     private SpriteBatch batch;
 
-    public MainMenuScreen(SceneManager sceneManager) {
-        super(sceneManager);
+    public MainMenuScreen(final GameManager gameManager) {
+        super(gameManager);
         batch = new SpriteBatch();
 
         Skin skin = UiUtil.getDefaultSkin();
@@ -25,7 +26,7 @@ public class MainMenuScreen extends StageScreen
                  @Override
                  public void clicked(InputEvent event, float x, float y)
                  {
-                     MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(MainMenuScreen.this.getSceneManager()));
+                     MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(gameManager));
                  }
              }
         );

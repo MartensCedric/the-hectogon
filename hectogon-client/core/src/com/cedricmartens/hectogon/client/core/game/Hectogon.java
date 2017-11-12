@@ -16,7 +16,12 @@ public class Hectogon extends SceneManager
 	public void create ()
 	{
 		super.create();
-		assetManager = new AssetManager();
+		this.assetManager = new AssetManager();
+
+		GameManager gameManager = new GameManager();
+		gameManager.assetManager = this.assetManager;
+		gameManager.sceneManager = this;
+
 		assetManager.load("test.png", Texture.class);
 		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
 		assetManager.load("icons/perks/hunter_perk.png", Texture.class);
@@ -27,7 +32,7 @@ public class Hectogon extends SceneManager
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
 		assetManager.finishLoading();
 
-		this.pushScreen(new MainMenuScreen(this));
+		this.pushScreen(new MainMenuScreen(gameManager));
 	}
 
 	@Override
