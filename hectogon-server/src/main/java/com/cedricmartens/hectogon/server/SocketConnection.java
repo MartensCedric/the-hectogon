@@ -1,5 +1,6 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -9,6 +10,7 @@ import com.cedricmartens.commons.networking.authentification.PacketInRegister;
 import com.cedricmartens.commons.networking.authentification.RegisterStatus;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
+import com.cedricmartens.hectogon.server.messaging.Messenger;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -20,9 +22,11 @@ public class SocketConnection implements SocketListener {
     private Socket socket;
     private int playerId = ANONYMOUS_PLAYER;
     private boolean listening = true;
+    private Server server;
 
-    public SocketConnection(Socket socket) {
+    public SocketConnection(Socket socket, Server server) {
         this.socket = socket;
+        this.server = server;
     }
 
     public Socket getSocket() {
@@ -82,7 +86,13 @@ public class SocketConnection implements SocketListener {
                 else if(packet instanceof PacketChat)
                 {
                     PacketChat packetInChat = (PacketChat) packet;
-                    System.out.println(packetInChat.getMessage());
+                    System.out.println(socket.getInetAddress() + " -> " + packetInChat.getMessage());
+                    User user = new User();
+                    user.setUserId(packetInChat.getSenderId());
+                    user.setUsername("Someone");
+                    Messenger.getMessagingService().sendLocal(
+                            user, server.getMatchById(0),
+                            packetInChat.getMessage());
                 }
 
             }catch (IOException e) {

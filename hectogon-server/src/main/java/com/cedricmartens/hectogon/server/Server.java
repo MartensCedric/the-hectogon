@@ -38,7 +38,7 @@ public class Server implements Runnable
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("New connection from" + socket.getInetAddress());
-                SocketConnection socketConnection = new SocketConnection(socket);
+                SocketConnection socketConnection = new SocketConnection(socket, this);
                 socketConnections.add(socketConnection);
                 new Thread(() -> socketConnection.listen(this)).run();
             } catch (IOException e) {

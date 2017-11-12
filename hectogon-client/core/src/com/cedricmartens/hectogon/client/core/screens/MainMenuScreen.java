@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
-import com.cedricmartens.hectogon.client.core.game.SceneManager;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 
 public class MainMenuScreen extends StageScreen
