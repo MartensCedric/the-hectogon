@@ -4,6 +4,7 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.hectogon.server.SocketConnection;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Match
@@ -12,6 +13,11 @@ public class Match
     private List<SocketConnection> connections;
     private int matchId;
     private boolean hasStarted;
+
+    public Match(int matchId)
+    {
+        this(matchId, new ArrayList<>());
+    }
 
     public Match(int matchId, List<SocketConnection> connections)
     {
