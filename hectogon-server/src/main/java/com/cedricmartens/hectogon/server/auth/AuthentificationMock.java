@@ -11,6 +11,11 @@ public class AuthentificationMock implements AuthentificationService {
     }
 
     @Override
+    public LoginStatus login(String token) {
+        return null;
+    }
+
+    @Override
     public RegisterStatus register(String username, String email, String password)
     {
         return RegisterStatus.OK;

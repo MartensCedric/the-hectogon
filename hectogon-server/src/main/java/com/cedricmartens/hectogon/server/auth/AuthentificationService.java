@@ -6,5 +6,6 @@ import com.cedricmartens.commons.networking.authentification.RegisterStatus;
 public interface AuthentificationService
 {
     LoginStatus login(String username, String password);
+    LoginStatus login(String token);
     RegisterStatus register(String username, String email, String password);
 }
