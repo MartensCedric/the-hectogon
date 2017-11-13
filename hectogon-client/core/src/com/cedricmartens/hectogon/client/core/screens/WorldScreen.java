@@ -1,15 +1,19 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
 import com.cedricmartens.hectogon.client.core.ui.ChatInput;
@@ -26,14 +30,20 @@ public class WorldScreen extends StageScreen{
 
     private Map map;
     private SpriteBatch batch;
+    private ShapeRenderer debugRenderer;
     private OrthographicCamera worldCamera;
     private boolean listening;
     private AssetManager assetManager;
     private Socket socket;
+    private Chest chest;
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
+        this.debugRenderer = new ShapeRenderer();
+        this.debugRenderer.setAutoShapeType(true);
+        this.chest = new Chest(12);
+        this.chest.setPosition(new Point(0, 0));
         this.socket = gameManager.socket;
         this.listening = true;
         this.assetManager = gameManager.assetManager;
@@ -42,7 +52,7 @@ public class WorldScreen extends StageScreen{
         this.worldCamera = new OrthographicCamera();
         this.worldCamera.setToOrtho(false);
         this.worldCamera.zoom = 0.5f;
-        this.worldCamera.position.x = 0;
+        this.worldCamera.position.x = -25;
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
 
@@ -98,10 +108,18 @@ public class WorldScreen extends StageScreen{
         Gdx.gl.glClearColor(1f, 0.25f, 0.25f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(this.worldCamera.combined);
+
+        worldCamera.update();
+
         this.batch.begin();
         map.render(batch);
-        batch.draw(assetManager.get("interactive/chest.png", Texture.class), 0,0);
+        batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
+        batch.draw(assetManager.get("character/dummy.png", Texture.class), worldCamera.position.x - 16, worldCamera.position.y - 24);
         this.batch.end();
+        this.debugRenderer.setProjectionMatrix(worldCamera.combined);
+        this.debugRenderer.begin();
+        this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
+        this.debugRenderer.end();
         super.render(delta);
     }
 

@@ -19,4 +19,24 @@ public class Chest extends SolidEntity implements Iterable<InventorySlot>
     public Iterator<InventorySlot> iterator() {
         return inventory.iterator();
     }
+
+    @Override
+    public int getBottomLimit() {
+        return -16;
+    }
+
+    @Override
+    public int getUpperLimit() {
+        return 40;
+    }
+
+    @Override
+    public int getLeftLimit() {
+        return 4;
+    }
+
+    @Override
+    public int getRightLimit() {
+        return 59;
+    }
 }

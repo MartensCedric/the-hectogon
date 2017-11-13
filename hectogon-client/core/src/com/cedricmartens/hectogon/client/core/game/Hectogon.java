@@ -2,6 +2,7 @@ package com.cedricmartens.hectogon.client.core.game;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.cedricmartens.hectogon.client.core.game.SceneManager;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 
@@ -31,8 +32,12 @@ public class Hectogon extends SceneManager
 		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
 		assetManager.load("interactive/chest.png", Texture.class);
+		assetManager.load("character/dummy.png", Texture.class);
+
+		assetManager.load("i18n/language", I18NBundle.class);
 		assetManager.finishLoading();
 
+		gameManager.i18NBundle = assetManager.get("i18n/language", I18NBundle.class);
 		this.pushScreen(new MainMenuScreen(gameManager));
 	}
 
