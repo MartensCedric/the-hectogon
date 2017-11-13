@@ -17,7 +17,7 @@ public class LaunchCommand extends Command
         {
             int port = Integer.parseInt(args[0]);
             CommandCenter.server = new Server(port);
-            CommandCenter.server.run();
+            new Thread(CommandCenter.server).start();
         }else{
         }
     }
