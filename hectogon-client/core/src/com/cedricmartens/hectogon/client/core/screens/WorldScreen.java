@@ -1,30 +1,34 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
+import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
 import com.cedricmartens.hectogon.client.core.ui.ChatInput;
+import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.ui.OnSend;
 import com.cedricmartens.hectogon.client.core.world.Map;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
+import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 
 public class WorldScreen extends StageScreen{
 
@@ -35,6 +39,8 @@ public class WorldScreen extends StageScreen{
     private boolean listening;
     private AssetManager assetManager;
     private Socket socket;
+    private InventoryUI inventoryUI;
+    private Inventory playerInv;
     private Chest chest;
 
     public WorldScreen(GameManager gameManager)
@@ -55,9 +61,20 @@ public class WorldScreen extends StageScreen{
         this.worldCamera.position.x = -25;
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
+        this.playerInv = new Inventory(12);
+        inventoryUI = new InventoryUI(playerInv);
+        Texture textureInventory = gameManager.assetManager.get("ui/inventory.png", Texture.class);
+        Drawable drawableInventory = new TextureRegionDrawable(new TextureRegion(
+                textureInventory));
+        inventoryUI.setBackground(drawableInventory);
+        inventoryUI.setWidth(textureInventory.getWidth());
+        inventoryUI.setHeight(textureInventory.getHeight());
+        inventoryUI.setX(WIDTH - textureInventory.getWidth());
+        inventoryUI.setY(0);
+        getStage().addActor(inventoryUI);
 
         final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
-        chatInput.setWidth(Hectogon.WIDTH / 2.5f);
+        chatInput.setWidth(WIDTH / 2.5f);
         chatInput.setX(15);
         chatInput.setY(15);
         chatInput.setOnSendAction(new OnSend() {

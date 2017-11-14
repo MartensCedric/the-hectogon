@@ -21,6 +21,7 @@ public abstract class StageScreen implements Screen
     private SceneManager sceneManager;
 
     public StageScreen(GameManager gameManager) {
+        //TODO camera and stage make up 2 cameras
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         stage = new Stage(new StretchViewport(WIDTH, HEIGHT));
         Gdx.input.setInputProcessor(getStage());
