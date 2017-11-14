@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.match.Match;
+import com.esotericsoftware.minlog.Log;
 
 public class MatchesCommand extends Command{
     @Override
@@ -8,12 +9,12 @@ public class MatchesCommand extends Command{
 
         if(CommandCenter.server == null)
         {
-            System.out.println("Server not started!");
+            Log.warn("Server not started!");
         }else{
-            System.out.println("Matches : ");
+            Log.trace("Matches : ");
             for(Match m : CommandCenter.server.getMatches())
             {
-                System.out.println(m);
+                Log.trace(m.toString());
             }
         }
     }

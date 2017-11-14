@@ -9,6 +9,7 @@ import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.Authentificator;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.messaging.Messenger;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,7 +52,7 @@ public class SocketConnection implements SocketListener {
     @Override
     public void listen(Server server) {
 
-        System.out.println("Listening to socket : " + socket.getInetAddress());
+        Log.info("Listening to socket : " + socket.getInetAddress());
         while (listening)
         {
             try {
@@ -70,7 +71,6 @@ public class SocketConnection implements SocketListener {
                     Packet.writeHeader(PacketOutLogin.class, socket.getOutputStream());
                     packetOutLogin.writeTo(socket.getOutputStream());
 
-
                 }else if(packet instanceof PacketInRegister)
                 {
                     PacketInRegister packetInRegister = (PacketInRegister) packet;
@@ -80,17 +80,19 @@ public class SocketConnection implements SocketListener {
 
                     if(registerStatus == RegisterStatus.OK)
                     {
-                        System.out.println("Registered!");
+
                     }
                 }
                 else if(packet instanceof PacketChat)
                 {
                     PacketChat packetInChat = (PacketChat) packet;
-                    System.out.println(socket.getInetAddress() + " -> " + packetInChat.getMessage());
+                    Log.debug(socket.getInetAddress() + " -> " + packetInChat.getMessage());
                     User user = new User();
                     user.setUserId(packetInChat.getSenderId());
                     user.setUsername("Someone");
                     try {
+
+                        //TODO set matchId
                         Messenger.getMessagingService().sendLocal(
                                 user, server.getMatchById(0),
                                 packetInChat.getMessage());

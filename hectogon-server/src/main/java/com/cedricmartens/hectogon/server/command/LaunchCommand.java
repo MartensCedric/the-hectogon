@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.Server;
+import com.esotericsoftware.minlog.Log;
 
 /**
  * Created by Cedric Martens on 2017-11-10.
@@ -12,7 +13,7 @@ public class LaunchCommand extends Command
 
         if(CommandCenter.server != null)
         {
-            System.out.println("Server already started!");
+            Log.warn("Server already started!");
         }else if(args.length > 0)
         {
             int port = Integer.parseInt(args[0]);

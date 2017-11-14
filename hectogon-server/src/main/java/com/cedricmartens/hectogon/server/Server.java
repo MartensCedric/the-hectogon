@@ -4,6 +4,7 @@ import com.cedricmartens.hectogon.server.match.Match;
 import com.cedricmartens.hectogon.server.match.MatchMock;
 import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -38,16 +39,16 @@ public class Server implements Runnable
     @Override
     public void run()
     {
-        System.out.println("Server is listening to connecting sockets on port : " + port);
+        Log.info("Server is listening to connecting sockets on port : " + port);
 
         while (listening)
         {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("New connection from" + socket.getInetAddress());
+                Log.trace("New connection from" + socket.getInetAddress());
                 SocketConnection socketConnection = new SocketConnection(socket, this);
                 socketConnections.add(socketConnection);
-                matches.get(0).addPlayer(socketConnection);
+                this.getNextAvailableMatch().addPlayer(socketConnection);
 
                 new Thread(() -> socketConnection.listen(this)).run();
             }catch (SocketException e)
@@ -84,6 +85,9 @@ public class Server implements Runnable
                 return match;
         }
 
-        return null;
+        MatchService matchService = new MatchMock();
+        Match match = matchService.createMatch();
+        matches.add(match);
+        return match;
     }
 }
