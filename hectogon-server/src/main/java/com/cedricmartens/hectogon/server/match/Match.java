@@ -45,4 +45,9 @@ public class Match
         //TODO improve this
         return !hasStarted && connections.size() < MAX_SLOTS;
     }
+
+    @Override
+    public String toString() {
+        return "Id : " + matchId + "\tConnections : " + connections.size() + "\tAvailable :" + canJoin();
+    }
 }

@@ -53,6 +53,11 @@ public class Server implements Runnable
         }
     }
 
+    public List<Match> getMatches()
+    {
+        return matches;
+    }
+
     public Match getMatchById(int matchId) throws NoMatchFoundException {
         for(Match match : matches)
         {
@@ -61,5 +66,16 @@ public class Server implements Runnable
         }
 
         throw new NoMatchFoundException();
+    }
+
+    public Match getNextAvailableMatch()
+    {
+        for(Match match : matches)
+        {
+            if(match.canJoin())
+                return match;
+        }
+
+        return null;
     }
 }
