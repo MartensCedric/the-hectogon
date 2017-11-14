@@ -24,6 +24,7 @@ public class Hectogon extends SceneManager
 		gameManager.sceneManager = this;
 
 		assetManager.load("test.png", Texture.class);
+		assetManager.load("ui/inventory.png", Texture.class);
 		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
 		assetManager.load("icons/perks/hunter_perk.png", Texture.class);
 		assetManager.load("icons/perks/tank_perk.png", Texture.class);

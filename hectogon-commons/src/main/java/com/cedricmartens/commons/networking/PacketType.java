@@ -38,8 +38,7 @@ public enum  PacketType
                 return pt.ordinal();
         }
 
-        //TODO custom ex
-        throw new IllegalStateException();
+        throw new PacketNotFoundException();
     }
 
     public Class<? extends Packet> getType() {
