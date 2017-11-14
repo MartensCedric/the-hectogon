@@ -11,10 +11,10 @@ import java.util.Scanner;
  */
 public class CommandCenter implements Runnable
 {
-    private boolean running = true;
+    private boolean running;
     public static Server server;
     public CommandCenter() {
-
+        running = true;
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.cedricmartens.hectogon.server;
 
 import com.cedricmartens.hectogon.server.match.Match;
+import com.cedricmartens.hectogon.server.match.MatchMock;
+import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,8 @@ public class Server implements Runnable
         this.port = port;
         socketConnections = new ArrayList<>();
         this.matches = new ArrayList<>();
-        this.matches.add(new Match(0, new ArrayList<>()));
+        MatchService matchService = new MatchMock();
+        this.matches.add(matchService.createMatch());
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -46,7 +50,11 @@ public class Server implements Runnable
                 matches.get(0).addPlayer(socketConnection);
 
                 new Thread(() -> socketConnection.listen(this)).run();
-            } catch (IOException e) {
+            }catch (SocketException e)
+            {
+                e.printStackTrace();
+            }
+            catch (IOException e) {
                 e.printStackTrace();
                 listening = false;
             }

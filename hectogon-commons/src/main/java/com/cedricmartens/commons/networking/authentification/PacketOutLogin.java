@@ -6,7 +6,7 @@ import com.cedricmartens.commons.networking.Packet;
 import java.io.*;
 
 /**
- * Created by 1544256 on 2017-11-08.
+ * Created by Cedric Martens on 2017-11-08.
  */
 public class PacketOutLogin extends Packet {
 
