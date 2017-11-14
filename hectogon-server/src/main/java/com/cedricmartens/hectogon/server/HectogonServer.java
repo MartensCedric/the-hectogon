@@ -9,7 +9,7 @@ public class HectogonServer
     {
         Log.TRACE();
         Log.filename = "server.log";
-        CommandCenter commandCenter = new CommandCenter();
+        CommandCenter commandCenter = CommandCenter.getCommandCenter();
         commandCenter.run();
     }
 }

@@ -3,7 +3,7 @@ package com.cedricmartens.hectogon.server.command;
 import com.cedricmartens.hectogon.server.match.Match;
 import com.esotericsoftware.minlog.Log;
 
-public class MatchesCommand extends Command{
+public class ListMatchesCommand extends Command{
     @Override
     void execute(String[] args) {
 

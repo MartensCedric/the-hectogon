@@ -1,9 +1,11 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.Server;
+import com.esotericsoftware.minlog.Log;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -12,9 +14,28 @@ import java.util.Scanner;
 public class CommandCenter implements Runnable
 {
     private boolean running;
+    private static CommandCenter commandCenter;
     public static Server server;
-    public CommandCenter() {
+    private HashMap<String, Class<? extends Command>> aliasMap;
+
+    private CommandCenter() {
         running = true;
+        Log.trace("Command Center started!");
+        aliasMap = new HashMap<>();
+        aliasMap.put("send", MessageCommand.class);
+        aliasMap.put("start", LaunchCommand.class);
+        aliasMap.put("listmatches", ListMatchesCommand.class);
+        aliasMap.put("matches", ListMatchesCommand.class);
+    }
+
+    public static CommandCenter getCommandCenter()
+    {
+        if(commandCenter == null)
+        {
+            commandCenter = new CommandCenter();
+        }
+
+        return commandCenter;
     }
 
     @Override
@@ -39,7 +60,11 @@ public class CommandCenter implements Runnable
             try {
                 commandClass = Class.forName(getFullCommandName(command));
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                try {
+                    commandClass = getCommandClass(command);
+                } catch (InvalidCommandException e1) {
+                    e1.printStackTrace();
+                }
             }
             Constructor<?> ctor = null;
             try {
@@ -77,5 +102,17 @@ public class CommandCenter implements Runnable
 
 
         return getClass().getPackage().getName() + "." + finalCommand + "Command";
+    }
+
+    private Class<? extends Command> getCommandClass(String commandName) throws InvalidCommandException
+    {
+        commandName = commandName.toLowerCase();
+
+        if(aliasMap.containsKey(commandName))
+        {
+            return aliasMap.get(commandName);
+        }else{
+            throw new InvalidCommandException();
+        }
     }
 }
