@@ -63,7 +63,7 @@ public class CommandCenter implements Runnable
                 try {
                     commandClass = getCommandClass(command);
                 } catch (InvalidCommandException e1) {
-                    e1.printStackTrace();
+                    System.out.println("Invalid command");
                 }
             }
             Constructor<?> ctor = null;

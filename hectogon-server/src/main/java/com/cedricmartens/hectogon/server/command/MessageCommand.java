@@ -3,7 +3,6 @@ package com.cedricmartens.hectogon.server.command;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.messaging.MessagingService;
-import com.cedricmartens.hectogon.server.messaging.Messenger;
 
 /**
  * Created by Cedric Martens on 2017-11-09.

@@ -1,9 +1,6 @@
 package com.cedricmartens.hectogon.server;
 
-import com.cedricmartens.hectogon.server.match.Match;
-import com.cedricmartens.hectogon.server.match.MatchMock;
-import com.cedricmartens.hectogon.server.match.MatchService;
-import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
+import com.cedricmartens.hectogon.server.match.*;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
@@ -48,7 +45,6 @@ public class Server implements Runnable
                 Log.trace("New connection from" + socket.getInetAddress());
                 SocketConnection socketConnection = new SocketConnection(socket, this);
                 socketConnections.add(socketConnection);
-                this.getNextAvailableMatch().addPlayer(socketConnection);
 
                 new Thread(() -> socketConnection.listen(this)).run();
             }catch (SocketException e)

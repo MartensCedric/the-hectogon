@@ -9,9 +9,11 @@
 
 ## December 2017
 - Melee combat
+- Rolling
 - Blood
 - Map
 - Perks
+- Camera
 
 ## January 2018
 - Animals

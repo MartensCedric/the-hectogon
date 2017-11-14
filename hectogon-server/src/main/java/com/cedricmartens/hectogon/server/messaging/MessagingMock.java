@@ -5,7 +5,7 @@ import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.hectogon.server.match.Match;
 
-public class MessagingMatch implements MessagingService {
+public class MessagingMock implements MessagingService {
 
     public static final int MAX_CHARARACTERS = 280;
 

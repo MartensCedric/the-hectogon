@@ -9,12 +9,12 @@ public class ListMatchesCommand extends Command{
 
         if(CommandCenter.server == null)
         {
-            Log.warn("Server not started!");
+            System.out.println("Server not started!");
         }else{
-            Log.trace("Matches : ");
+            System.out.println("Matches : ");
             for(Match m : CommandCenter.server.getMatches())
             {
-                Log.trace(m.toString());
+                System.out.println(m.toString());
             }
         }
     }

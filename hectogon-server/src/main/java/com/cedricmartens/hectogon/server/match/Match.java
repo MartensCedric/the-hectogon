@@ -10,50 +10,46 @@ import java.util.List;
 public class Match
 {
     private static final int MAX_SLOTS = 100;
-    private List<SocketConnection> connections;
+    private List<Player> players;
     private int matchId;
     private boolean hasStarted;
 
+
     public Match(int matchId)
     {
-        this(matchId, new ArrayList<>());
-    }
-
-    public Match(int matchId, List<SocketConnection> connections)
-    {
         this.hasStarted = false;
-        this.connections = connections;
+        this.players = new ArrayList<>();
+        this.matchId = matchId;
     }
 
     public int getMatchId() {
         return matchId;
     }
 
-    public void addPlayer(SocketConnection connection)
+    public void addPlayer(Player player)
     {
-        this.connections.add(connection);
+        this.players.add(player);
     }
 
     public void sendToEveryone(Packet packet)
     {
-        for(int i = 0; i < connections.size(); i++)
-        {
+        players.forEach((p) -> {
             try {
-                connections.get(i).sendPacket(packet);
+                p.sendPacket(packet);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        });
     }
 
     public boolean canJoin()
     {
         //TODO improve this
-        return !hasStarted && connections.size() < MAX_SLOTS;
+        return !hasStarted && players.size() < MAX_SLOTS;
     }
 
     @Override
     public String toString() {
-        return "Id : " + matchId + "\tConnections : " + connections.size() + "\tAvailable :" + canJoin();
+        return "Id : " + matchId + "\tPlayers : " + players.size() + "\tAvailable : " + canJoin();
     }
 }
