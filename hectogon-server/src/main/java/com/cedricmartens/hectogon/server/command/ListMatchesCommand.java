@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.match.Match;
-import com.esotericsoftware.minlog.Log;
 
 public class ListMatchesCommand extends Command{
     @Override

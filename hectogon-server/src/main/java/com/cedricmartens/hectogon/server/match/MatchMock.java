@@ -1,7 +1,5 @@
 package com.cedricmartens.hectogon.server.match;
 
-import java.util.ArrayList;
-
 /**
  * Created by Cedric Martens on 2017-11-13.
  */

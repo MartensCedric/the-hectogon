@@ -1,6 +1,9 @@
 package com.cedricmartens.hectogon.server;
 
-import com.cedricmartens.hectogon.server.match.*;
+import com.cedricmartens.hectogon.server.match.Match;
+import com.cedricmartens.hectogon.server.match.MatchMock;
+import com.cedricmartens.hectogon.server.match.MatchService;
+import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;

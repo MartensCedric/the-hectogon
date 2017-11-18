@@ -3,8 +3,8 @@ package com.cedricmartens.hectogon.client.core.game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.cedricmartens.hectogon.client.core.game.SceneManager;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
+import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 
 public class Hectogon extends SceneManager
 {
@@ -37,6 +37,9 @@ public class Hectogon extends SceneManager
 
 		assetManager.load("i18n/language", I18NBundle.class);
 		assetManager.finishLoading();
+
+		TextureUtil textureUtil = TextureUtil.getTextureUtil();
+		textureUtil.setAssetManager(assetManager);
 
 		gameManager.i18NBundle = assetManager.get("i18n/language", I18NBundle.class);
 		this.pushScreen(new MainMenuScreen(gameManager));

@@ -71,6 +71,7 @@ public class SocketConnection implements SocketListener {
                     PacketOutLogin packetOutLogin = new PacketOutLogin();
                     packetOutLogin.setLoginStatus(loginStatus);
                     packetOutLogin.setToken("token");
+                    packetOutLogin.setUserId(0);
                     Packet.writeHeader(PacketOutLogin.class, socket.getOutputStream());
                     packetOutLogin.writeTo(socket.getOutputStream());
 

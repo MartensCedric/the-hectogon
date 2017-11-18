@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;
 import com.cedricmartens.commons.storage.inventory.Item;
+import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 
 public class InventoryUI extends Table
 {
@@ -24,11 +25,14 @@ public class InventoryUI extends Table
         if(inventory.getSlotCount() != inventorySlotImages.length)
             throw new IllegalStateException();
 
+        TextureUtil textureUtil = TextureUtil.getTextureUtil();
         int n = 0;
         for(InventorySlot is : inventory)
         {
             inventorySlotImages[n] = new InventorySlotImage(is);
-            //inventorySlotImages[n].setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
+            Texture texture = textureUtil.getItemTexture(is.getItem());
+            TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(texture));
+            inventorySlotImages[n].setDrawable(trd);
             n++;
         }
 

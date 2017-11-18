@@ -18,11 +18,10 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
-import com.cedricmartens.hectogon.client.core.game.Hectogon;
 import com.cedricmartens.hectogon.client.core.ui.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
-import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.ui.OnSend;
+import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 
 import java.io.IOException;

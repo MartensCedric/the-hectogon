@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game;
+package com.cedricmartens.hectogon.client.core.util;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +25,16 @@ public class TextureUtil
         initItemMap();
     }
 
+    public Texture getItemTexture(Item item)
+    {
+        if(itemMap.containsKey(item))
+        {
+            return itemMap.get(item);
+        }
+
+        return assetManager.get("test.png", Texture.class);
+    }
+
     private void initItemMap()
     {
         itemMap.put(Item.bomb, assetManager.get("items/bomb.png", Texture.class));
@@ -35,7 +45,9 @@ public class TextureUtil
     public static TextureUtil getTextureUtil()
     {
         if(textureUtil == null)
-            throw new IllegalStateException();
+        {
+            textureUtil = new TextureUtil();
+        }
 
         return textureUtil;
     }
