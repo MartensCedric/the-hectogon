@@ -3,6 +3,7 @@ package com.cedricmartens.hectogon.client.core.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -36,14 +37,14 @@ public class InventoryUI extends Table
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        TextureUtil textureUtil = TextureUtil.getTextureUtil();
-
-        //TODO fix this bug, needs projection matrix
         if(selectedItem != null)
         {
+            TextureUtil textureUtil = TextureUtil.getTextureUtil();
+
             batch.draw(textureUtil.getItemTexture(selectedItem),
                     Gdx.input.getX(), HEIGHT - Gdx.input.getY());
         }
+
         super.draw(batch, parentAlpha);
     }
 

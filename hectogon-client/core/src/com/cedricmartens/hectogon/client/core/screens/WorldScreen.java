@@ -136,7 +136,6 @@ public class WorldScreen extends StageScreen{
         this.batch.begin();
         map.render(batch);
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
-        batch.draw(assetManager.get("character/dummy.png", Texture.class), worldCamera.position.x - 16, worldCamera.position.y - 24);
         this.batch.end();
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.begin();
