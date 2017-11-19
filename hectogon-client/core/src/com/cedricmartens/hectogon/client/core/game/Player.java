@@ -8,30 +8,52 @@ import com.cedricmartens.commons.User;
 
 public class Player extends Contestant implements InputProcessor {
 
+    private boolean upPressed;
+    private boolean downPressed;
+    private boolean leftPressed;
+    private boolean rightPressed;
+
     public Player(User user, Point position) {
         super(user, position);
+        upPressed = false;
+        downPressed = false;
+        leftPressed = false;
+        rightPressed = false;
     }
 
     @Override
     public boolean keyDown(int keycode)
     {
         if(Input.Keys.LEFT == keycode)
-            move(0.15f, (float) Math.PI);
+            leftPressed = true;
 
         if(Input.Keys.RIGHT == keycode)
-            move(0.15f, 0);
+            rightPressed = true;
 
         if(Input.Keys.UP == keycode)
-            move(0.15f, (float) (Math.PI + Math.PI/2));
+            upPressed = true;
 
         if(Input.Keys.DOWN == keycode)
-            move(0.15f, (float) Math.PI/2);
+            downPressed = true;
+
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        if(Input.Keys.LEFT == keycode)
+            leftPressed = false;
+
+        if(Input.Keys.RIGHT == keycode)
+            rightPressed = false;
+
+        if(Input.Keys.UP == keycode)
+            upPressed = false;
+
+        if(Input.Keys.DOWN == keycode)
+            downPressed = false;
+
+        return true;
     }
 
     @Override
@@ -62,5 +84,34 @@ public class Player extends Contestant implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void move(float speed, float deltaTime)
+    {
+        if(leftPressed)
+        {
+            addForce(speed, (float) Math.PI, deltaTime);
+        }
+
+        if(rightPressed)
+        {
+            addForce(speed, 0, deltaTime);
+        }
+
+        if(upPressed)
+        {
+            addForce(speed, (float) Math.PI / 2, deltaTime);
+        }
+
+        if(downPressed)
+        {
+            addForce(speed, (float) (Math.PI + Math.PI/2), deltaTime);
+        }
+    }
+
+    private void addForce(float speed, float direction, float deltaTime)
+    {
+        getPosition().x += Math.cos(direction) * speed * deltaTime;
+        getPosition().y += Math.sin(direction) * speed * deltaTime;
     }
 }

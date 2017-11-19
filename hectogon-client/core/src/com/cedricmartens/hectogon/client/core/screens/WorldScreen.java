@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.Point;
+import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
@@ -18,7 +20,9 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
+import com.cedricmartens.hectogon.client.core.game.Contestant;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
+import com.cedricmartens.hectogon.client.core.game.Player;
 import com.cedricmartens.hectogon.client.core.ui.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
 import com.cedricmartens.hectogon.client.core.ui.OnSend;
@@ -27,10 +31,12 @@ import com.cedricmartens.hectogon.client.core.world.Map;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 
-public class WorldScreen extends StageScreen{
+public class WorldScreen extends StageScreen {
 
     private Map map;
     private SpriteBatch batch;
@@ -42,10 +48,16 @@ public class WorldScreen extends StageScreen{
     private InventoryUI inventoryUI;
     private Inventory playerInv;
     private Chest chest;
+    private List<Contestant> contestants;
+    private Player player;
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
+        this.contestants = new ArrayList<Contestant>();
+        this.player = new Player(new User(0, "Loomy"), new Point(0, 0));
+        this.contestants.add(player);
+
         this.debugRenderer = new ShapeRenderer();
         this.debugRenderer.setAutoShapeType(true);
         this.chest = new Chest(12);
@@ -57,7 +69,7 @@ public class WorldScreen extends StageScreen{
         this.batch = new SpriteBatch();
         this.worldCamera = new OrthographicCamera();
         this.worldCamera.setToOrtho(false);
-        this.worldCamera.zoom = 0.5f;
+        this.worldCamera.zoom = .5f;
         this.worldCamera.position.x = -25;
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
@@ -129,13 +141,20 @@ public class WorldScreen extends StageScreen{
     public void render(float delta) {
         Gdx.gl.glClearColor(1f, 0.25f, 0.25f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.setProjectionMatrix(this.worldCamera.combined);
-
+        player.move(150, delta);
+        worldCamera.position.x = player.getPosition().x;
+        worldCamera.position.y = player.getPosition().y;
         worldCamera.update();
 
+        batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
         map.render(batch);
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
+        for(Contestant c : contestants)
+        {
+            batch.draw(assetManager.get("character/dummy.png", Texture.class),
+                    c.getPosition().x, c.getPosition().y);
+        }
         this.batch.end();
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.begin();
@@ -162,5 +181,14 @@ public class WorldScreen extends StageScreen{
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public void show()
+    {
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(player);
+        multiplexer.addProcessor(this.getStage());
+        Gdx.input.setInputProcessor(multiplexer);
     }
 }

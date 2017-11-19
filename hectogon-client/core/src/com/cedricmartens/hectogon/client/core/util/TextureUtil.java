@@ -7,7 +7,7 @@ import com.cedricmartens.commons.storage.inventory.Item;
 import java.util.HashMap;
 
 /**
- * Created by 1544256 on 2017-11-14.
+ * Created by Cedric Martens on 2017-11-14.
  */
 public class TextureUtil
 {

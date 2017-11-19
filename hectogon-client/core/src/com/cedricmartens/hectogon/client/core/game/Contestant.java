@@ -19,4 +19,9 @@ public class Contestant
         position.x += Math.cos(direction) * speed * /* DELTA TIME */ 1;
         position.y += Math.sin(direction) * speed * /* DELTA TIME */ 1;
     }
+
+    public Point getPosition()
+    {
+        return position;
+    }
 }

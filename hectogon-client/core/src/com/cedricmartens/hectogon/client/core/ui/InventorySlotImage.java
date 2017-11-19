@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;
 
 /**
- * Created by 1544256 on 2017-11-14.
+ * Created by Cedric Martens on 2017-11-14.
  */
 public class InventorySlotImage extends Image
 {
