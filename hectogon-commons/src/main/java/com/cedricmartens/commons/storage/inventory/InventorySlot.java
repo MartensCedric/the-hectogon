@@ -24,6 +24,11 @@ public class InventorySlot {
         count -= amount;
     }
 
+    public void setItem(Item item)
+    {
+        this.item = item;
+    }
+
     public Item getItem() {
         return item;
     }
@@ -35,5 +40,11 @@ public class InventorySlot {
     public boolean fullStack()
     {
         return item.getStackMax() == getQuantity();
+    }
+
+    public void clear()
+    {
+        item = Item.empty_slot;
+        count = 0;
     }
 }

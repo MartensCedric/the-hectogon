@@ -17,6 +17,7 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.GameManager;
 import com.cedricmartens.hectogon.client.core.ui.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
@@ -61,15 +62,20 @@ public class WorldScreen extends StageScreen{
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
         this.playerInv = new Inventory(12);
+        this.playerInv.addItem(Item.bow_wood);
+        this.playerInv.addItem(Item.bomb);
         inventoryUI = new InventoryUI(playerInv);
         Texture textureInventory = gameManager.assetManager.get("ui/inventory.png", Texture.class);
         Drawable drawableInventory = new TextureRegionDrawable(new TextureRegion(
                 textureInventory));
         inventoryUI.setBackground(drawableInventory);
-        inventoryUI.setWidth(textureInventory.getWidth());
-        inventoryUI.setHeight(textureInventory.getHeight());
-        inventoryUI.setX(WIDTH - textureInventory.getWidth());
+        inventoryUI.setWidth(textureInventory.getWidth() * 2);
+        inventoryUI.setHeight(textureInventory.getHeight() * 2);
+        inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
         inventoryUI.setY(0);
+        inventoryUI.setDebug(true);
+        inventoryUI.debugTable();
+
         getStage().addActor(inventoryUI);
 
         final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
