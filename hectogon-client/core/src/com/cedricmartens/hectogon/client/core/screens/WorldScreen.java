@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
@@ -27,6 +29,7 @@ import com.cedricmartens.hectogon.client.core.ui.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
 import com.cedricmartens.hectogon.client.core.ui.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
+import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 
 import java.io.IOException;
@@ -39,7 +42,7 @@ import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 public class WorldScreen extends StageScreen {
 
     private Map map;
-    private SpriteBatch batch;
+    private SpriteBatch batch, uiBatch;
     private ShapeRenderer debugRenderer;
     private OrthographicCamera worldCamera;
     private boolean listening;
@@ -67,6 +70,7 @@ public class WorldScreen extends StageScreen {
         this.assetManager = gameManager.assetManager;
         this.map = new Map(this.assetManager);
         this.batch = new SpriteBatch();
+        this.uiBatch = new SpriteBatch();
         this.worldCamera = new OrthographicCamera();
         this.worldCamera.setToOrtho(false);
         this.worldCamera.zoom = .5f;
@@ -141,9 +145,11 @@ public class WorldScreen extends StageScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1f, 0.25f, 0.25f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         player.move(150, delta);
-        worldCamera.position.x = player.getPosition().x;
-        worldCamera.position.y = player.getPosition().y;
+        worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
+        worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
         worldCamera.update();
 
         batch.setProjectionMatrix(this.worldCamera.combined);
@@ -152,15 +158,31 @@ public class WorldScreen extends StageScreen {
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
         for(Contestant c : contestants)
         {
-            batch.draw(assetManager.get("character/dummy.png", Texture.class),
-                    c.getPosition().x, c.getPosition().y);
+            batch.draw(playerDummy, c.getPosition().x, c.getPosition().y);
         }
         this.batch.end();
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.begin();
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
+        this.debugRenderer.rect(player.getPosition().x, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
+
         super.render(delta);
+
+        if(this.inventoryUI.getSelectedItem() != null)
+        {
+            this.uiBatch.setProjectionMatrix(getCamera().combined);
+            this.uiBatch.begin();
+            TextureUtil textureUtil = TextureUtil.getTextureUtil();
+            Texture textureItem = textureUtil.getItemTexture(this.inventoryUI.getSelectedItem());
+            Viewport viewPort = getStage().getViewport();
+            Vector3 pos = getCamera().unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0),
+                    viewPort.getScreenX(), viewPort.getScreenY(),
+                    viewPort.getScreenWidth(), viewPort.getScreenHeight());
+            this.uiBatch.draw(textureItem, pos.x - textureItem.getWidth(), pos.y - textureItem.getHeight(),
+                    textureItem.getWidth() * 2, textureItem.getHeight() * 2);
+            this.uiBatch.end();
+        }
     }
 
     @Override

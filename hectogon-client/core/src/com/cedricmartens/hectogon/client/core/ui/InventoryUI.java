@@ -1,9 +1,6 @@
 package com.cedricmartens.hectogon.client.core.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,8 +10,6 @@ import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
-
-import static com.cedricmartens.hectogon.client.core.game.Hectogon.HEIGHT;
 
 public class InventoryUI extends Table
 {
@@ -33,19 +28,6 @@ public class InventoryUI extends Table
             throw new IllegalStateException();
 
         refresh();
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        if(selectedItem != null)
-        {
-            TextureUtil textureUtil = TextureUtil.getTextureUtil();
-
-            batch.draw(textureUtil.getItemTexture(selectedItem),
-                    Gdx.input.getX(), HEIGHT - Gdx.input.getY());
-        }
-
-        super.draw(batch, parentAlpha);
     }
 
     public void refresh()
@@ -79,7 +61,10 @@ public class InventoryUI extends Table
             }
             row();
         }
+    }
 
-
+    public Item getSelectedItem()
+    {
+        return selectedItem;
     }
 }
