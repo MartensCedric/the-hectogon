@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;
@@ -38,14 +39,38 @@ public class InventoryUI extends Table
         for(final InventorySlot is : inventory)
         {
             inventorySlotImages[n] = new InventorySlotImage(is);
-            Texture texture = textureUtil.getItemTexture(is.getItem());
-            TextureRegionDrawable trd = new TextureRegionDrawable(new TextureRegion(texture));
-            inventorySlotImages[n].setDrawable(trd);
-            inventorySlotImages[n].addListener(new ClickListener(){
+            inventorySlotImages[n].setDebug(true);
+            if(is.getItem() != Item.empty_slot)
+            {
+                Texture textureItem = textureUtil.getItemTexture(is.getItem());
+                Drawable drawable = new TextureRegionDrawable(new TextureRegion(textureItem));
+                inventorySlotImages[n].setDrawable(drawable);
+            }
+
+            inventorySlotImages[n].addListener(new ClickListener()
+            {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    selectedItem = is.getItem();
-                    is.clear();
+
+                    if(selectedItem == null)
+                    {
+                        if(is.getItem() != Item.empty_slot)
+                        {
+                            selectedItem = is.getItem();
+                            is.clear();
+                        }
+                    }else
+                    {
+                        if(is.getItem() == Item.empty_slot)
+                        {
+                            is.setItem(selectedItem);
+                            selectedItem = null;
+                        }else{
+                            Item tempItem = selectedItem;
+                            selectedItem = is.getItem();
+                            is.setItem(tempItem);
+                        }
+                    }
                     refresh();
                 }
             });
@@ -61,6 +86,11 @@ public class InventoryUI extends Table
             }
             row();
         }
+    }
+
+    public void clearSelectedItem()
+    {
+        selectedItem = null;
     }
 
     public Item getSelectedItem()
