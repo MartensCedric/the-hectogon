@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.ui;
+package com.cedricmartens.hectogon.client.core.ui.inventory;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;

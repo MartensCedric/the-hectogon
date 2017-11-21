@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.ui;
+package com.cedricmartens.hectogon.client.core.ui.inventory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

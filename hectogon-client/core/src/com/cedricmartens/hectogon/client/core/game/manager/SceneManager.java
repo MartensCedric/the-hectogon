@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game;
+package com.cedricmartens.hectogon.client.core.game.manager;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;

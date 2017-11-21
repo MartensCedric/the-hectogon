@@ -116,6 +116,7 @@ public class SocketConnection implements SocketListener {
             }catch (IOException e) {
                 e.printStackTrace();
                 listening = false;
+                server.removeSocketConnection(this);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InstantiationException e) {
@@ -124,5 +125,20 @@ public class SocketConnection implements SocketListener {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SocketConnection that = (SocketConnection) o;
+
+        return playerId == that.playerId;
+    }
+
+    @Override
+    public int hashCode() {
+        return playerId;
     }
 }

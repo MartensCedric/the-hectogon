@@ -89,4 +89,9 @@ public class Server implements Runnable
         matches.add(match);
         return match;
     }
+
+    public boolean removeSocketConnection(SocketConnection connection)
+    {
+        return socketConnections.remove(connection);
+    }
 }

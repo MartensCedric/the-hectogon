@@ -12,7 +12,7 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.authentification.LoginStatus;
 import com.cedricmartens.commons.networking.authentification.PacketInLogin;
 import com.cedricmartens.commons.networking.authentification.PacketOutLogin;
-import com.cedricmartens.hectogon.client.core.game.GameManager;
+import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 

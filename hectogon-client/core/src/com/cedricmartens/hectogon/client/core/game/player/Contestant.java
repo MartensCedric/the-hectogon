@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game;
+package com.cedricmartens.hectogon.client.core.game.player;
 
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;

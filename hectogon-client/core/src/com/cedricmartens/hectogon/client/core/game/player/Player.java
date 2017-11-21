@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game;
+package com.cedricmartens.hectogon.client.core.game.player;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
