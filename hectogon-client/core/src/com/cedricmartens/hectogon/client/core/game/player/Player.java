@@ -4,36 +4,47 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.networking.actions.MovementAction;
 
 public class Player extends Contestant implements InputProcessor {
 
-    private boolean upPressed;
-    private boolean downPressed;
-    private boolean leftPressed;
-    private boolean rightPressed;
+    private MovementListener movementListener;
 
-    public Player(User user, Point position) {
+    public Player(User user, Point position, MovementListener movementListener) {
         super(user, position);
-        upPressed = false;
-        downPressed = false;
-        leftPressed = false;
-        rightPressed = false;
+        movingUp = false;
+        movingDown = false;
+        movingLeft = false;
+        movingRight = false;
+        this.movementListener = movementListener;
     }
 
     @Override
     public boolean keyDown(int keycode)
     {
         if(Input.Keys.LEFT == keycode)
-            leftPressed = true;
+        {
+            movingLeft = true;
+            movementListener.move(MovementAction.LEFT_KEY_PRESS);
+        }
 
         if(Input.Keys.RIGHT == keycode)
-            rightPressed = true;
+        {
+            movingRight = true;
+            movementListener.move(MovementAction.RIGHT_KEY_PRESS);
+        }
 
         if(Input.Keys.UP == keycode)
-            upPressed = true;
+        {
+            movingUp = true;
+            movementListener.move(MovementAction.UP_KEY_PRESS);
+        }
 
         if(Input.Keys.DOWN == keycode)
-            downPressed = true;
+        {
+            movingDown = true;
+            movementListener.move(MovementAction.DOWN_KEY_PRESS);
+        }
 
         return true;
     }
@@ -41,16 +52,25 @@ public class Player extends Contestant implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if(Input.Keys.LEFT == keycode)
-            leftPressed = false;
+        {
+            movingLeft = false;
+            movementListener.move(MovementAction.LEFT_KEY_RELEASED);
+        }
 
-        if(Input.Keys.RIGHT == keycode)
-            rightPressed = false;
+        if(Input.Keys.RIGHT == keycode) {
+            movingRight = false;
+            movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
+        }
 
-        if(Input.Keys.UP == keycode)
-            upPressed = false;
+        if(Input.Keys.UP == keycode) {
+            movingUp = false;
+            movementListener.move(MovementAction.UP_KEY_RELEASED);
+        }
 
-        if(Input.Keys.DOWN == keycode)
-            downPressed = false;
+        if(Input.Keys.DOWN == keycode) {
+            movingDown = false;
+            movementListener.move(MovementAction.DOWN_KEY_RELEASED);
+        }
 
         return true;
     }
@@ -83,34 +103,5 @@ public class Player extends Contestant implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    public void move(float speed, float deltaTime)
-    {
-        if(leftPressed)
-        {
-            addForce(speed, (float) Math.PI, deltaTime);
-        }
-
-        if(rightPressed)
-        {
-            addForce(speed, 0, deltaTime);
-        }
-
-        if(upPressed)
-        {
-            addForce(speed, (float) Math.PI / 2, deltaTime);
-        }
-
-        if(downPressed)
-        {
-            addForce(speed, (float) (Math.PI + Math.PI/2), deltaTime);
-        }
-    }
-
-    private void addForce(float speed, float direction, float deltaTime)
-    {
-        getPosition().x += Math.cos(direction) * speed * deltaTime;
-        getPosition().y += Math.sin(direction) * speed * deltaTime;
     }
 }

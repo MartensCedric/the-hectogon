@@ -114,8 +114,8 @@ public class SocketConnection implements SocketListener {
                 }
 
             }catch (IOException e) {
-                e.printStackTrace();
                 listening = false;
+                Log.info(this.playerId + " at " + this.getSocket().getInetAddress().getHostAddress() +" has disconnected");
                 server.removeSocketConnection(this);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

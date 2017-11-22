@@ -25,6 +25,7 @@ import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.player.Contestant;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
+import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
@@ -62,7 +63,8 @@ public class WorldScreen extends StageScreen {
     {
         super(gameManager);
         this.contestants = new ArrayList<Contestant>();
-        this.player = new Player(new User(0, "Loomy"), new Point(0, 0));
+        this.player = new Player(new User(0, "Loomy"), new Point(0, 0),
+                new NetworkMovementListener(this.socket));
         this.decorations = new ArrayList<Entity>();
         for(int i = 0; i < 100; i++)
         {
@@ -123,6 +125,7 @@ public class WorldScreen extends StageScreen {
                 }
             }
         });
+
         getStage().addActor(chatInput);
 
         new Thread(new Runnable() {

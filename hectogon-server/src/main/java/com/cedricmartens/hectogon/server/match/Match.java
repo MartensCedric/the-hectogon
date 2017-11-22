@@ -51,4 +51,9 @@ public class Match
     public String toString() {
         return "Id : " + matchId + "\tPlayers : " + players.size() + "\tAvailable : " + canJoin();
     }
+
+    public void removePlayer(int playerId)
+    {
+        players.removeIf(p -> p.getUserId() == playerId);
+    }
 }

@@ -6,6 +6,7 @@ import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.esotericsoftware.minlog.Log;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -43,20 +44,24 @@ public class Server implements Runnable
 
         while (listening)
         {
+            SocketConnection socketConnection = null;
             try {
                 Socket socket = serverSocket.accept();
-                Log.trace("New connection from" + socket.getInetAddress());
-                SocketConnection socketConnection = new SocketConnection(socket, this);
+                Log.trace("New connection from " + socket.getInetAddress());
+                socketConnection = new SocketConnection(socket, this);
                 socketConnections.add(socketConnection);
 
-                new Thread(() -> socketConnection.listen(this)).run();
+                SocketConnection finalSocketConnection = socketConnection;
+                new Thread(() -> finalSocketConnection.listen(this)).run();
             }catch (SocketException e)
             {
                 e.printStackTrace();
+                this.removeSocketConnection(socketConnection);
             }
             catch (IOException e) {
                 e.printStackTrace();
                 listening = false;
+                this.removeSocketConnection(socketConnection);
             }
         }
     }
@@ -90,8 +95,12 @@ public class Server implements Runnable
         return match;
     }
 
-    public boolean removeSocketConnection(SocketConnection connection)
+    public synchronized boolean removeSocketConnection(SocketConnection connection)
     {
+        for(Match m : matches)
+        {
+            m.removePlayer(connection.getPlayerId());
+        }
         return socketConnections.remove(connection);
     }
 }
