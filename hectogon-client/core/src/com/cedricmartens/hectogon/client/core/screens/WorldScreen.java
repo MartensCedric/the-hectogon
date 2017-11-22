@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
+import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -31,6 +32,7 @@ import com.cedricmartens.hectogon.client.core.ui.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
+import com.cedricmartens.hectogon.client.core.world.StartStone;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
+import static java.lang.Math.PI;
 
 public class WorldScreen extends StageScreen {
 
@@ -52,6 +55,7 @@ public class WorldScreen extends StageScreen {
     private Inventory playerInv;
     private Chest chest;
     private List<Contestant> contestants;
+    private List<Entity> decorations;
     private Player player;
 
     public WorldScreen(GameManager gameManager)
@@ -59,6 +63,13 @@ public class WorldScreen extends StageScreen {
         super(gameManager);
         this.contestants = new ArrayList<Contestant>();
         this.player = new Player(new User(0, "Loomy"), new Point(0, 0));
+        this.decorations = new ArrayList<Entity>();
+        for(int i = 0; i < 100; i++)
+        {
+            float x = Math.round(2500 * Math.cos((PI * i) / (100 / 2)));
+            float y = Math.round(2500 * Math.sin((PI * i) / (100 / 2)));
+            this.decorations.add(new StartStone(x, y));
+        }
         this.contestants.add(player);
 
         this.debugRenderer = new ShapeRenderer();
@@ -155,6 +166,16 @@ public class WorldScreen extends StageScreen {
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
         map.render(batch);
+        for(Entity e : decorations)
+        {
+            if(e instanceof StartStone)
+            {
+                Texture texStartStone = assetManager.get("misc/startstone.png", Texture.class);
+                batch.draw(texStartStone,
+                        e.getPosition().x - texStartStone.getWidth()/2,
+                        e.getPosition().y - texStartStone.getHeight()/2);
+            }
+        }
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
         for(Contestant c : contestants)
         {

@@ -12,6 +12,7 @@ public class Chest extends SolidEntity implements Iterable<InventorySlot>
 
     public Chest(int inventorySize)
     {
+        super(0, 0);
         this.inventory = new Inventory(inventorySize);
     }
 

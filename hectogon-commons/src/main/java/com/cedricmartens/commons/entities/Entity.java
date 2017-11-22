@@ -4,6 +4,10 @@ import com.cedricmartens.commons.Point;
 
 public abstract class Entity
 {
+    public Entity(float x, float y)
+    {
+        setPosition(new Point(x, y));
+    }
     private Point position;
 
     public Point getPosition() {
