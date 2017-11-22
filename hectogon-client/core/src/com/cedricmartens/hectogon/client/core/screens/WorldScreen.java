@@ -23,12 +23,12 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
-import com.cedricmartens.hectogon.client.core.game.Contestant;
-import com.cedricmartens.hectogon.client.core.game.GameManager;
-import com.cedricmartens.hectogon.client.core.game.Player;
-import com.cedricmartens.hectogon.client.core.ui.ChatInput;
-import com.cedricmartens.hectogon.client.core.ui.InventoryUI;
-import com.cedricmartens.hectogon.client.core.ui.OnSend;
+import com.cedricmartens.hectogon.client.core.game.player.Contestant;
+import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
+import com.cedricmartens.hectogon.client.core.game.player.Player;
+import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
+import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
@@ -192,12 +192,12 @@ public class WorldScreen extends StageScreen {
 
         if(this.inventoryUI.getSelectedItem() != null)
         {
-            this.uiBatch.setProjectionMatrix(getCamera().combined);
+            this.uiBatch.setProjectionMatrix(getStage().getCamera().combined);
             this.uiBatch.begin();
             TextureUtil textureUtil = TextureUtil.getTextureUtil();
             Texture textureItem = textureUtil.getItemTexture(this.inventoryUI.getSelectedItem());
             Viewport viewPort = getStage().getViewport();
-            Vector3 pos = getCamera().unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0),
+            Vector3 pos = getStage().getCamera().unproject(new Vector3(Gdx.input.getX(),Gdx.input.getY(),0),
                     viewPort.getScreenX(), viewPort.getScreenY(),
                     viewPort.getScreenWidth(), viewPort.getScreenHeight());
             this.uiBatch.draw(textureItem, pos.x - textureItem.getWidth(), pos.y - textureItem.getHeight(),
