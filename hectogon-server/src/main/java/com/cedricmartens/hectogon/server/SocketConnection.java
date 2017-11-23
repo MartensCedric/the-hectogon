@@ -1,9 +1,11 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
@@ -25,6 +27,7 @@ public class SocketConnection implements SocketListener {
     private int playerId = ANONYMOUS_PLAYER;
     private boolean listening = true;
     private Server server;
+    private Player player;
 
     public SocketConnection(Socket socket, Server server) {
         this.socket = socket;
@@ -79,7 +82,8 @@ public class SocketConnection implements SocketListener {
                     {
                         UserService userService = new UserMock();
                         User user = userService.getUserByUsername(packetInLogin.getUsername());
-                        Player player = new Player(this, user);
+                        Player player = new Player(this, user, new Point(0,0));
+                        this.player = player;
                         server.getNextAvailableMatch().addPlayer(player);
                     }
 
@@ -110,6 +114,16 @@ public class SocketConnection implements SocketListener {
                                 packetInChat.getMessage());
                     } catch (NoMatchFoundException e) {
                         e.printStackTrace();
+                    }
+                }else if(packet instanceof PacketMovement)
+                {
+                    PacketMovement packetMovement = (PacketMovement) packet;
+                    if(player != null)
+                    {
+                        Log.trace("Someone did " + packetMovement.getMovementAction().name());
+                        player.processMovement(packetMovement.getMovementAction());
+                    }else{
+                        throw new IllegalStateException();
                     }
                 }
 

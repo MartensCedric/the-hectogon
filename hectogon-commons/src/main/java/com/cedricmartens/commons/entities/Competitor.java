@@ -1,19 +1,19 @@
-package com.cedricmartens.hectogon.client.core.game.player;
+package com.cedricmartens.commons.entities;
 
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 
-public class Contestant
+public class Competitor
 {
-    private User user;
-    private Point position;
+    protected User user;
+    protected Point position;
 
     protected boolean movingUp;
     protected boolean movingDown;
     protected boolean movingLeft;
     protected boolean movingRight;
 
-    public Contestant(User user, Point position)
+    public Competitor(User user, Point position)
     {
         this.user = user;
         this.position = position;
@@ -58,6 +58,4 @@ public class Contestant
     {
         return position;
     }
-
-
 }

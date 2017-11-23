@@ -4,9 +4,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.actions.MovementAction;
 
-public class Player extends Contestant implements InputProcessor {
+public class Player extends Competitor implements InputProcessor {
 
     private MovementListener movementListener;
 

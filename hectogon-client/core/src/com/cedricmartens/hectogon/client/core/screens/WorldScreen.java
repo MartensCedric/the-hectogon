@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
+import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
@@ -23,7 +24,6 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
-import com.cedricmartens.hectogon.client.core.game.player.Contestant;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
@@ -55,14 +55,15 @@ public class WorldScreen extends StageScreen {
     private InventoryUI inventoryUI;
     private Inventory playerInv;
     private Chest chest;
-    private List<Contestant> contestants;
+    private List<Competitor> contestants;
     private List<Entity> decorations;
     private Player player;
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
-        this.contestants = new ArrayList<Contestant>();
+        this.socket = gameManager.socket;
+        this.contestants = new ArrayList<Competitor>();
         this.player = new Player(new User(0, "Loomy"), new Point(0, 0),
                 new NetworkMovementListener(this.socket));
         this.decorations = new ArrayList<Entity>();
@@ -78,7 +79,6 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.setAutoShapeType(true);
         this.chest = new Chest(12);
         this.chest.setPosition(new Point(0, 0));
-        this.socket = gameManager.socket;
         this.listening = true;
         this.assetManager = gameManager.assetManager;
         this.map = new Map(this.assetManager);
@@ -180,7 +180,7 @@ public class WorldScreen extends StageScreen {
             }
         }
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
-        for(Contestant c : contestants)
+        for(Competitor c : contestants)
         {
             batch.draw(playerDummy, c.getPosition().x, c.getPosition().y);
         }

@@ -56,4 +56,15 @@ public class Match
     {
         players.removeIf(p -> p.getUserId() == playerId);
     }
+
+    public Player getPlayerById(int playerId)
+    {
+        for(Player player : players)
+        {
+            if(player.getUserId() == playerId)
+                return player;
+        }
+
+        throw new IllegalStateException();
+    }
 }
