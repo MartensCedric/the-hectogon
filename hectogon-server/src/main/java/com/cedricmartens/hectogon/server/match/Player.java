@@ -28,11 +28,6 @@ public class Player extends Competitor
         connection.sendPacket(packet);
     }
 
-    public int getUserId()
-    {
-        return user.getUserId();
-    }
-
     @Override
     public void move(float speed, float deltaTime) {
         super.move(speed, deltaTime);

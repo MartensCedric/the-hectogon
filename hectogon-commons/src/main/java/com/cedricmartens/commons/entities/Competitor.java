@@ -48,6 +48,10 @@ public class Competitor
         }
     }
 
+    public User getUser() {
+        return user;
+    }
+
     private void addForce(float speed, float direction, float deltaTime)
     {
         getPosition().x += Math.cos(direction) * speed * deltaTime;

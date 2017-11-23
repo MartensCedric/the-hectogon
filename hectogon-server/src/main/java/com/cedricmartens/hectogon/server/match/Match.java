@@ -5,6 +5,7 @@ import com.cedricmartens.commons.networking.Packet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class Match
 {
@@ -41,6 +42,11 @@ public class Match
         });
     }
 
+    public void send(Predicate<Player> player, Packet packet)
+    {
+        //TODO finish htis
+    }
+
     public boolean canJoin()
     {
         //TODO improve this
@@ -54,14 +60,14 @@ public class Match
 
     public void removePlayer(int playerId)
     {
-        players.removeIf(p -> p.getUserId() == playerId);
+        players.removeIf(p -> p.getUser().getUserId() == playerId);
     }
 
     public Player getPlayerById(int playerId)
     {
         for(Player player : players)
         {
-            if(player.getUserId() == playerId)
+            if(player.getUser().getUserId() == playerId)
                 return player;
         }
 
