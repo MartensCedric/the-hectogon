@@ -6,7 +6,6 @@ import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.esotericsoftware.minlog.Log;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,13 +17,13 @@ public class Server implements Runnable
 {
     private List<SocketConnection> socketConnections;
     private List<Match> matches;
-    private boolean listening;
+    private boolean serverUp;
     private ServerSocket serverSocket;
     private int port;
 
     public Server(int port)
     {
-        this.listening = true;
+        this.serverUp = true;
         this.port = port;
         socketConnections = new ArrayList<>();
         this.matches = new ArrayList<>();
@@ -40,9 +39,31 @@ public class Server implements Runnable
     @Override
     public void run()
     {
-        Log.info("Server is listening to connecting sockets on port : " + port);
+        Log.info("Server is serverUp to connecting sockets on port : " + port);
+        new Thread(() -> {
+            long time = System.currentTimeMillis();
+            int targetTPS = 60;
+            while(serverUp)
+            {
+                long timeNow = System.currentTimeMillis();
+                long delta = timeNow - time;
+                time = timeNow;
+                float deltaTime = delta/1000.0f;
+                tick(deltaTime);
+                long timeAfterTick = System.currentTimeMillis();
+                float newDelta = timeAfterTick - time;
 
-        while (listening)
+                if(newDelta < 1000/targetTPS) {
+                    try {
+                        Thread.sleep((long) ((1000 / targetTPS) - newDelta));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+        while (serverUp)
         {
             SocketConnection socketConnection = null;
             try {
@@ -52,7 +73,7 @@ public class Server implements Runnable
                 socketConnections.add(socketConnection);
 
                 SocketConnection finalSocketConnection = socketConnection;
-                new Thread(() -> finalSocketConnection.listen(this)).run();
+                new Thread(() -> finalSocketConnection.listen(this)).start();
             }catch (SocketException e)
             {
                 e.printStackTrace();
@@ -60,7 +81,7 @@ public class Server implements Runnable
             }
             catch (IOException e) {
                 e.printStackTrace();
-                listening = false;
+                serverUp = false;
                 this.removeSocketConnection(socketConnection);
             }
         }
@@ -102,5 +123,11 @@ public class Server implements Runnable
             m.removePlayer(connection.getPlayerId());
         }
         return socketConnections.remove(connection);
+    }
+
+    public void tick(float delta)
+    {
+        for(Match m : matches)
+            m.tick(delta);
     }
 }

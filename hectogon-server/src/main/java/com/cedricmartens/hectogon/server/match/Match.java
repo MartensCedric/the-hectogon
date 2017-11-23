@@ -67,4 +67,12 @@ public class Match
 
         throw new IllegalStateException();
     }
+
+    public void tick(float delta)
+    {
+        for(Player p : players)
+        {
+            p.move(150, delta);
+        }
+    }
 }
