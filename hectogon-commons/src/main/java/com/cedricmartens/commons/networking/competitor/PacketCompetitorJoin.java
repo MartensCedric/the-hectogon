@@ -1,4 +1,4 @@
-package com.cedricmartens.commons.networking.authentification;
+package com.cedricmartens.commons.networking.competitor;
 
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class PacketCompetitorJoin extends Packet
 {
-    private Competitor competitor;
+    protected Competitor competitor;
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         DataInputStream dataInputStream = new DataInputStream(inputStream);

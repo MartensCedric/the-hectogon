@@ -62,4 +62,51 @@ public class Competitor
     {
         return position;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Competitor that = (Competitor) o;
+
+        return user.equals(that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return user.hashCode();
+    }
+
+    public boolean isMovingUp() {
+        return movingUp;
+    }
+
+    public void setMovingUp(boolean movingUp) {
+        this.movingUp = movingUp;
+    }
+
+    public boolean isMovingDown() {
+        return movingDown;
+    }
+
+    public void setMovingDown(boolean movingDown) {
+        this.movingDown = movingDown;
+    }
+
+    public boolean isMovingLeft() {
+        return movingLeft;
+    }
+
+    public void setMovingLeft(boolean movingLeft) {
+        this.movingLeft = movingLeft;
+    }
+
+    public boolean isMovingRight() {
+        return movingRight;
+    }
+
+    public void setMovingRight(boolean movingRight) {
+        this.movingRight = movingRight;
+    }
 }

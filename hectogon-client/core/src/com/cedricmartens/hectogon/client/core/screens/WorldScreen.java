@@ -21,7 +21,8 @@ import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
-import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
@@ -151,6 +152,10 @@ public class WorldScreen extends StageScreen {
                             }else{
                                 competitors.add(competitor);
                             }
+                        }else if(packet instanceof PacketCompetitor)
+                        {
+                            PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
+                            competitors.add(packetCompetitor.getCompetitor());
                         }
 
                     } catch (IOException e) {

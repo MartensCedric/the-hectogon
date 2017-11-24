@@ -2,6 +2,8 @@ package com.cedricmartens.commons.networking;
 
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 
 public enum  PacketType
 {
@@ -12,7 +14,8 @@ public enum  PacketType
     IN_REGISTER(PacketInRegister.class),
     OUT_REGISTER(PacketOutRegister.class),
     MOVEMENT(PacketMovement.class),
-    JOIN(PacketCompetitorJoin.class)
+    JOIN(PacketCompetitorJoin.class),
+    COMPETITOR(PacketCompetitor.class)
     ;
     private Class<? extends Packet> type;
 

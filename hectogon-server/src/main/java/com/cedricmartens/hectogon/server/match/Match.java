@@ -1,10 +1,9 @@
 package com.cedricmartens.hectogon.server.match;
 
-import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
-import com.cedricmartens.commons.networking.PacketChat;
-import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
+import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
@@ -37,6 +36,20 @@ public class Match
         PacketCompetitorJoin packetCompetitorJoin = new PacketCompetitorJoin();
         packetCompetitorJoin.setCompetitor(new Competitor(player.getUser(), player.getPosition()));
         sendToEveryone(packetCompetitorJoin);
+
+        for(Player p : players)
+        {
+            if(p != player)
+            {
+                PacketCompetitor packetCompetitor = new PacketCompetitor();
+                packetCompetitor.setCompetitor(p);
+                try {
+                    player.sendPacket(packetCompetitor);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void sendToEveryone(Packet packet)
