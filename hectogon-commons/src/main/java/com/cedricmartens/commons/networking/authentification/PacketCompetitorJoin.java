@@ -36,4 +36,12 @@ public class PacketCompetitorJoin extends Packet
         dataOutputStream.writeFloat(competitor.getPosition().x);
         dataOutputStream.writeFloat(competitor.getPosition().y);
     }
+
+    public Competitor getCompetitor() {
+        return competitor;
+    }
+
+    public void setCompetitor(Competitor competitor) {
+        this.competitor = competitor;
+    }
 }

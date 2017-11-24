@@ -1,6 +1,11 @@
 package com.cedricmartens.hectogon.server.match;
 
+import com.cedricmartens.commons.chat.ChatType;
+import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,6 +34,9 @@ public class Match
     public void addPlayer(Player player)
     {
         this.players.add(player);
+        PacketCompetitorJoin packetCompetitorJoin = new PacketCompetitorJoin();
+        packetCompetitorJoin.setCompetitor(new Competitor(player.getUser(), player.getPosition()));
+        sendToEveryone(packetCompetitorJoin);
     }
 
     public void sendToEveryone(Packet packet)
@@ -40,11 +48,22 @@ public class Match
                 e.printStackTrace();
             }
         });
+        Log.info(packet.getClass().getSimpleName() + " sent to everyone");
     }
 
-    public void send(Predicate<Player> player, Packet packet)
+    public void send(Predicate<Player> playerPredicate, Packet packet)
     {
-        //TODO finish htis
+        for(Player p : players)
+        {
+            if(playerPredicate.test(p))
+            {
+                try {
+                    p.sendPacket(packet);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public boolean canJoin()

@@ -21,6 +21,7 @@ import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
@@ -55,7 +56,7 @@ public class WorldScreen extends StageScreen {
     private InventoryUI inventoryUI;
     private Inventory playerInv;
     private Chest chest;
-    private List<Competitor> contestants;
+    private List<Competitor> competitors;
     private List<Entity> decorations;
     private Player player;
 
@@ -63,9 +64,7 @@ public class WorldScreen extends StageScreen {
     {
         super(gameManager);
         this.socket = gameManager.socket;
-        this.contestants = new ArrayList<Competitor>();
-        this.player = new Player(new User(0, "Loomy"), new Point(0, 0),
-                new NetworkMovementListener(this.socket));
+        this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
         for(int i = 0; i < 100; i++)
         {
@@ -73,8 +72,8 @@ public class WorldScreen extends StageScreen {
             float y = Math.round(2500 * Math.sin((PI * i) / (100 / 2)));
             this.decorations.add(new StartStone(x, y));
         }
-        this.contestants.add(player);
-
+        this.player = new Player(null, null,
+                new NetworkMovementListener(socket));
         this.debugRenderer = new ShapeRenderer();
         this.debugRenderer.setAutoShapeType(true);
         this.chest = new Chest(12);
@@ -139,6 +138,19 @@ public class WorldScreen extends StageScreen {
                         if (packet instanceof PacketChat) {
                             PacketChat packetChat = (PacketChat) packet;
                             System.out.println(packetChat.getMessage());
+                        }else if(packet instanceof PacketCompetitorJoin)
+                        {
+                            PacketCompetitorJoin packetCompetitorJoin = (PacketCompetitorJoin) packet;
+                            Competitor competitor = packetCompetitorJoin.getCompetitor();
+
+                            if(competitors.size() == 0)
+                            {
+                                player.setUser(competitor.getUser());
+                                player.setPosition(competitor.getPosition());
+                                competitors.add(player);
+                            }else{
+                                competitors.add(competitor);
+                            }
                         }
 
                     } catch (IOException e) {
@@ -152,7 +164,7 @@ public class WorldScreen extends StageScreen {
                     }
                 }
             }
-        });
+        }).start();
     }
 
     @Override
@@ -161,10 +173,13 @@ public class WorldScreen extends StageScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
-        player.move(150, delta);
-        worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
-        worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
-        worldCamera.update();
+        if(competitors.size() != 0 && player.getPosition() != null)
+        {
+            player.move(150, delta);
+            worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
+            worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
+            worldCamera.update();
+        }
 
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
@@ -180,7 +195,7 @@ public class WorldScreen extends StageScreen {
             }
         }
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
-        for(Competitor c : contestants)
+        for(Competitor c : competitors)
         {
             batch.draw(playerDummy, c.getPosition().x, c.getPosition().y);
         }
@@ -188,7 +203,7 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.begin();
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
-        this.debugRenderer.rect(player.getPosition().x, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
+        //this.debugRenderer.rect(player.getPosition().x, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
 
         super.render(delta);

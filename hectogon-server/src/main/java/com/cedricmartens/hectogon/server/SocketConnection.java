@@ -82,7 +82,8 @@ public class SocketConnection implements SocketListener {
                     {
                         UserService userService = new UserMock();
                         User user = userService.getUserByUsername(packetInLogin.getUsername());
-                        Player player = new Player(this, user, new Point(0,0));
+
+                        Player player = new Player(this, user, new Point(0, 0));
                         this.player = player;
                         server.getNextAvailableMatch().addPlayer(player);
                     }

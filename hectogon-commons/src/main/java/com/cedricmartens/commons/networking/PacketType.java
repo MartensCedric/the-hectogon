@@ -1,10 +1,7 @@
 package com.cedricmartens.commons.networking;
 
 import com.cedricmartens.commons.networking.actions.PacketMovement;
-import com.cedricmartens.commons.networking.authentification.PacketInLogin;
-import com.cedricmartens.commons.networking.authentification.PacketInRegister;
-import com.cedricmartens.commons.networking.authentification.PacketOutLogin;
-import com.cedricmartens.commons.networking.authentification.PacketOutRegister;
+import com.cedricmartens.commons.networking.authentification.*;
 
 public enum  PacketType
 {
@@ -14,7 +11,8 @@ public enum  PacketType
     OUT_LOGIN(PacketOutLogin.class),
     IN_REGISTER(PacketInRegister.class),
     OUT_REGISTER(PacketOutRegister.class),
-    MOVEMENT(PacketMovement.class)
+    MOVEMENT(PacketMovement.class),
+    JOIN(PacketCompetitorJoin.class)
     ;
     private Class<? extends Packet> type;
 

@@ -50,6 +50,16 @@ public class Player extends Competitor implements InputProcessor {
         return true;
     }
 
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
+    public void setPosition(Point position)
+    {
+        this.position = position;
+    }
+
     @Override
     public boolean keyUp(int keycode) {
         if(Input.Keys.LEFT == keycode)
@@ -75,6 +85,7 @@ public class Player extends Competitor implements InputProcessor {
 
         return true;
     }
+
 
     @Override
     public boolean keyTyped(char character) {

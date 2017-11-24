@@ -2,9 +2,12 @@ package com.cedricmartens.hectogon.server.match;
 
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.MovementAction;
+import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.hectogon.server.SocketConnection;
 
