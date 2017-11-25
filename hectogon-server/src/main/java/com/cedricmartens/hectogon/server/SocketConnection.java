@@ -98,7 +98,12 @@ public class SocketConnection implements SocketListener {
 
                     if(registerStatus == RegisterStatus.OK)
                     {
+                        UserService userService = new UserMock();
+                        User user = userService.getUserByUsername(packetInRegister.getUsername());
 
+                        Player player = new Player(this, user, new Point(0, 0));
+                        this.player = player;
+                        server.getNextAvailableMatch().addPlayer(player);
                     }
                 }
                 else if(packet instanceof PacketChat)

@@ -30,4 +30,20 @@ public class PacketOutRegister extends Packet
         dataOutputStream.writeInt(registerStatus.ordinal());
         dataOutputStream.writeUTF(token);
     }
+
+    public RegisterStatus getRegisterStatus() {
+        return registerStatus;
+    }
+
+    public void setRegisterStatus(RegisterStatus registerStatus) {
+        this.registerStatus = registerStatus;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

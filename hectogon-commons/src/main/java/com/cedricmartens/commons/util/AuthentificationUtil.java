@@ -1,4 +1,5 @@
-package com.cedricmartens.hectogon.client.core.util;
+package com.cedricmartens.commons.util;
+
 
 import java.security.MessageDigest;
 
@@ -32,3 +33,4 @@ public class AuthentificationUtil
         return saltString(salt, sha256(base));
     }
 }
+

@@ -9,9 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
-import com.cedricmartens.commons.networking.authentification.LoginStatus;
-import com.cedricmartens.commons.networking.authentification.PacketInLogin;
-import com.cedricmartens.commons.networking.authentification.PacketOutLogin;
+import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.util.AuthentificationUtil;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
@@ -23,6 +22,8 @@ import java.net.SocketException;
 public class MainMenuScreen extends StageScreen
 {
     private SpriteBatch batch;
+    private final static String SERVER_IP = "127.0.0.1";
+    private final static int SERVER_PORT = 6666;
 
     public MainMenuScreen(final GameManager gameManager) {
         super(gameManager);
@@ -38,14 +39,17 @@ public class MainMenuScreen extends StageScreen
         final TextField tfPassword = new TextField("", skin);
         tfPassword.setPasswordCharacter('*');
         tfPassword.setPasswordMode(true);
-        TextButton txtButtonConnect = new TextButton(gameManager.i18NBundle.get("connect"), skin);
+        final TextButton txtButtonConnect = new TextButton(gameManager.i18NBundle.get("connect"), skin);
+        final TextButton txtButtonRegister = new TextButton(gameManager.i18NBundle.get("register"), skin);
         txtButtonConnect.addListener(new ClickListener()
              {
                  @Override
                  public void clicked(InputEvent event, float x, float y)
                  {
                      try {
-                         gameManager.socket = new Socket("127.0.0.1", 6666);
+                         txtButtonConnect.setDisabled(true);
+                         txtButtonRegister.setDisabled(true);
+                         gameManager.socket = new Socket(SERVER_IP, SERVER_PORT);
                          PacketInLogin packetInLogin = new PacketInLogin();
                          packetInLogin.setUsername(tfUsername.getText());
                          packetInLogin.setPassword(tfPassword.getText());
@@ -66,6 +70,9 @@ public class MainMenuScreen extends StageScreen
                              }else if(ls == LoginStatus.BANNED){
                                  lblError.setText(gameManager.i18NBundle.get("login_banned"));
                              }
+
+                             txtButtonConnect.setDisabled(false);
+                             txtButtonRegister.setDisabled(false);
                          }
 
                      }catch (SocketException e)
@@ -85,6 +92,64 @@ public class MainMenuScreen extends StageScreen
              }
         );
 
+        txtButtonRegister.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    gameManager.socket = new Socket(SERVER_IP, SERVER_PORT);
+                    txtButtonConnect.setDisabled(true);
+                    txtButtonRegister.setDisabled(true);
+
+                    PacketInRegister packetInRegister = new PacketInRegister();
+                    packetInRegister.setEmail("");
+                    packetInRegister.setUsername(tfUsername.getText().toString());
+                    packetInRegister.setPassword(AuthentificationUtil.sha256(tfPassword.getText()));
+
+                    Packet.writeHeader(PacketInRegister.class, gameManager.socket.getOutputStream());
+                    packetInRegister.writeTo(gameManager.socket.getOutputStream());
+
+                    Packet packet = Packet.readHeader(gameManager.socket.getInputStream());
+                    packet.readFrom(gameManager.socket.getInputStream());
+
+                    if(packet instanceof PacketOutRegister)
+                    {
+                        PacketOutRegister packetOutRegister = (PacketOutRegister) packet;
+                        RegisterStatus registerStatus = packetOutRegister.getRegisterStatus();
+
+                        switch (registerStatus) {
+                            case OK:
+                                MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(gameManager));
+                                break;
+                            case USERNAME_TAKEN:
+                                lblError.setText(gameManager.i18NBundle.get("username_taken"));
+                                break;
+                            case EMAIL_TAKEN:
+                                lblError.setText(gameManager.i18NBundle.get("email_taken"));
+                                break;
+                            case BAD_USERNAME:
+                                lblError.setText(gameManager.i18NBundle.get("bad_username"));
+                                break;
+                            case BAD_EMAIL:
+                                lblError.setText(gameManager.i18NBundle.get("bad_email"));
+                                break;
+                            case BAD_PASSWORD:
+                                lblError.setText(gameManager.i18NBundle.get("bad_password"));
+                                break;
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvalidPacketDataException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         tableAuth.add(lblError).colspan(2);
         tableAuth.row();
         tableAuth.add(lblUsername);
@@ -93,7 +158,8 @@ public class MainMenuScreen extends StageScreen
         tableAuth.add(lblPassword);
         tableAuth.add(tfPassword).width(600).height(50);
         tableAuth.row();
-        tableAuth.add(txtButtonConnect).colspan(2);
+        tableAuth.add(txtButtonConnect);
+        tableAuth.add(txtButtonRegister);
         tableAuth.setX(Hectogon.WIDTH / 2);
         tableAuth.setY(Hectogon.HEIGHT / 2);
         getStage().addActor(tableAuth);
