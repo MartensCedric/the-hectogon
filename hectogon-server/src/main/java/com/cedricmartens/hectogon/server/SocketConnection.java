@@ -6,6 +6,7 @@ import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.MovementAction;
+import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
@@ -86,6 +87,9 @@ public class SocketConnection implements SocketListener {
                     {
                         UserService userService = new DatabaseUser();
                         User user = userService.getUserByUsername(packetInLogin.getUsername());
+
+                        Log.info(user.getUsername() + " has logged in");
+                        setPlayerId(user.getUserId());
                         Player player = new Player(this, user, new Point(0, 0));
                         this.player = player;
                         server.getNextAvailableMatch().addPlayer(player);
@@ -109,6 +113,9 @@ public class SocketConnection implements SocketListener {
                         UserService userService = new DatabaseUser();
                         User user = userService.getUserByUsername(packetInRegister.getUsername());
 
+                        Log.info(user.getUsername() + " has registered");
+
+                        setPlayerId(user.getUserId());
                         Player player = new Player(this, user, new Point(0, 0));
                         this.player = player;
                         server.getNextAvailableMatch().addPlayer(player);
@@ -133,9 +140,12 @@ public class SocketConnection implements SocketListener {
                 }else if(packet instanceof PacketMovement) {
                     PacketMovement packetMovement = (PacketMovement) packet;
                     if (player != null) {
-                        Log.trace("Someone did " + packetMovement.getMovementAction().name());
+
                         player.processMovement(packetMovement.getMovementAction());
-                        server.getMatchById(0).send(p-> p != player, packetMovement);
+                        PacketCompetitorMovement packetCompetitorMovement = new PacketCompetitorMovement();
+                        packetCompetitorMovement.setMovementAction(packetMovement.getMovementAction());
+                        packetCompetitorMovement.setUserId(playerId);
+                        server.getMatchById(0).send(p-> p != player, packetCompetitorMovement);
                     } else {
                         throw new IllegalStateException();
                     }

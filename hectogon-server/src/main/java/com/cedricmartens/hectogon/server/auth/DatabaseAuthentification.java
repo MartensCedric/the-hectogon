@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class DatabaseAuthentification implements AuthentificationService {
+
     @Override
     public LoginStatus login(String username, String password) {
 
