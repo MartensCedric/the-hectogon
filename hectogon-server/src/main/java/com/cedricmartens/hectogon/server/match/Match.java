@@ -1,5 +1,6 @@
 package com.cedricmartens.hectogon.server.match;
 
+import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
@@ -11,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static java.lang.Math.PI;
+
 public class Match
 {
     private static final int MAX_SLOTS = 100;
     private List<Player> players;
     private int matchId;
     private boolean hasStarted;
-
 
     public Match(int matchId)
     {
@@ -28,6 +30,14 @@ public class Match
 
     public int getMatchId() {
         return matchId;
+    }
+
+    public Point getNextPlayerPosition()
+    {
+        float x = Math.round(2500 * Math.cos((PI * players.size()) / (100 / 2)));
+        float y = Math.round(2500 * Math.sin((PI * players.size()) / (100 / 2)));
+        Point p = new Point(x, y);
+        return p;
     }
 
     public void addPlayer(Player player)

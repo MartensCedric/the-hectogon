@@ -12,6 +12,7 @@ import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
+import com.cedricmartens.hectogon.server.match.Match;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.match.Player;
 import com.cedricmartens.hectogon.server.messaging.MessagingMock;
@@ -90,9 +91,10 @@ public class SocketConnection implements SocketListener {
 
                         Log.info(user.getUsername() + " has logged in");
                         setPlayerId(user.getUserId());
-                        Player player = new Player(this, user, new Point(0, 0));
+                        Match match = server.getNextAvailableMatch();
+                        Player player = new Player(this, user, match.getNextPlayerPosition());
                         this.player = player;
-                        server.getNextAvailableMatch().addPlayer(player);
+                        match.addPlayer(player);
                     }
 
                 }else if(packet instanceof PacketInRegister)
@@ -116,9 +118,11 @@ public class SocketConnection implements SocketListener {
                         Log.info(user.getUsername() + " has registered");
 
                         setPlayerId(user.getUserId());
-                        Player player = new Player(this, user, new Point(0, 0));
+
+                        Match match = server.getNextAvailableMatch();
+                        Player player = new Player(this, user, match.getNextPlayerPosition());
                         this.player = player;
-                        server.getNextAvailableMatch().addPlayer(player);
+                        match.addPlayer(player);
                     }
                 }
                 else if(packet instanceof PacketChat)
