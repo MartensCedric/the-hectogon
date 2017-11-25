@@ -13,7 +13,7 @@ public class LaunchCommand extends Command
 
         if(CommandCenter.server != null)
         {
-            Log.warn("Server already started!");
+            System.out.println("Server already started!");
         }else if(args.length > 0)
         {
             int port = Integer.parseInt(args[0]);

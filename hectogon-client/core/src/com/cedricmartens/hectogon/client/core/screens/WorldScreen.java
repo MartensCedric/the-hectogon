@@ -21,6 +21,8 @@ import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
+import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.Chest;
@@ -156,6 +158,11 @@ public class WorldScreen extends StageScreen {
                         {
                             PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
                             competitors.add(packetCompetitor.getCompetitor());
+                        }else if(packet instanceof PacketCompetitorMovement)
+                        {
+                            PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
+                            Competitor competitor = getCompetitorById(competitorMovement.getUserId());
+                            competitor.processMovement(competitorMovement.getMovementAction());
                         }
 
                     } catch (IOException e) {
@@ -180,7 +187,9 @@ public class WorldScreen extends StageScreen {
         Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         if(competitors.size() != 0 && player.getPosition() != null)
         {
-            player.move(150, delta);
+            for(Competitor competitor : competitors)
+                competitor.move(150, delta);
+
             worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
             worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
             worldCamera.update();
@@ -227,6 +236,19 @@ public class WorldScreen extends StageScreen {
                     textureItem.getWidth() * 2, textureItem.getHeight() * 2);
             this.uiBatch.end();
         }
+    }
+
+    private Competitor getCompetitorById(int id)
+    {
+        for(int i = 0; i < competitors.size(); i++)
+        {
+            if(competitors.get(i).getUser().getUserId() == id)
+            {
+                return competitors.get(i);
+            }
+        }
+
+        throw new IllegalStateException();
     }
 
     @Override

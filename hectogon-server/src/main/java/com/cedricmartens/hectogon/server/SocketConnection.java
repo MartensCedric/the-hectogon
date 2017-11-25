@@ -5,6 +5,7 @@ import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
+import com.cedricmartens.commons.networking.actions.MovementAction;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
@@ -116,14 +117,13 @@ public class SocketConnection implements SocketListener {
                     } catch (NoMatchFoundException e) {
                         e.printStackTrace();
                     }
-                }else if(packet instanceof PacketMovement)
-                {
+                }else if(packet instanceof PacketMovement) {
                     PacketMovement packetMovement = (PacketMovement) packet;
-                    if(player != null)
-                    {
+                    if (player != null) {
                         Log.trace("Someone did " + packetMovement.getMovementAction().name());
                         player.processMovement(packetMovement.getMovementAction());
-                    }else{
+                        server.getMatchById(0).send(p-> p != player, packetMovement);
+                    } else {
                         throw new IllegalStateException();
                     }
                 }
@@ -137,6 +137,8 @@ public class SocketConnection implements SocketListener {
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (InvalidPacketDataException e) {
+                e.printStackTrace();
+            } catch (NoMatchFoundException e) {
                 e.printStackTrace();
             }
         }

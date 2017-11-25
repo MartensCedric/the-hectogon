@@ -7,7 +7,6 @@ import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.MovementAction;
-import com.cedricmartens.commons.networking.authentification.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.hectogon.server.SocketConnection;
 
@@ -34,37 +33,5 @@ public class Player extends Competitor
     @Override
     public void move(float speed, float deltaTime) {
         super.move(speed, deltaTime);
-    }
-
-    public void processMovement(MovementAction movementAction)
-    {
-        switch (movementAction) {
-            case UP_KEY_PRESS:
-                movingUp = true;
-                break;
-            case RIGHT_KEY_PRESS:
-                movingRight = true;
-                break;
-            case DOWN_KEY_PRESS:
-                movingDown = true;
-                break;
-            case LEFT_KEY_PRESS:
-                movingLeft = true;
-                break;
-            case UP_KEY_RELEASED:
-                movingUp = false;
-                break;
-            case RIGHT_KEY_RELEASED:
-                movingRight = false;
-                break;
-            case DOWN_KEY_RELEASED:
-                movingDown = false;
-                break;
-            case LEFT_KEY_RELEASED:
-                movingLeft = false;
-                break;
-            case ROLL:
-                break;
-        }
     }
 }

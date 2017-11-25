@@ -2,6 +2,7 @@ package com.cedricmartens.commons.entities;
 
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.networking.actions.MovementAction;
 
 public class Competitor
 {
@@ -17,6 +18,38 @@ public class Competitor
     {
         this.user = user;
         this.position = position;
+    }
+
+    public void processMovement(MovementAction movementAction)
+    {
+        switch (movementAction) {
+            case UP_KEY_PRESS:
+                movingUp = true;
+                break;
+            case RIGHT_KEY_PRESS:
+                movingRight = true;
+                break;
+            case DOWN_KEY_PRESS:
+                movingDown = true;
+                break;
+            case LEFT_KEY_PRESS:
+                movingLeft = true;
+                break;
+            case UP_KEY_RELEASED:
+                movingUp = false;
+                break;
+            case RIGHT_KEY_RELEASED:
+                movingRight = false;
+                break;
+            case DOWN_KEY_RELEASED:
+                movingDown = false;
+                break;
+            case LEFT_KEY_RELEASED:
+                movingLeft = false;
+                break;
+            case ROLL:
+                break;
+        }
     }
 
     public void move(float speed, float direction, float deltaTime)

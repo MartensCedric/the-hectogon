@@ -35,4 +35,6 @@ public class PacketMovement extends Packet
     public void setMovementAction(MovementAction movementAction) {
         this.movementAction = movementAction;
     }
+
+
 }
