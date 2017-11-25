@@ -12,7 +12,6 @@ public class PacketOutLogin extends Packet {
 
     private LoginStatus loginStatus;
     private String token;
-    private int userId;
 
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
@@ -25,7 +24,6 @@ public class PacketOutLogin extends Packet {
 
         loginStatus = LoginStatus.values()[responseCode];
         token = dataInputStream.readUTF();
-        userId = dataInputStream.readInt();
     }
 
     @Override
@@ -33,7 +31,6 @@ public class PacketOutLogin extends Packet {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(loginStatus.ordinal());
         dataOutputStream.writeUTF(token);
-        dataOutputStream.writeInt(userId);
     }
 
     public LoginStatus getLoginStatus() {
@@ -42,15 +39,6 @@ public class PacketOutLogin extends Packet {
 
     public void setLoginStatus(LoginStatus loginStatus) {
         this.loginStatus = loginStatus;
-    }
-
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getToken() {

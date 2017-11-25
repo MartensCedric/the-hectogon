@@ -14,7 +14,9 @@ import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.match.Player;
 import com.cedricmartens.hectogon.server.messaging.MessagingMock;
+import com.cedricmartens.hectogon.server.user.DatabaseUser;
 import com.cedricmartens.hectogon.server.user.UserMock;
+import com.cedricmartens.hectogon.server.user.UserNotFoundException;
 import com.cedricmartens.hectogon.server.user.UserService;
 import com.esotericsoftware.minlog.Log;
 
@@ -70,21 +72,20 @@ public class SocketConnection implements SocketListener {
                 if (packet instanceof PacketInLogin)
                 {
                     PacketInLogin packetInLogin = (PacketInLogin) packet;
-                    AuthentificationService authService = new AuthentificationMock();
+                    AuthentificationService authService = new DatabaseAuthentification();
                     LoginStatus loginStatus = authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
 
                     PacketOutLogin packetOutLogin = new PacketOutLogin();
                     packetOutLogin.setLoginStatus(loginStatus);
                     packetOutLogin.setToken("token");
-                    packetOutLogin.setUserId(0);
+
                     Packet.writeHeader(PacketOutLogin.class, socket.getOutputStream());
                     packetOutLogin.writeTo(socket.getOutputStream());
 
                     if(loginStatus == LoginStatus.OK)
                     {
-                        UserService userService = new UserMock();
+                        UserService userService = new DatabaseUser();
                         User user = userService.getUserByUsername(packetInLogin.getUsername());
-
                         Player player = new Player(this, user, new Point(0, 0));
                         this.player = player;
                         server.getNextAvailableMatch().addPlayer(player);
@@ -97,9 +98,15 @@ public class SocketConnection implements SocketListener {
                     RegisterStatus registerStatus = authService.register(packetInRegister.getUsername(),
                             packetInRegister.getEmail(), packetInRegister.getPassword());
 
+                    PacketOutRegister packetOutRegister = new PacketOutRegister();
+                    packetOutRegister.setRegisterStatus(registerStatus);
+                    packetOutRegister.setToken("");
+                    Packet.writeHeader(PacketOutRegister.class, socket.getOutputStream());
+                    packetOutRegister.writeTo(socket.getOutputStream());
+
                     if(registerStatus == RegisterStatus.OK)
                     {
-                        UserService userService = new UserMock();
+                        UserService userService = new DatabaseUser();
                         User user = userService.getUserByUsername(packetInRegister.getUsername());
 
                         Player player = new Player(this, user, new Point(0, 0));
@@ -111,7 +118,7 @@ public class SocketConnection implements SocketListener {
                 {
                     PacketChat packetInChat = (PacketChat) packet;
                     Log.debug(socket.getInetAddress() + " -> " + packetInChat.getMessage());
-                    UserService userService = new UserMock();
+                    UserService userService = new DatabaseUser();
                     User user = userService.getUserById(packetInChat.getSenderId());
 
                     try {
@@ -145,6 +152,8 @@ public class SocketConnection implements SocketListener {
             } catch (InvalidPacketDataException e) {
                 e.printStackTrace();
             } catch (NoMatchFoundException e) {
+                e.printStackTrace();
+            } catch (UserNotFoundException e) {
                 e.printStackTrace();
             }
         }

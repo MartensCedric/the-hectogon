@@ -1,0 +1,1 @@
+SELECT Id FROM User WHERE Username = ?;

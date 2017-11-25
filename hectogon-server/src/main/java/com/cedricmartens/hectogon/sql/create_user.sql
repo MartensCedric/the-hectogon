@@ -1,1 +1,1 @@
-INSERT INTO User(Username, Password, Email, RegisterDate, EmailConfirmed) VALUES(?, ?, ?, NOW(), NULL);
+INSERT INTO User(Username, Email, Password, RegisterDate, EmailConfirmed) VALUES(?, ?, ?, NOW(), NULL);

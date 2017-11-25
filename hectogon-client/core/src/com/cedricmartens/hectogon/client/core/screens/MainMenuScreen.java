@@ -83,7 +83,7 @@ public class MainMenuScreen extends StageScreen
                          gameManager.socket = new Socket(SERVER_IP, SERVER_PORT);
                          PacketInLogin packetInLogin = new PacketInLogin();
                          packetInLogin.setUsername(tfUsername.getText());
-                         packetInLogin.setPassword(tfPassword.getText());
+                         packetInLogin.setPassword(AuthentificationUtil.sha256(tfPassword.getText()));
                          Packet.writeHeader(PacketInLogin.class, gameManager.socket.getOutputStream());
                          packetInLogin.writeTo(gameManager.socket.getOutputStream());
 
@@ -93,14 +93,21 @@ public class MainMenuScreen extends StageScreen
                          {
                              PacketOutLogin packetOutLogin = (PacketOutLogin) packet;
                              LoginStatus ls = packetOutLogin.getLoginStatus();
-                             if(ls == LoginStatus.OK)
-                             {
-                                 MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(gameManager));
-                             }else if (ls == LoginStatus.INCORRECT_INFO){
-                                 lblError.setText(gameManager.i18NBundle.get("login_inc_info"));
-                             }else if(ls == LoginStatus.BANNED){
-                                 lblError.setText(gameManager.i18NBundle.get("login_banned"));
+                             switch (ls) {
+                                 case OK:
+                                     MainMenuScreen.this.getSceneManager().pushScreen(new WorldScreen(gameManager));
+                                     break;
+                                 case INCORRECT_INFO:
+                                     lblError.setText(gameManager.i18NBundle.get("login_inc_info"));
+                                     break;
+                                 case BANNED:
+                                     lblError.setText(gameManager.i18NBundle.get("login_banned"));
+                                     break;
+                                 case UNEXPECTED_ERROR:
+                                     lblError.setText(gameManager.i18NBundle.get("unexpected_error"));
+                                     break;
                              }
+
 
                              txtButtonConnect.setDisabled(false);
                          }
@@ -145,6 +152,7 @@ public class MainMenuScreen extends StageScreen
         final TextField tfPassword = new TextField("", skin);
         tfPassword.setPasswordCharacter('*');
         tfPassword.setPasswordMode(true);
+
         final TextField tfPasswordConf = new TextField("", skin);
         tfPasswordConf.setPasswordCharacter('*');
         tfPasswordConf.setPasswordMode(true);
@@ -194,6 +202,9 @@ public class MainMenuScreen extends StageScreen
                                 break;
                             case BAD_PASSWORD:
                                 lblError.setText(gameManager.i18NBundle.get("bad_password"));
+                                break;
+                            case UNEXPECTED_ERROR:
+                                lblError.setText(gameManager.i18NBundle.get("unexpected_error"));
                                 break;
 
                         }

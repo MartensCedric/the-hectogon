@@ -7,5 +7,6 @@ public enum RegisterStatus
     EMAIL_TAKEN,
     BAD_USERNAME,
     BAD_EMAIL,
-    BAD_PASSWORD
+    BAD_PASSWORD,
+    UNEXPECTED_ERROR
 }

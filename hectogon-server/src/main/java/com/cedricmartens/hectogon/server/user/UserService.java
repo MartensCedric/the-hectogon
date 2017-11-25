@@ -4,10 +4,10 @@ import com.cedricmartens.commons.User;
 
 public interface UserService
 {
-    User getUserById(int userId);
-    User getUserByUsername(String username);
+    User getUserById(int userId) throws UserNotFoundException;
+    User getUserByUsername(String username) throws UserNotFoundException;
 
-    boolean emailConfirmed(int userId);
-    boolean emailConfirmed(String username);
-    boolean emailConfirmed(User user);
+    boolean emailConfirmed(int userId) throws UserNotFoundException;
+    boolean emailConfirmed(String username) throws UserNotFoundException;
+    boolean emailConfirmed(User user) throws UserNotFoundException;
 }

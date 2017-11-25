@@ -24,7 +24,6 @@ public class Server implements Runnable
     private boolean serverUp;
     private ServerSocket serverSocket;
     private int port;
-    private DatabaseManager dbManager;
 
     public Server(int port)
     {
@@ -35,7 +34,6 @@ public class Server implements Runnable
 
         try {
             DatabaseManager.initDatabaseManager("jdbc:mysql://localhost:3306/hectogon", "hectogon_user", "P@ssw0rd");
-            dbManager = DatabaseManager.getDatabaseManager();
         } catch (SQLException e) {
             e.printStackTrace();
         }
