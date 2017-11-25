@@ -54,9 +54,9 @@ public class TabbedPanel extends Table
                     build();
                 }
             });
-            add(textButton);
+            add(textButton).width(300);
         }
         row();
-        add(tabContents[selectedTab]);
+        add(tabContents[selectedTab]).colspan(tabContents.length);
     }
 }

@@ -31,7 +31,7 @@ public class DatabaseManager
 
     public static String get(String filename) throws IOException
     {
-        Scanner sc = new Scanner(new File("src/com/cedricmartens/hectogon/sql/"+ filename + ".sql"));
+        Scanner sc = new Scanner(new File("src/main/java/com/cedricmartens/hectogon/sql/"+ filename + ".sql"));
         String str = "";
         while(sc.hasNextLine()){
             str += sc.nextLine();
