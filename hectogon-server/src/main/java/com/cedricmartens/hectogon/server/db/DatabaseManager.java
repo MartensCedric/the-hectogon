@@ -17,11 +17,11 @@ public class DatabaseManager
         db_conn = DriverManager.getConnection(connection, user, password);
     }
 
-    public void initDatabaseManager(String connection, String user, String password) throws SQLException {
+    public static void initDatabaseManager(String connection, String user, String password) throws SQLException {
         databaseManager = new DatabaseManager(connection, user, password);
     }
 
-    public DatabaseManager getDatabaseManager()
+    public static DatabaseManager getDatabaseManager()
     {
         if(databaseManager == null)
             throw new IllegalStateException();
@@ -39,7 +39,7 @@ public class DatabaseManager
         return str;
     }
 
-    public String getUsername(int playerId) throws QueryException, IOException, IllegalDatabaseStateException, java.sql.SQLException {
+    public String getUsername(int playerId) throws QueryException, IllegalDatabaseStateException, java.sql.SQLException, IOException {
 
         String script = DatabaseManager.get("username_from_id");
         PreparedStatement statement = db_conn.prepareStatement(script);
@@ -56,8 +56,8 @@ public class DatabaseManager
         return username;
     }
 
-    public void createUser(String username, String email, String password)
-    {
-        
+    public void createUser(String username, String email, String password) throws IOException, SQLException {
+        String script = DatabaseManager.get("create_user");
+        PreparedStatement statement = db_conn.prepareStatement(script);
     }
 }

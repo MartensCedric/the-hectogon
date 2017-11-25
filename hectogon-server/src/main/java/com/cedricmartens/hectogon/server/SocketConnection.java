@@ -10,6 +10,7 @@ import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
+import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.match.Player;
 import com.cedricmartens.hectogon.server.messaging.MessagingMock;
@@ -92,7 +93,7 @@ public class SocketConnection implements SocketListener {
                 }else if(packet instanceof PacketInRegister)
                 {
                     PacketInRegister packetInRegister = (PacketInRegister) packet;
-                    AuthentificationService authService = new AuthentificationMock();
+                    AuthentificationService authService = new DatabaseAuthentification();
                     RegisterStatus registerStatus = authService.register(packetInRegister.getUsername(),
                             packetInRegister.getEmail(), packetInRegister.getPassword());
 

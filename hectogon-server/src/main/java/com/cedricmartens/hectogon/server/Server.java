@@ -1,15 +1,19 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.hectogon.server.db.DatabaseManager;
 import com.cedricmartens.hectogon.server.match.Match;
 import com.cedricmartens.hectogon.server.match.MatchMock;
 import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.esotericsoftware.minlog.Log;
 
+import javax.xml.crypto.Data;
+import java.awt.image.DataBuffer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class Server implements Runnable
     private boolean serverUp;
     private ServerSocket serverSocket;
     private int port;
+    private DatabaseManager dbManager;
 
     public Server(int port)
     {
@@ -27,6 +32,14 @@ public class Server implements Runnable
         this.port = port;
         socketConnections = new ArrayList<>();
         this.matches = new ArrayList<>();
+
+        try {
+            DatabaseManager.initDatabaseManager("jdbc:mysql://localhost:3306/hectogon", "hectogon_user", "P@ssw0rd");
+            dbManager = DatabaseManager.getDatabaseManager();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         MatchService matchService = new MatchMock();
         this.matches.add(matchService.createMatch());
         try {
