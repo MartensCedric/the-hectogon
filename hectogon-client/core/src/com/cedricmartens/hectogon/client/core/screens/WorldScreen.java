@@ -16,13 +16,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
+import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
-import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.storage.Chest;
@@ -31,6 +31,7 @@ import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
+import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
@@ -69,6 +70,7 @@ public class WorldScreen extends StageScreen {
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
+
         for(int i = 0; i < 100; i++)
         {
             float x = Math.round(2500 * Math.cos((PI * i) / (100 / 2)));
@@ -109,6 +111,13 @@ public class WorldScreen extends StageScreen {
 
         getStage().addActor(inventoryUI);
 
+        final Chat chat = new Chat(UiUtil.getDefaultSkin());
+        chat.setWidth(WIDTH / 2.5f);
+        chat.setHeight(300);
+        chat.setX(15);
+        chat.setY(50);
+        getStage().addActor(chat);
+
         final ChatInput chatInput = new ChatInput("", UiUtil.getChatSkin());
         chatInput.setWidth(WIDTH / 2.5f);
         chatInput.setX(15);
@@ -117,10 +126,16 @@ public class WorldScreen extends StageScreen {
             @Override
             public void send() {
                 if (chatInput.getText().length() > 0) {
-                    PacketChat packetChat = new PacketChat(chatInput.getText(), 0, ChatType.LOCAL);
+                    PacketChat packetChat = new PacketChat(chatInput.getText(), player.getUser().getUserId(), ChatType.LOCAL);
                     try {
                         Packet.writeHeader(PacketChat.class, socket.getOutputStream());
                         packetChat.writeTo(socket.getOutputStream());
+                        Message message = new Message();
+                        message.setSender(player.getUser());
+                        message.setContents(chatInput.getText());
+                        message.setChatType(ChatType.GLOBAL);
+
+                        chat.addMessage(message);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -129,7 +144,6 @@ public class WorldScreen extends StageScreen {
         });
 
         getStage().addActor(chatInput);
-
         new Thread(new Runnable() {
             @Override
             public void run() {
