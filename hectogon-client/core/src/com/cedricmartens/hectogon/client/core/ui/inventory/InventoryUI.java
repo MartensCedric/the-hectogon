@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.storage.inventory.Inventory;
@@ -27,62 +28,52 @@ public class InventoryUI extends Table
         if(inventory.getSlotCount() != inventorySlotImages.length)
             throw new IllegalStateException();
 
-        refresh();
+        init();
+        redraw();
     }
 
     public void setInventory(Inventory inventory)
     {
         this.inventory = inventory;
         inventorySlotImages = new InventorySlotImage[inventory.getSlotCount()];
-        refresh();
+        init();
+        redraw();
     }
 
-    public void refresh()
+    public void init()
     {
-        clearChildren();
-        TextureUtil textureUtil = TextureUtil.getTextureUtil();
         int n = 0;
         for(final InventorySlot is : inventory)
         {
             inventorySlotImages[n] = new InventorySlotImage(is);
-            inventorySlotImages[n].setDebug(true);
-            if(is.getItem() != Item.empty_slot)
-            {
-                Texture textureItem = textureUtil.getItemTexture(is.getItem());
-                Drawable drawable = new TextureRegionDrawable(new TextureRegion(textureItem));
-                inventorySlotImages[n].setDrawable(drawable);
-            }
+            inventorySlotImages[n].addListener(new DragListener(){
 
-            inventorySlotImages[n].addListener(new ClickListener()
-            {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public void dragStart(InputEvent event, float x, float y, int pointer) {
 
-                    if(selectedItem == null)
+                    if(is.getItem() != Item.empty_slot &&
+                            selectedItem == null)
                     {
-                        if(is.getItem() != Item.empty_slot)
-                        {
-                            selectedItem = is.getItem();
-                            is.clear();
-                        }
-                    }else
-                    {
-                        if(is.getItem() == Item.empty_slot)
-                        {
-                            is.setItem(selectedItem);
-                            selectedItem = null;
-                        }else{
-                            Item tempItem = selectedItem;
-                            selectedItem = is.getItem();
-                            is.setItem(tempItem);
-                        }
+                        selectedItem = is.getItem();
+                        is.clear();
+                        redraw();
                     }
-                    refresh();
+                }
+
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    if(is.getItem() == Item.empty_slot)
+                    {
+                        is.setItem(selectedItem);
+                        selectedItem = null;
+                        redraw();
+                    }
                 }
             });
-
             n++;
         }
+
+        clearChildren();
 
         for(int i = 0; i < ROWS; i++)
         {
@@ -91,6 +82,27 @@ public class InventoryUI extends Table
                 add(inventorySlotImages[i * COLUMNS + j]).width(64).height(64).expand().fill();
             }
             row();
+        }
+    }
+
+    public void redraw()
+    {
+        System.out.println(inventory);
+        TextureUtil textureUtil = TextureUtil.getTextureUtil();
+        int n = 0;
+        for(InventorySlot is : inventory)
+        {
+            inventorySlotImages[n].setInventorySlot(is);
+            inventorySlotImages[n].setDebug(true);
+            if(is.getItem() != Item.empty_slot)
+            {
+                Texture textureItem = textureUtil.getItemTexture(is.getItem());
+                Drawable drawable = new TextureRegionDrawable(new TextureRegion(textureItem));
+                inventorySlotImages[n].setDrawable(drawable);
+            }else{
+                inventorySlotImages[n].setDrawable(null);
+            }
+            n++;
         }
     }
 

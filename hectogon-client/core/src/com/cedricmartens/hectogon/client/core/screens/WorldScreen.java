@@ -273,7 +273,7 @@ public class WorldScreen extends StageScreen {
             }
         }
 
-        throw new IllegalStateException();
+        throw new IllegalStateException("Looking for Id:" + id);
     }
 
     @Override

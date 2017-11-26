@@ -38,8 +38,11 @@ public class PacketInventory extends Packet {
         dataOutputStream.writeInt(inventory.emptySlotCount());
         for(InventorySlot is : inventory)
         {
-            dataOutputStream.writeInt(is.getItem().ordinal());
-            dataOutputStream.writeInt(is.getQuantity());
+            if(is.getItem() != Item.empty_slot)
+            {
+                dataOutputStream.writeInt(is.getItem().ordinal());
+                dataOutputStream.writeInt(is.getQuantity());
+            }
         }
     }
 
