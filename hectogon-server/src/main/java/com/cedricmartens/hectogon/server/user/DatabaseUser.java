@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server.user;
 
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.hectogon.server.db.DatabaseManager;
 
 public class DatabaseUser implements UserService {

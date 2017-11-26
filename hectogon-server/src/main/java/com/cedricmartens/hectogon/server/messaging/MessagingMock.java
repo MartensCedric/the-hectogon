@@ -17,7 +17,7 @@ public class MessagingMock implements MessagingService {
     @Override
     public void sendGlobal(User sender, Match match, String contents) {
         PacketChat packetInChat = new PacketChat(verify(contents), sender.getUserId(), ChatType.GLOBAL);
-        match.sendToEveryone(packetInChat);
+        match.send(p -> !p.getUser().equals(sender), packetInChat);
     }
 
     @Override

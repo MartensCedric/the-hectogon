@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server.user;
 
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.UserNotFoundException;
 
 public interface UserService
 {

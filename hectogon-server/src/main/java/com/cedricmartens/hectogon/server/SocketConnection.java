@@ -1,15 +1,13 @@
 package com.cedricmartens.hectogon.server;
 
-import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
-import com.cedricmartens.commons.networking.actions.MovementAction;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
-import com.cedricmartens.hectogon.server.auth.AuthentificationMock;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
 import com.cedricmartens.hectogon.server.match.Match;
@@ -17,8 +15,6 @@ import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.match.Player;
 import com.cedricmartens.hectogon.server.messaging.MessagingMock;
 import com.cedricmartens.hectogon.server.user.DatabaseUser;
-import com.cedricmartens.hectogon.server.user.UserMock;
-import com.cedricmartens.hectogon.server.user.UserNotFoundException;
 import com.cedricmartens.hectogon.server.user.UserService;
 import com.esotericsoftware.minlog.Log;
 
@@ -133,9 +129,8 @@ public class SocketConnection implements SocketListener {
                     User user = userService.getUserById(packetInChat.getSenderId());
 
                     try {
-
                         //TODO set matchId
-                        new MessagingMock().sendLocal(
+                        new MessagingMock().sendGlobal(
                                 user, server.getMatchById(0),
                                 packetInChat.getMessage());
                     } catch (NoMatchFoundException e) {
@@ -149,7 +144,7 @@ public class SocketConnection implements SocketListener {
                         PacketCompetitorMovement packetCompetitorMovement = new PacketCompetitorMovement();
                         packetCompetitorMovement.setMovementAction(packetMovement.getMovementAction());
                         packetCompetitorMovement.setUserId(playerId);
-                        server.getMatchById(0).send(p-> p != player, packetCompetitorMovement);
+                        server.getMatchById(0).send(p-> !p.equals(player), packetCompetitorMovement);
                     } else {
                         throw new IllegalStateException();
                     }

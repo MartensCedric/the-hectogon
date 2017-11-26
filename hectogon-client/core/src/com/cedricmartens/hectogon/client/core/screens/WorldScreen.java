@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
+import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
@@ -154,7 +155,14 @@ public class WorldScreen extends StageScreen {
 
                         if (packet instanceof PacketChat) {
                             PacketChat packetChat = (PacketChat) packet;
-                            System.out.println(packetChat.getMessage());
+                            User u = WorldScreen.this.getCompetitorById(packetChat.getSenderId()).getUser();
+                            Message m = new Message();
+                            m.setSender(u);
+                            m.setContents(packetChat.getMessage());
+                            m.setChatType(packetChat.getChatType());
+
+                            chat.addMessage(m);
+
                         }else if(packet instanceof PacketCompetitorJoin)
                         {
                             PacketCompetitorJoin packetCompetitorJoin = (PacketCompetitorJoin) packet;
