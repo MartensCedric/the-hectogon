@@ -25,6 +25,7 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
@@ -95,8 +96,6 @@ public class WorldScreen extends StageScreen {
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
         this.playerInv = new Inventory(12);
-        this.playerInv.addItem(Item.bow_wood);
-        this.playerInv.addItem(Item.bomb);
         inventoryUI = new InventoryUI(playerInv);
         Texture textureInventory = gameManager.assetManager.get("ui/inventory.png", Texture.class);
         Drawable drawableInventory = new TextureRegionDrawable(new TextureRegion(
@@ -184,6 +183,10 @@ public class WorldScreen extends StageScreen {
                             PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
                             Competitor competitor = getCompetitorById(competitorMovement.getUserId());
                             competitor.processMovement(competitorMovement.getMovementAction());
+                        }else if (packet instanceof PacketInventory)
+                        {
+                            PacketInventory packetInventory = (PacketInventory) packet;
+                            inventoryUI.setInventory(packetInventory.getInventory());
                         }
 
                     } catch (IOException e) {

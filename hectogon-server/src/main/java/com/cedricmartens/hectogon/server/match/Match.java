@@ -5,6 +5,8 @@ import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.inventory.PacketInventory;
+import com.cedricmartens.commons.storage.inventory.Item;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
@@ -59,6 +61,16 @@ public class Match
                     e.printStackTrace();
                 }
             }
+        }
+
+        player.getInventory().addItem(Item.bow_wood, 2);
+        player.getInventory().addItem(Item.bomb, 3);
+        PacketInventory packetInventory = new PacketInventory();
+        packetInventory.setInventory(player.getInventory());
+        try {
+            player.sendPacket(packetInventory);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

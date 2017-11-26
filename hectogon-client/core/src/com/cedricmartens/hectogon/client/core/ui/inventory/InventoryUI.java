@@ -22,12 +22,18 @@ public class InventoryUI extends Table
 
     public InventoryUI(Inventory inventory)
     {
-        this.inventory = inventory;
-        inventorySlotImages = new InventorySlotImage[inventory.getSlotCount()];
+        setInventory(inventory);
 
         if(inventory.getSlotCount() != inventorySlotImages.length)
             throw new IllegalStateException();
 
+        refresh();
+    }
+
+    public void setInventory(Inventory inventory)
+    {
+        this.inventory = inventory;
+        inventorySlotImages = new InventorySlotImage[inventory.getSlotCount()];
         refresh();
     }
 

@@ -34,4 +34,8 @@ public class Player extends Competitor
     public void move(float speed, float deltaTime) {
         super.move(speed, deltaTime);
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 }

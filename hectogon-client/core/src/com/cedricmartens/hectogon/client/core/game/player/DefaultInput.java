@@ -6,8 +6,9 @@ import static com.badlogic.gdx.Input.Keys.*;
 
 public class DefaultInput implements InputService {
     @Override
-    public boolean fire(int keyCode) {
-        return Input.Keys.SPACE == keyCode;
+    public boolean fire(int keyCode)
+    {
+        return Input.Keys.SPACE == keyCode || Input.Buttons.LEFT == keyCode;
     }
 
     @Override
