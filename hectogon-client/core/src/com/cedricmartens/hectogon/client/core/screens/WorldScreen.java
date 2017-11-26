@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
-import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
@@ -219,7 +218,8 @@ public class WorldScreen extends StageScreen {
 
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
-        map.render(batch);
+        if(competitors.size() != 0)
+            map.render(batch, player.getPosition().x, player.getPosition().y, 500);
         for(Entity e : decorations)
         {
             if(e instanceof StartStone)

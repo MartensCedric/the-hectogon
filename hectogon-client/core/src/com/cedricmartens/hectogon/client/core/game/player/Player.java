@@ -1,6 +1,5 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
@@ -10,9 +9,11 @@ import com.cedricmartens.commons.networking.actions.MovementAction;
 public class Player extends Competitor implements InputProcessor {
 
     private MovementListener movementListener;
+    private InputService inputService;
 
     public Player(User user, Point position, MovementListener movementListener) {
         super(user, position);
+        this.inputService = new DefaultInput();
         movingUp = false;
         movingDown = false;
         movingLeft = false;
@@ -23,25 +24,25 @@ public class Player extends Competitor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode)
     {
-        if(Input.Keys.LEFT == keycode)
+        if(inputService.left(keycode))
         {
             movingLeft = true;
             movementListener.move(MovementAction.LEFT_KEY_PRESS);
         }
 
-        if(Input.Keys.RIGHT == keycode)
+        if(inputService.right(keycode))
         {
             movingRight = true;
             movementListener.move(MovementAction.RIGHT_KEY_PRESS);
         }
 
-        if(Input.Keys.UP == keycode)
+        if(inputService.up(keycode))
         {
             movingUp = true;
             movementListener.move(MovementAction.UP_KEY_PRESS);
         }
 
-        if(Input.Keys.DOWN == keycode)
+        if(inputService.down(keycode))
         {
             movingDown = true;
             movementListener.move(MovementAction.DOWN_KEY_PRESS);
@@ -62,23 +63,23 @@ public class Player extends Competitor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if(Input.Keys.LEFT == keycode)
+        if(inputService.left(keycode))
         {
             movingLeft = false;
             movementListener.move(MovementAction.LEFT_KEY_RELEASED);
         }
 
-        if(Input.Keys.RIGHT == keycode) {
+        if(inputService.right(keycode)) {
             movingRight = false;
             movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
         }
 
-        if(Input.Keys.UP == keycode) {
+        if(inputService.up(keycode)) {
             movingUp = false;
             movementListener.move(MovementAction.UP_KEY_RELEASED);
         }
 
-        if(Input.Keys.DOWN == keycode) {
+        if(inputService.down(keycode)) {
             movingDown = false;
             movementListener.move(MovementAction.DOWN_KEY_RELEASED);
         }
