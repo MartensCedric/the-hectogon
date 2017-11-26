@@ -2,6 +2,8 @@ package com.cedricmartens.hectogon.client.core.ui.inventory;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -60,13 +62,33 @@ public class InventoryUI extends Table
                     }
                 }
 
+
+
                 @Override
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    if(is.getItem() == Item.empty_slot)
+                public void dragStop(InputEvent event, float x, float y, int pointer) {
+
+                    if(selectedItem == null) return;
+                    
+                    Vector2 pos = event.getTarget().localToParentCoordinates(new Vector2(x, y));
+                    Actor actor = hit(pos.x, pos.y, true);
+                    InventorySlotImage isi = (InventorySlotImage) actor;
+                    if(isi != null)
                     {
-                        is.setItem(selectedItem);
-                        selectedItem = null;
+                        InventorySlot is = isi.getInventorySlot();
+                        if(is.getItem() == Item.empty_slot)
+                        {
+                            is.setItem(selectedItem);
+                            selectedItem = null;
+                        }else{
+                            Item tempItem = is.getItem();
+                            is.setItem(selectedItem);
+                            inventory.addItem(tempItem);
+                            selectedItem = null;
+                        }
                         redraw();
+                    }else{
+                        selectedItem = null;
+                        System.out.println("Item dropped");
                     }
                 }
             });
@@ -87,7 +109,6 @@ public class InventoryUI extends Table
 
     public void redraw()
     {
-        System.out.println(inventory);
         TextureUtil textureUtil = TextureUtil.getTextureUtil();
         int n = 0;
         for(InventorySlot is : inventory)
