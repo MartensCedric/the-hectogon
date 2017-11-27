@@ -5,7 +5,9 @@ import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
+import com.cedricmartens.commons.networking.inventory.PacketLoot;
 
 public enum  PacketType
 {
@@ -19,7 +21,9 @@ public enum  PacketType
     COMP_MOVEMENT(PacketCompetitorMovement.class),
     JOIN(PacketCompetitorJoin.class),
     COMPETITOR(PacketCompetitor.class),
-    INVENTORY(PacketInventory.class)
+    INVENTORY(PacketInventory.class),
+    LOOT(PacketLoot.class),
+    DROP(PacketDropItem.class)
     ;
     private Class<? extends Packet> type;
 

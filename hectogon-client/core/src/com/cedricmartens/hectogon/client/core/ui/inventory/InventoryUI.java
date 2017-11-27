@@ -22,6 +22,7 @@ public class InventoryUI extends Table
     private Item selectedItem;
     private final int ROWS = 3;
     private final int COLUMNS = 4;
+    private DropListener dropListener;
 
     public InventoryUI(Inventory inventory)
     {
@@ -42,6 +43,11 @@ public class InventoryUI extends Table
         redraw();
     }
 
+    public void setDropListener(DropListener dropListener)
+    {
+        this.dropListener = dropListener;
+    }
+
     public void init()
     {
         int n = 0;
@@ -57,12 +63,11 @@ public class InventoryUI extends Table
                             selectedItem == null)
                     {
                         selectedItem = is.getItem();
+                        System.out.println("DragStart " + selectedItem.getName());
                         is.clear();
                         redraw();
                     }
                 }
-
-
 
                 @Override
                 public void dragStop(InputEvent event, float x, float y, int pointer) {
@@ -77,18 +82,24 @@ public class InventoryUI extends Table
                         InventorySlot is = isi.getInventorySlot();
                         if(is.getItem() == Item.empty_slot)
                         {
+                            System.out.println("Dragstop empty slot");
                             is.setItem(selectedItem);
                             selectedItem = null;
                         }else{
                             Item tempItem = is.getItem();
+                            System.out.println("DragStop " + tempItem.getName());
                             is.setItem(selectedItem);
                             inventory.addItem(tempItem);
                             selectedItem = null;
                         }
                         redraw();
                     }else{
+
+                        if(dropListener != null)
+                        {
+                            dropListener.drop(selectedItem, 1);
+                        }
                         selectedItem = null;
-                        System.out.println("Item dropped");
                     }
                 }
             });

@@ -25,7 +25,9 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
+import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
@@ -34,6 +36,7 @@ import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListene
 import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
@@ -105,6 +108,20 @@ public class WorldScreen extends StageScreen {
         inventoryUI.setHeight(textureInventory.getHeight() * 2);
         inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
         inventoryUI.setY(0);
+        inventoryUI.setDropListener(new DropListener() {
+            @Override
+            public void drop(Item item, int qty) {
+                PacketDropItem packetDropItem = new PacketDropItem();
+                packetDropItem.setItem(item);
+                packetDropItem.setQty(qty);
+                try {
+                    Packet.writeHeader(PacketDropItem.class, socket.getOutputStream());
+                    packetDropItem.writeTo(socket.getOutputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         inventoryUI.setDebug(true);
         inventoryUI.debugTable();
 
@@ -150,7 +167,7 @@ public class WorldScreen extends StageScreen {
                     try {
                         Packet packet = Packet.readHeader(socket.getInputStream());
                         packet.readFrom(socket.getInputStream());
-
+                        System.out.println(packet.getClass().getSimpleName());
                         if (packet instanceof PacketChat) {
                             PacketChat packetChat = (PacketChat) packet;
                             User u = WorldScreen.this.getCompetitorById(packetChat.getSenderId()).getUser();
@@ -183,7 +200,12 @@ public class WorldScreen extends StageScreen {
                             PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
                             Competitor competitor = getCompetitorById(competitorMovement.getUserId());
                             competitor.processMovement(competitorMovement.getMovementAction());
-                        }else if (packet instanceof PacketInventory)
+                        }else if(packet instanceof PacketLoot)
+                        {
+                            PacketLoot packetLoot = (PacketLoot)packet;
+                            System.out.println("Something was dropped");
+                        }
+                        else if (packet instanceof PacketInventory)
                         {
                             PacketInventory packetInventory = (PacketInventory) packet;
                             inventoryUI.setInventory(packetInventory.getInventory());

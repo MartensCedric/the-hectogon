@@ -8,6 +8,10 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.networking.inventory.PacketDropItem;
+import com.cedricmartens.commons.networking.inventory.PacketLoot;
+import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.server.auth.AuthentificationService;
 import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
 import com.cedricmartens.hectogon.server.match.Match;
@@ -66,7 +70,7 @@ public class SocketConnection implements SocketListener {
             try {
                 Packet packet = Packet.readHeader(socket.getInputStream());
                 packet.readFrom(socket.getInputStream());
-
+                Log.trace("Received packet of type : " + packet.getClass().getSimpleName());
                 if (packet instanceof PacketInLogin)
                 {
                     PacketInLogin packetInLogin = (PacketInLogin) packet;
@@ -146,6 +150,23 @@ public class SocketConnection implements SocketListener {
                         packetCompetitorMovement.setUserId(playerId);
                         server.getMatchById(0).send(p-> !p.equals(player), packetCompetitorMovement);
                     } else {
+                        throw new IllegalStateException();
+                    }
+                }else if(packet instanceof PacketDropItem)
+                {
+                    PacketDropItem packetDropItem = (PacketDropItem)packet;
+                    if(player != null)
+                    {
+                        Item item = packetDropItem.getItem();
+                        int qty = packetDropItem.getQty();
+                        player.getInventory().removeItem(item, qty);
+                        PacketLoot packetLoot = new PacketLoot();
+                        packetLoot.setPoint(player.getPosition());
+                        Inventory inventory = new Inventory(12);
+                        inventory.addItem(item, qty);
+                        packetLoot.setInventory(inventory);
+                        server.getMatchById(0).sendToEveryone(packetLoot);
+                    }else{
                         throw new IllegalStateException();
                     }
                 }
