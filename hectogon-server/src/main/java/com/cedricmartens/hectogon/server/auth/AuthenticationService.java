@@ -1,9 +1,9 @@
 package com.cedricmartens.hectogon.server.auth;
 
-import com.cedricmartens.commons.networking.authentification.LoginStatus;
-import com.cedricmartens.commons.networking.authentification.RegisterStatus;
+import com.cedricmartens.commons.networking.authentication.LoginStatus;
+import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 
-public interface AuthentificationService
+public interface AuthenticationService
 {
     LoginStatus login(String username, String password);
     LoginStatus login(String token);

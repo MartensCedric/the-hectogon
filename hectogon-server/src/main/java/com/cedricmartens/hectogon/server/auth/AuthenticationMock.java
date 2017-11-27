@@ -1,9 +1,9 @@
 package com.cedricmartens.hectogon.server.auth;
 
-import com.cedricmartens.commons.networking.authentification.LoginStatus;
-import com.cedricmartens.commons.networking.authentification.RegisterStatus;
+import com.cedricmartens.commons.networking.authentication.LoginStatus;
+import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 
-public class AuthentificationMock implements AuthentificationService {
+public class AuthenticationMock implements AuthenticationService {
 
     @Override
     public LoginStatus login(String username, String password) {

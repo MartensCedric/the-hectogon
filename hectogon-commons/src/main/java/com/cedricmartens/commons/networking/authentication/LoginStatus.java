@@ -1,4 +1,4 @@
-package com.cedricmartens.commons.networking.authentification;
+package com.cedricmartens.commons.networking.authentication;
 
 /**
  * Created by Cedric Martens on 2017-11-08.

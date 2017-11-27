@@ -7,13 +7,13 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
-import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.networking.authentication.*;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
-import com.cedricmartens.hectogon.server.auth.AuthentificationService;
-import com.cedricmartens.hectogon.server.auth.DatabaseAuthentification;
+import com.cedricmartens.hectogon.server.auth.AuthenticationService;
+import com.cedricmartens.hectogon.server.auth.DatabaseAuthentication;
 import com.cedricmartens.hectogon.server.match.Match;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.cedricmartens.hectogon.server.match.Player;
@@ -74,7 +74,7 @@ public class SocketConnection implements SocketListener {
                 if (packet instanceof PacketInLogin)
                 {
                     PacketInLogin packetInLogin = (PacketInLogin) packet;
-                    AuthentificationService authService = new DatabaseAuthentification();
+                    AuthenticationService authService = new DatabaseAuthentication();
                     LoginStatus loginStatus = authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
 
                     PacketOutLogin packetOutLogin = new PacketOutLogin();
@@ -100,7 +100,7 @@ public class SocketConnection implements SocketListener {
                 }else if(packet instanceof PacketInRegister)
                 {
                     PacketInRegister packetInRegister = (PacketInRegister) packet;
-                    AuthentificationService authService = new DatabaseAuthentification();
+                    AuthenticationService authService = new DatabaseAuthentication();
                     RegisterStatus registerStatus = authService.register(packetInRegister.getUsername(),
                             packetInRegister.getEmail(), packetInRegister.getPassword());
 

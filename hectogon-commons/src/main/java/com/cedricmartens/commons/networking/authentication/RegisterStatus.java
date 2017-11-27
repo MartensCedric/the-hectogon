@@ -1,4 +1,4 @@
-package com.cedricmartens.commons.networking.authentification;
+package com.cedricmartens.commons.networking.authentication;
 
 public enum RegisterStatus
 {

@@ -2,7 +2,7 @@ package com.cedricmartens.commons.networking;
 
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
-import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.networking.authentication.*;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;

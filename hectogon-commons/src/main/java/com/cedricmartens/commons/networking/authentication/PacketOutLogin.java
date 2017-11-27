@@ -1,4 +1,4 @@
-package com.cedricmartens.commons.networking.authentification;
+package com.cedricmartens.commons.networking.authentication;
 
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;

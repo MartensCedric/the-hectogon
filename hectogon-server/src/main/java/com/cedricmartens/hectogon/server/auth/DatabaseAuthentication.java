@@ -1,14 +1,14 @@
 package com.cedricmartens.hectogon.server.auth;
 
-import com.cedricmartens.commons.networking.authentification.LoginStatus;
-import com.cedricmartens.commons.networking.authentification.RegisterStatus;
+import com.cedricmartens.commons.networking.authentication.LoginStatus;
+import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 import com.cedricmartens.hectogon.server.db.DatabaseManager;
 import com.cedricmartens.hectogon.server.db.IllegalDatabaseStateException;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class DatabaseAuthentification implements AuthentificationService {
+public class DatabaseAuthentication implements AuthenticationService {
 
     @Override
     public LoginStatus login(String username, String password) {

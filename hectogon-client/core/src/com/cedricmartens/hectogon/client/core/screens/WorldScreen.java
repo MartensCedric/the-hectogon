@@ -29,6 +29,7 @@ import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
+import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
@@ -66,6 +67,7 @@ public class WorldScreen extends StageScreen {
     private Chest chest;
     private List<Competitor> competitors;
     private List<Entity> decorations;
+    private List<Lootbag> drops;
     private Player player;
 
     public WorldScreen(GameManager gameManager)
@@ -74,6 +76,7 @@ public class WorldScreen extends StageScreen {
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
+        this.drops = new ArrayList<Lootbag>();
 
         for(int i = 0; i < 100; i++)
         {
@@ -202,8 +205,9 @@ public class WorldScreen extends StageScreen {
                             competitor.processMovement(competitorMovement.getMovementAction());
                         }else if(packet instanceof PacketLoot)
                         {
-                            PacketLoot packetLoot = (PacketLoot)packet;
-                            System.out.println("Something was dropped");
+                            PacketLoot pl = (PacketLoot)packet;
+                            Lootbag lootbag = new Lootbag(pl.getPoint().x, pl.getPoint().y, pl.getInventory());
+                            drops.add(lootbag);
                         }
                         else if (packet instanceof PacketInventory)
                         {
@@ -245,6 +249,7 @@ public class WorldScreen extends StageScreen {
         this.batch.begin();
         if(competitors.size() != 0)
             map.render(batch, player.getPosition().x, player.getPosition().y, 500);
+
         for(Entity e : decorations)
         {
             if(e instanceof StartStone)
@@ -255,10 +260,22 @@ public class WorldScreen extends StageScreen {
                         e.getPosition().y - texStartStone.getHeight()/2);
             }
         }
+
         batch.draw(assetManager.get("interactive/chest.png", Texture.class), chest.getPosition().x,chest.getPosition().y);
+
+        Texture txtLb = assetManager.get("interactive/lootbag.png", Texture.class);
+        float lbOffsetX = txtLb.getWidth()/2;
+        float lbOffsetY = txtLb.getHeight()/2;
+        for(Lootbag l : drops)
+        {
+            batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
+        }
+
+        float playerOffsetX = playerDummy.getWidth()/2;
+        float playerOffsetY = playerDummy.getHeight()/2;
         for(Competitor c : competitors)
         {
-            batch.draw(playerDummy, c.getPosition().x, c.getPosition().y);
+            batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y - playerOffsetY);
         }
         this.batch.end();
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);

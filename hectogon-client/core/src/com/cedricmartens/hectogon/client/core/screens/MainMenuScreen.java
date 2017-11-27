@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
-import com.cedricmartens.commons.networking.authentification.*;
+import com.cedricmartens.commons.networking.authentication.*;
 import com.cedricmartens.commons.util.AuthentificationUtil;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
