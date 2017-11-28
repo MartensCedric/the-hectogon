@@ -38,8 +38,7 @@ public class Match
     {
         float x = Math.round(2500 * Math.cos((PI * players.size()) / (100 / 2)));
         float y = Math.round(2500 * Math.sin((PI * players.size()) / (100 / 2)));
-        Point p = new Point(x, y);
-        return p;
+        return new Point(x, y);
     }
 
     public void addPlayer(Player player)
@@ -132,7 +131,7 @@ public class Match
     {
         for(Player p : players)
         {
-            p.move(150, delta);
+            p.move(delta);
         }
     }
 }

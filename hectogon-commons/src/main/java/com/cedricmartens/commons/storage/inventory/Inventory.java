@@ -160,10 +160,8 @@ public class Inventory implements Iterable<InventorySlot>
 
     public boolean hasEmptySlots()
     {
-        for(int i = 0; i < slots.length; i++)
-        {
-            if(slots[i].getItem() == Item.empty_slot)
-            {
+        for (InventorySlot slot : slots) {
+            if (slot.getItem() == Item.empty_slot) {
                 return true;
             }
         }
@@ -173,9 +171,8 @@ public class Inventory implements Iterable<InventorySlot>
     public int emptySlotCount()
     {
         int c = 0;
-        for(int i = 0; i < slots.length; i++)
-        {
-            if(slots[i].getItem() == Item.empty_slot)
+        for (InventorySlot slot : slots) {
+            if (slot.getItem() == Item.empty_slot)
                 c++;
         }
         return c;
@@ -216,11 +213,8 @@ public class Inventory implements Iterable<InventorySlot>
 
     private boolean hasEmptySlot()
     {
-        for(int i = 0; i < slots.length; i++)
-        {
-            InventorySlot invItem = slots[i];
-            if(invItem.getItem() == Item.empty_slot)
-            {
+        for (InventorySlot invItem : slots) {
+            if (invItem.getItem() == Item.empty_slot) {
                 return true;
             }
         }
@@ -242,9 +236,8 @@ public class Inventory implements Iterable<InventorySlot>
 
     public boolean isEmpty()
     {
-        for(int i = 0; i < slots.length; i++)
-        {
-            if(slots[i].getItem() != Item.empty_slot)
+        for (InventorySlot slot : slots) {
+            if (slot.getItem() != Item.empty_slot)
                 return false;
         }
         return true;

@@ -12,8 +12,8 @@ import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.authentication.*;
 import com.cedricmartens.commons.util.AuthentificationUtil;
-import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.Hectogon;
+import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.ui.TabbedPanel;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 

@@ -10,8 +10,7 @@ public class DatabaseUser implements UserService {
         DatabaseManager dm = DatabaseManager.getDatabaseManager();
         try {
             String username = dm.getUsername(userId);
-            User user = new User(userId, username);
-            return user;
+            return new User(userId, username);
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -27,8 +26,7 @@ public class DatabaseUser implements UserService {
             if(id == dm.NO_RESULTS)
                 throw new UserNotFoundException();
 
-            User user = new User(id, username);
-            return user;
+            return new User(id, username);
         } catch (Exception e)
         {
             e.printStackTrace();

@@ -23,6 +23,7 @@ import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
+import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
@@ -35,12 +36,12 @@ import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
+import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
-import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
-import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 import com.cedricmartens.hectogon.client.core.world.StartStone;
@@ -181,6 +182,10 @@ public class WorldScreen extends StageScreen {
 
                             chat.addMessage(m);
 
+                        }else if(packet instanceof PacketCompetitor)
+                        {
+                            PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
+                            competitors.add(packetCompetitor.getCompetitor());
                         }else if(packet instanceof PacketCompetitorJoin)
                         {
                             PacketCompetitorJoin packetCompetitorJoin = (PacketCompetitorJoin) packet;
@@ -194,10 +199,6 @@ public class WorldScreen extends StageScreen {
                             }else{
                                 competitors.add(competitor);
                             }
-                        }else if(packet instanceof PacketCompetitor)
-                        {
-                            PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
-                            competitors.add(packetCompetitor.getCompetitor());
                         }else if(packet instanceof PacketCompetitorMovement)
                         {
                             PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
@@ -213,6 +214,11 @@ public class WorldScreen extends StageScreen {
                         {
                             PacketInventory packetInventory = (PacketInventory) packet;
                             inventoryUI.setInventory(packetInventory.getInventory());
+                        }else if(packet instanceof PacketPositionCorrection)
+                        {
+                            PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
+                            Competitor c = getCompetitorById(ppc.getUserId());
+                            c.correctPosition(ppc.getPosition(), ppc.getTime());
                         }
 
                     } catch (IOException e) {
@@ -238,7 +244,7 @@ public class WorldScreen extends StageScreen {
         if(competitors.size() != 0 && player.getPosition() != null)
         {
             for(Competitor competitor : competitors)
-                competitor.move(150, delta);
+                competitor.move(delta);
 
             worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
             worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
@@ -304,11 +310,9 @@ public class WorldScreen extends StageScreen {
 
     private Competitor getCompetitorById(int id)
     {
-        for(int i = 0; i < competitors.size(); i++)
-        {
-            if(competitors.get(i).getUser().getUserId() == id)
-            {
-                return competitors.get(i);
+        for (Competitor competitor : competitors) {
+            if (competitor.getUser().getUserId() == id) {
+                return competitor;
             }
         }
 

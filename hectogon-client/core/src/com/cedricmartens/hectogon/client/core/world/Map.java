@@ -3,7 +3,6 @@ package com.cedricmartens.hectogon.client.core.world;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.cedricmartens.commons.util.MathUtil;
 
 import java.util.Random;
 

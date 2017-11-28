@@ -87,7 +87,6 @@ public class Player extends Competitor implements InputProcessor {
         return true;
     }
 
-
     @Override
     public boolean keyTyped(char character) {
         return false;

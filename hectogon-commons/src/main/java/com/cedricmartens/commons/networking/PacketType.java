@@ -2,7 +2,11 @@ package com.cedricmartens.commons.networking;
 
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
-import com.cedricmartens.commons.networking.authentication.*;
+import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
+import com.cedricmartens.commons.networking.authentication.PacketInLogin;
+import com.cedricmartens.commons.networking.authentication.PacketInRegister;
+import com.cedricmartens.commons.networking.authentication.PacketOutLogin;
+import com.cedricmartens.commons.networking.authentication.PacketOutRegister;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
@@ -11,7 +15,6 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 
 public enum  PacketType
 {
-    //Add packets here
     CHAT(PacketChat.class),
     IN_LOGIN(PacketInLogin.class),
     OUT_LOGIN(PacketOutLogin.class),
@@ -23,8 +26,10 @@ public enum  PacketType
     COMPETITOR(PacketCompetitor.class),
     INVENTORY(PacketInventory.class),
     LOOT(PacketLoot.class),
-    DROP(PacketDropItem.class)
+    DROP(PacketDropItem.class),
+    CORRECTION(PacketPositionCorrection.class)
     ;
+
     private Class<? extends Packet> type;
 
 

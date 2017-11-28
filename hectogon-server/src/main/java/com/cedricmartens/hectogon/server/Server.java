@@ -7,8 +7,6 @@ import com.cedricmartens.hectogon.server.match.MatchService;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
 import com.esotericsoftware.minlog.Log;
 
-import javax.xml.crypto.Data;
-import java.awt.image.DataBuffer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -53,7 +51,9 @@ public class Server implements Runnable
         Log.info("Server is serverUp to connecting sockets on port : " + port);
         new Thread(() -> {
             long time = System.currentTimeMillis();
+            long test = time;
             int targetTPS = 60;
+            int tickCount = 0;
             while(serverUp)
             {
                 long timeNow = System.currentTimeMillis();
@@ -71,6 +71,7 @@ public class Server implements Runnable
                         e.printStackTrace();
                     }
                 }
+                tickCount++;
             }
         }).start();
 

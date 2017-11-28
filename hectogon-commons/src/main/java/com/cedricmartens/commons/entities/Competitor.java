@@ -8,6 +8,7 @@ public class Competitor
 {
     protected User user;
     protected Point position;
+    protected float speed;
 
     protected boolean movingUp;
     protected boolean movingDown;
@@ -18,6 +19,7 @@ public class Competitor
     {
         this.user = user;
         this.position = position;
+        this.speed = 150;
     }
 
     public void processMovement(MovementAction movementAction)
@@ -52,13 +54,13 @@ public class Competitor
         }
     }
 
-    public void move(float speed, float direction, float deltaTime)
+    public void move(float direction, float deltaTime)
     {
-        position.x += Math.cos(direction) * speed * /* DELTA TIME */ 1;
-        position.y += Math.sin(direction) * speed * /* DELTA TIME */ 1;
+        position.x += Math.cos(direction) * speed * deltaTime;
+        position.y += Math.sin(direction) * speed * deltaTime;
     }
 
-    public void move(float speed, float deltaTime)
+    public void move(float deltaTime)
     {
         if(movingLeft)
         {
@@ -90,6 +92,16 @@ public class Competitor
         getPosition().x += Math.cos(direction) * speed * deltaTime;
         getPosition().y += Math.sin(direction) * speed * deltaTime;
     }
+
+    public void correctPosition(Point p, long timeAtCorrection)
+    {
+        position.x = p.x;
+        position.y = p.y;
+        long diff = System.currentTimeMillis() - timeAtCorrection;
+        System.out.println("Correction delta has " + diff + "ms");
+        move(diff/60.0f);
+    }
+
 
     public Point getPosition()
     {
@@ -141,5 +153,13 @@ public class Competitor
 
     public void setMovingRight(boolean movingRight) {
         this.movingRight = movingRight;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 }

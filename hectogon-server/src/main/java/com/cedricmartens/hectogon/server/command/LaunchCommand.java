@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.Server;
-import com.esotericsoftware.minlog.Log;
 
 /**
  * Created by Cedric Martens on 2017-11-10.
