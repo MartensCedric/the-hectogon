@@ -93,12 +93,6 @@ com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 		vScrollKnob: default-round-large
 	}
 }
-com.cedricmartens.hectogon.client.core.ui.chat.Chat$ChatStyle: {
-	default: {
-		openChat: open
-		closeChat: close
-	}
-}
 com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
 	default: {
 		font: default-font
@@ -181,6 +175,14 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		titleFont: default-font
 		titleFontColor: white
 		stageBackground: dialogDim
+	}
+}
+com.cedricmartens.hectogon.client.core.ui.chat.Chat$ChatStyle: {
+	default: {
+		openChat: open
+		openChatDown: open_down
+		closeChat: close
+		closeChatDown: close_down
 	}
 }
 }

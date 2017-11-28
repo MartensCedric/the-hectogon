@@ -315,7 +315,7 @@ atlasData: {
 			name: white
 		}
 		{
-			file: temp/302218742_data/white.png
+			file: temp/120737138_data/white.png
 			bgColor: {
 				r: 0
 				g: 0
@@ -333,17 +333,17 @@ atlasData: {
 			name: dialogDim
 		}
 		{
-			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/ui/close.png"
+			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/ui/open_down.png"
 			bgColor: {
-				r: 0
-				g: 0
-				b: 0
+				r: 1
+				g: 1
+				b: 1
 				a: 1
 			}
 			visible: true
 			tint: null
 			tintName: null
-			name: close
+			name: open_down
 		}
 		{
 			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/ui/open.png"
@@ -357,6 +357,32 @@ atlasData: {
 			tint: null
 			tintName: null
 			name: open
+		}
+		{
+			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/ui/close_down.png"
+			bgColor: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			visible: true
+			tint: null
+			tintName: null
+			name: close_down
+		}
+		{
+			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/ui/close.png"
+			bgColor: {
+				r: 0
+				g: 0
+				b: 0
+				a: 1
+			}
+			visible: true
+			tint: null
+			tintName: null
+			name: close
 		}
 	]
 }
@@ -2163,7 +2189,46 @@ jsonData: {
 			}
 		]
 	}
-	customClasses: []
+	customClasses: [
+		{
+			fullyQualifiedName: com.cedricmartens.hectogon.client.core.ui.chat.Chat$ChatStyle
+			displayName: ChatStyle
+			styles: [
+				{
+					name: default
+					properties: [
+						{
+							name: openChat
+							type: TEXT
+							value: open
+						}
+						{
+							name: closeChat
+							type: TEXT
+							value: close
+						}
+					]
+					deletable: false
+				}
+			]
+			templateStyle: {
+				name: template
+				properties: [
+					{
+						name: openChat
+						type: TEXT
+						value: null
+					}
+					{
+						name: closeChat
+						type: TEXT
+						value: null
+					}
+				]
+				deletable: true
+			}
+		}
+	]
 }
 preferences: {
 	maxUndos: {
@@ -2172,7 +2237,7 @@ preferences: {
 	}
 	id: {
 		class: java.lang.Integer
-		value: 302218742
+		value: 120737138
 	}
 	resources-relative: {
 		class: java.lang.Boolean
