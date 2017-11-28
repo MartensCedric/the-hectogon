@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -44,6 +41,7 @@ import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
+import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryTable;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
@@ -53,6 +51,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
 import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 import static java.lang.Math.PI;
 
