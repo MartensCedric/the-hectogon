@@ -7,6 +7,7 @@ public class UiUtil
 {
     private static Skin defaultSkin;
     private static Skin chatSkin;
+    private static Skin hectogonSkin;
 
     public static Skin getDefaultSkin()
     {
@@ -15,6 +16,15 @@ public class UiUtil
             defaultSkin = new Skin(Gdx.files.internal("skins/default/skin/uiskin.json"));
         }
         return defaultSkin;
+    }
+
+    public static Skin getHectogonSkin()
+    {
+        if(hectogonSkin == null)
+        {
+            hectogonSkin = new Skin(Gdx.files.internal("skins/hectogon/hectogon.json"));
+        }
+        return hectogonSkin;
     }
 
     public static Skin getChatSkin()

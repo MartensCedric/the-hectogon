@@ -131,7 +131,7 @@ public class WorldScreen extends StageScreen {
 
         getStage().addActor(inventoryUI);
 
-        final Chat chat = new Chat(UiUtil.getDefaultSkin());
+        final Chat chat = new Chat(UiUtil.getHectogonSkin());
         chat.setWidth(WIDTH / 2.5f);
         chat.setHeight(300);
         chat.setX(15);
