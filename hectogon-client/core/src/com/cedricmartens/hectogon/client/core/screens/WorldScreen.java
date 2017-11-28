@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -50,7 +53,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 import static java.lang.Math.PI;
 
@@ -74,6 +76,7 @@ public class WorldScreen extends StageScreen {
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
+
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
@@ -164,6 +167,7 @@ public class WorldScreen extends StageScreen {
         });
 
         getStage().addActor(chatInput);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
