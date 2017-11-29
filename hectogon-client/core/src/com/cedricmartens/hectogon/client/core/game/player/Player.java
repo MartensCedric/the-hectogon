@@ -10,6 +10,7 @@ public class Player extends Competitor implements InputProcessor {
 
     private MovementListener movementListener;
     private InputService inputService;
+    private boolean inputEnabled;
 
     public Player(User user, Point position, MovementListener movementListener) {
         super(user, position);
@@ -19,35 +20,39 @@ public class Player extends Competitor implements InputProcessor {
         movingLeft = false;
         movingRight = false;
         this.movementListener = movementListener;
+        this.inputEnabled = true;
     }
 
     @Override
     public boolean keyDown(int keycode)
     {
-        if(inputService.left(keycode))
+        if(inputEnabled)
         {
-            movingLeft = true;
-            movementListener.move(MovementAction.LEFT_KEY_PRESS);
-        }
+            if(inputService.left(keycode))
+            {
+                movingLeft = true;
+                movementListener.move(MovementAction.LEFT_KEY_PRESS);
+            }
 
-        if(inputService.right(keycode))
-        {
-            movingRight = true;
-            movementListener.move(MovementAction.RIGHT_KEY_PRESS);
-        }
+            if(inputService.right(keycode))
+            {
+                movingRight = true;
+                movementListener.move(MovementAction.RIGHT_KEY_PRESS);
+            }
 
-        if(inputService.up(keycode))
-        {
-            movingUp = true;
-            movementListener.move(MovementAction.UP_KEY_PRESS);
-        }
+            if(inputService.up(keycode))
+            {
+                movingUp = true;
+                movementListener.move(MovementAction.UP_KEY_PRESS);
+            }
 
-        if(inputService.down(keycode))
-        {
-            movingDown = true;
-            movementListener.move(MovementAction.DOWN_KEY_PRESS);
-        }
+            if(inputService.down(keycode))
+            {
+                movingDown = true;
+                movementListener.move(MovementAction.DOWN_KEY_PRESS);
+            }
 
+        }
         return true;
     }
 
@@ -62,26 +67,31 @@ public class Player extends Competitor implements InputProcessor {
     }
 
     @Override
-    public boolean keyUp(int keycode) {
-        if(inputService.left(keycode))
+    public boolean keyUp(int keycode)
+    {
+        if(inputEnabled)
         {
-            movingLeft = false;
-            movementListener.move(MovementAction.LEFT_KEY_RELEASED);
-        }
+            if(inputService.left(keycode))
+            {
+                movingLeft = false;
+                movementListener.move(MovementAction.LEFT_KEY_RELEASED);
+            }
 
-        if(inputService.right(keycode)) {
-            movingRight = false;
-            movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
-        }
+            if(inputService.right(keycode)) {
+                movingRight = false;
+                movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
+            }
 
-        if(inputService.up(keycode)) {
-            movingUp = false;
-            movementListener.move(MovementAction.UP_KEY_RELEASED);
-        }
+            if(inputService.up(keycode)) {
+                movingUp = false;
+                movementListener.move(MovementAction.UP_KEY_RELEASED);
+            }
 
-        if(inputService.down(keycode)) {
-            movingDown = false;
-            movementListener.move(MovementAction.DOWN_KEY_RELEASED);
+            if(inputService.down(keycode)) {
+                movingDown = false;
+                movementListener.move(MovementAction.DOWN_KEY_RELEASED);
+            }
+
         }
 
         return true;
@@ -115,5 +125,17 @@ public class Player extends Competitor implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void setInputEnabled(boolean inputEnabled)
+    {
+        this.inputEnabled = inputEnabled;
+        if(!inputEnabled)
+        {
+            movementListener.move(MovementAction.LEFT_KEY_RELEASED);
+            movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
+            movementListener.move(MovementAction.UP_KEY_RELEASED);
+            movementListener.move(MovementAction.DOWN_KEY_RELEASED);
+        }
     }
 }

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -39,6 +41,7 @@ import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.ui.chat.OnFocusChange;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryTable;
@@ -80,6 +83,16 @@ public class WorldScreen extends StageScreen {
         this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
         this.drops = new ArrayList<Lootbag>();
+   /*
+        this.getStage().getRoot().addCaptureListener(new InputListener(){
+            @Override
+            public boolean keyTyped(InputEvent event, char character) {
+                System.out.println("Typed " + character);
+                return super.keyTyped(event, character);
+            }
+        });
+
+        */
 
         for(int i = 0; i < 100; i++)
         {
@@ -161,6 +174,16 @@ public class WorldScreen extends StageScreen {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        });
+
+        chatInput.setOnFocusChange(new OnFocusChange() {
+            @Override
+            public void focus(boolean isFocus) {
+                if(player != null)
+                {
+                    player.setInputEnabled(!isFocus);
                 }
             }
         });
