@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -44,7 +42,6 @@ import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnFocusChange;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
-import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryTable;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
@@ -55,6 +52,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cedricmartens.hectogon.client.core.game.Hectogon.HEIGHT;
 import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 import static java.lang.Math.PI;
 
@@ -263,33 +261,37 @@ public class WorldScreen extends StageScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1f, 0.25f, 0.25f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
-        if(competitors.size() != 0 && player.getPosition() != null)
-        {
-            for(Competitor competitor : competitors)
-                competitor.move(delta);
+        if(!playerHasConnected())
+            return;
 
-            worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
-            worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
-            worldCamera.update();
-        }
+        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
+
+        for(Competitor competitor : competitors)
+            competitor.move(delta);
+
+        worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
+        worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
+        worldCamera.update();
+
 
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
-        if(competitors.size() != 0)
-            map.render(batch, player.getPosition().x, player.getPosition().y, 500);
+        map.render(batch, player.getPosition().x, player.getPosition().y, 500);
 
         for(Entity e : decorations)
         {
-            if(e instanceof StartStone)
+            if(e.getPosition().distanceBetweenPoint(player.getPosition()) < 500)
             {
-                Texture texStartStone = assetManager.get("misc/startstone.png", Texture.class);
-                batch.draw(texStartStone,
-                        e.getPosition().x - texStartStone.getWidth()/2,
-                        e.getPosition().y - texStartStone.getHeight()/2);
+                if(e instanceof StartStone)
+                {
+                    Texture texStartStone = assetManager.get("misc/startstone.png", Texture.class);
+                    batch.draw(texStartStone,
+                            e.getPosition().x - texStartStone.getWidth()/2,
+                            e.getPosition().y - texStartStone.getHeight()/2);
+                }
             }
         }
 
@@ -310,10 +312,14 @@ public class WorldScreen extends StageScreen {
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y - playerOffsetY);
         }
         this.batch.end();
-        this.debugRenderer.setProjectionMatrix(worldCamera.combined);
+
         this.debugRenderer.begin();
+        this.debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
+        this.debugRenderer.line(0, HEIGHT/2, WIDTH, HEIGHT/2);
+        this.debugRenderer.line(WIDTH/2, 0, WIDTH/2, HEIGHT);
+        this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
-        //this.debugRenderer.rect(player.getPosition().x, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
+        this.debugRenderer.rect(player.getPosition().x - playerDummy.getWidth()/2, player.getPosition().y - playerDummy.getWidth()/2, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
 
         super.render(delta);
@@ -369,8 +375,13 @@ public class WorldScreen extends StageScreen {
     public void show()
     {
         InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(player);
         multiplexer.addProcessor(this.getStage());
+        multiplexer.addProcessor(player);
         Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    private boolean playerHasConnected()
+    {
+        return player.getUser() != null;
     }
 }

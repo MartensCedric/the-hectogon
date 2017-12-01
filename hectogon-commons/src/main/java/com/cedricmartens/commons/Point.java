@@ -15,8 +15,8 @@ public class Point
         this.y = y;
     }
 
-    public float distanceBetweenPoints(Point p)
+    public float distanceBetweenPoint(Point p)
     {
-        return (float) Math.sqrt((this.x - p.x) * (this.x - p.x) - (this.y - p.y) * (this.y - p.y));
+        return (float) Math.sqrt((this.x - p.x) * (this.x - p.x) + (this.y - p.y) * (this.y - p.y));
     }
 }
