@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -188,6 +191,20 @@ public class WorldScreen extends StageScreen {
 
         getStage().addActor(chatInput);
 
+        getStage().getRoot().addCaptureListener(new InputListener(){
+            @Override
+            public boolean keyTyped(InputEvent event, char character) {
+
+                if(character == '\r')
+                {
+                    getStage().setKeyboardFocus(chatInput);
+                    return true;
+                }
+
+                return super.keyTyped(event, character);
+            }
+        });
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -272,8 +289,8 @@ public class WorldScreen extends StageScreen {
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
-        worldCamera.position.x = player.getPosition().x + playerDummy.getWidth() / 2;
-        worldCamera.position.y = player.getPosition().y + playerDummy.getHeight() / 2;
+        worldCamera.position.x = player.getPosition().x;
+        worldCamera.position.y = player.getPosition().y;
         worldCamera.update();
 
 
