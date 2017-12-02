@@ -91,7 +91,6 @@ public class Player extends Competitor implements InputProcessor {
                 movingDown = false;
                 movementListener.move(MovementAction.DOWN_KEY_RELEASED);
             }
-
         }
 
         return true;
@@ -132,6 +131,11 @@ public class Player extends Competitor implements InputProcessor {
         this.inputEnabled = inputEnabled;
         if(!inputEnabled)
         {
+            this.movingDown = false;
+            this.movingUp = false;
+            this.movingLeft = false;
+            this.movingRight = false;
+
             movementListener.move(MovementAction.LEFT_KEY_RELEASED);
             movementListener.move(MovementAction.RIGHT_KEY_RELEASED);
             movementListener.move(MovementAction.UP_KEY_RELEASED);

@@ -9,6 +9,7 @@ import com.cedricmartens.commons.networking.authentication.PacketOutLogin;
 import com.cedricmartens.commons.networking.authentication.PacketOutRegister;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.competitor.PacketDeath;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
@@ -27,7 +28,8 @@ public enum  PacketType
     INVENTORY(PacketInventory.class),
     LOOT(PacketLoot.class),
     DROP(PacketDropItem.class),
-    CORRECTION(PacketPositionCorrection.class)
+    CORRECTION(PacketPositionCorrection.class),
+    DEATH(PacketDeath.class)
     ;
 
     private Class<? extends Packet> type;

@@ -29,6 +29,7 @@ import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.competitor.PacketDeath;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
@@ -84,16 +85,6 @@ public class WorldScreen extends StageScreen {
         this.competitors = new ArrayList<Competitor>();
         this.decorations = new ArrayList<Entity>();
         this.drops = new ArrayList<Lootbag>();
-   /*
-        this.getStage().getRoot().addCaptureListener(new InputListener(){
-            @Override
-            public boolean keyTyped(InputEvent event, char character) {
-                System.out.println("Typed " + character);
-                return super.keyTyped(event, character);
-            }
-        });
-
-        */
 
         for(int i = 0; i < 100; i++)
         {
@@ -260,6 +251,14 @@ public class WorldScreen extends StageScreen {
                             PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
                             Competitor c = getCompetitorById(ppc.getUserId());
                             c.correctPosition(ppc.getPosition(), ppc.getTime());
+                        }else if(packet instanceof PacketDeath)
+                        {
+                            final PacketDeath packetDeath = (PacketDeath) packet;
+                            if(player.getUser().getUserId() == ((PacketDeath) packet).getUserId())
+                            {
+                                gameManager.sceneManager.popScreen();
+                            }
+                            competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
                         }
 
                     } catch (IOException e) {

@@ -27,13 +27,8 @@ public class DesktopLauncher {
 		}
 
 		if(config.width <= 0 || config.height <= 0)
-		{
-			//Monitor way too small
-			config.width = display.getWidth();
-			config.height = display.getHeight();
-			config.fullscreen = true;
 			return;
-		}
+
 
 		new LwjglApplication(new Hectogon(), config);
 	}

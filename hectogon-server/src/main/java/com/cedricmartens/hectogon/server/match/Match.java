@@ -3,8 +3,10 @@ package com.cedricmartens.hectogon.server.match;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.commons.networking.competitor.DeathReason;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
+import com.cedricmartens.commons.networking.competitor.PacketDeath;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.esotericsoftware.minlog.Log;
@@ -113,7 +115,17 @@ public class Match
 
     public void removePlayer(int playerId)
     {
+        removePlayer(playerId, DeathReason.DISCONNECT);
+    }
+
+    public void removePlayer(int playerId, DeathReason deathReason)
+    {
+        PacketDeath packetDeath = new PacketDeath();
+        packetDeath.setUserId(playerId);
+        packetDeath.setDeathReason(deathReason);
+        sendToEveryone(packetDeath);
         players.removeIf(p -> p.getUser().getUserId() == playerId);
+        Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name());
     }
 
     public Player getPlayerById(int playerId)
