@@ -19,7 +19,7 @@ public class Competitor
     {
         this.user = user;
         this.position = position;
-        this.speed = 150;
+        this.speed = 170;
     }
 
     public void processMovement(MovementAction movementAction)
@@ -62,32 +62,30 @@ public class Competitor
 
     public void move(float deltaTime)
     {
+        float dirX = 0;
+        float dirY = 0;
+
         if(movingLeft)
-        {
-            addForce(speed, (float) Math.PI, deltaTime);
-        }
+            dirX += -1;
 
         if(movingRight)
-        {
-            addForce(speed, 0, deltaTime);
-        }
+            dirX += 1;
 
         if(movingUp)
-        {
-            addForce(speed, (float) Math.PI / 2, deltaTime);
-        }
+            dirY += 1;
 
         if(movingDown)
-        {
-            addForce(speed, (float) (Math.PI + Math.PI/2), deltaTime);
-        }
+            dirY += -1;
+
+        if(dirX != 0 || dirY != 0)
+            applyForce((float) Math.atan2(dirY, dirX), deltaTime);
     }
 
     public User getUser() {
         return user;
     }
 
-    private void addForce(float speed, float direction, float deltaTime)
+    private void applyForce(float direction, float deltaTime)
     {
         getPosition().x += Math.cos(direction) * speed * deltaTime;
         getPosition().y += Math.sin(direction) * speed * deltaTime;
