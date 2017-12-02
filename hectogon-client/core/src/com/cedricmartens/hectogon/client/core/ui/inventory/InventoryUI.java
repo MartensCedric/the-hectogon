@@ -32,7 +32,6 @@ public class InventoryUI extends InventoryTable
     public void init()
     {
         super.init();
-
         for(int i = 0; i < inventorySlotImages.length; i++)
         {
             final InventorySlot is = inventorySlotImages[i].getInventorySlot();
@@ -41,6 +40,7 @@ public class InventoryUI extends InventoryTable
                 @Override
                 public void dragStart(InputEvent event, float x, float y, int pointer) {
 
+                    System.out.println("Drag");
                     if(is.getItem() != Item.empty_slot &&
                             selectedItem == null)
                     {
@@ -74,6 +74,7 @@ public class InventoryUI extends InventoryTable
                             inventory.addItem(tempItem);
                             selectedItem = null;
                         }
+                        init();
                         redraw();
                     }else{
 

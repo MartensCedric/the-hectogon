@@ -6,7 +6,8 @@ package com.cedricmartens.commons.storage.inventory;
 public enum  Item {
 
     empty_slot("Empty Slot", "An item could be placed here", 0),
-    swd_wood("Wooden Sword", "A sharp stick", 1),
+    swd_wood("Wooden Sword", "A pointy stick", 1),
+    swd_steel("Steel Sword", "A sharp sword made of steel", 1),
     swd_copper("Copper Sword", "A sword made of copper", 1),
     bow_wood("Wooden Bow", "A curved stick with a string, could be useful with some arrows", 1),
     arr_wood("Wooden Arrow", "Bow ammunition", 16),

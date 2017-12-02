@@ -66,7 +66,9 @@ public class Match
         }
 
         player.getInventory().addItem(Item.bow_wood, 2);
-        player.getInventory().addItem(Item.bomb, 3);
+        player.getInventory().addItem(Item.bomb, 1);
+        player.getInventory().addItem(Item.arr_wood, 17);
+        player.getInventory().addItem(Item.swd_steel, 2);
         PacketInventory packetInventory = new PacketInventory();
         packetInventory.setInventory(player.getInventory());
         try {

@@ -2,7 +2,6 @@ package com.cedricmartens.hectogon.server.command;
 
 import com.cedricmartens.hectogon.server.match.Match;
 import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
-import com.esotericsoftware.minlog.Log;
 
 public class AlivePlayersCommand extends Command
 {

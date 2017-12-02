@@ -34,6 +34,9 @@ public class Hectogon extends SceneManager
 		assetManager.load("icons/perks/tank_perk.png", Texture.class);
 		assetManager.load("items/bow_wood.png", Texture.class);
 		assetManager.load("items/bomb.png", Texture.class);
+		assetManager.load("items/arr_wood.png", Texture.class);
+		assetManager.load("items/arrow_wood.png", Texture.class);
+		assetManager.load("items/steel_sword.png", Texture.class);
 		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
 		assetManager.load("interactive/chest.png", Texture.class);
@@ -43,7 +46,7 @@ public class Hectogon extends SceneManager
 		assetManager.load("animals/bunny/bunny-left.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-right.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-down.png", Texture.class);
-		assetManager.load("animals/bunny/bunny-up.png", Texture.class);
+		assetManager.load("animals/bunny/bunny-up.png", Texture.class);;
 		assetManager.load("i18n/language", I18NBundle.class);
 		assetManager.finishLoading();
 

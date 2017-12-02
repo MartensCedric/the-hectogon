@@ -51,6 +51,7 @@ public class InventoryTable extends Table
     protected void redraw()
     {
         TextureUtil textureUtil = TextureUtil.getTextureUtil();
+
         int n = 0;
         for(InventorySlot is : inventory)
         {
