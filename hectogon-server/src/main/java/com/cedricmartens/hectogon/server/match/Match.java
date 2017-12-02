@@ -24,6 +24,7 @@ public class Match
     private List<Player> players;
     private int matchId;
     private boolean hasStarted;
+    private long startTime;
 
     public Match(int matchId)
     {
@@ -123,7 +124,9 @@ public class Match
         PacketDeath packetDeath = new PacketDeath();
         packetDeath.setUserId(playerId);
         packetDeath.setDeathReason(deathReason);
-        sendToEveryone(packetDeath);
+        send(p-> (deathReason != DeathReason.DISCONNECT)
+                        || p.getUser().getUserId() != playerId
+                ,packetDeath);
         players.removeIf(p -> p.getUser().getUserId() == playerId);
         Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name());
     }
@@ -145,5 +148,17 @@ public class Match
         {
             p.move(delta);
         }
+    }
+
+    public String[] getAlivePlayerUsernames()
+    {
+        String[] names = new String[players.size()];
+
+        for(int i = 0; i < players.size(); i++)
+        {
+            names[i] = players.get(i).getUser().getUsername();
+        }
+
+        return names;
     }
 }

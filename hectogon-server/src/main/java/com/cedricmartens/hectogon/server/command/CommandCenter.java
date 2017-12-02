@@ -26,6 +26,10 @@ public class CommandCenter implements Runnable
         aliasMap.put("start", LaunchCommand.class);
         aliasMap.put("listmatches", ListMatchesCommand.class);
         aliasMap.put("matches", ListMatchesCommand.class);
+        aliasMap.put("matchinfo", MatchInfoCommand.class);
+        aliasMap.put("kick", KillCommand.class);
+        aliasMap.put("alives", AlivePlayersCommand.class);
+        aliasMap.put("aliveplayers", AlivePlayersCommand.class);
     }
 
     public static CommandCenter getCommandCenter()

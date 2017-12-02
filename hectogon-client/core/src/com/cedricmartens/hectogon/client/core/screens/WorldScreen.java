@@ -66,7 +66,6 @@ public class WorldScreen extends StageScreen {
     private SpriteBatch batch, uiBatch;
     private ShapeRenderer debugRenderer;
     private OrthographicCamera worldCamera;
-    private boolean listening;
     private AssetManager assetManager;
     private Socket socket;
     private InventoryUI inventoryUI;
@@ -98,7 +97,6 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.setAutoShapeType(true);
         this.chest = new Chest(12);
         this.chest.setPosition(new Point(0, 0));
-        this.listening = true;
         this.assetManager = gameManager.assetManager;
         this.map = new Map(this.assetManager);
         this.batch = new SpriteBatch();
@@ -196,83 +194,83 @@ public class WorldScreen extends StageScreen {
             }
         });
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (listening) {
-                    try {
-                        Packet packet = Packet.readHeader(socket.getInputStream());
-                        packet.readFrom(socket.getInputStream());
-                        System.out.println(packet.getClass().getSimpleName());
-                        if (packet instanceof PacketChat) {
-                            PacketChat packetChat = (PacketChat) packet;
-                            User u = WorldScreen.this.getCompetitorById(packetChat.getSenderId()).getUser();
-                            Message m = new Message();
-                            m.setSender(u);
-                            m.setContents(packetChat.getMessage());
-                            m.setChatType(packetChat.getChatType());
+        new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    Packet packet = Packet.readHeader(socket.getInputStream());
+                    packet.readFrom(socket.getInputStream());
+                    System.out.println(packet.getClass().getSimpleName());
+                    if (packet instanceof PacketChat) {
+                        PacketChat packetChat = (PacketChat) packet;
+                        User u = WorldScreen.this.getCompetitorById(packetChat.getSenderId()).getUser();
+                        Message m = new Message();
+                        m.setSender(u);
+                        m.setContents(packetChat.getMessage());
+                        m.setChatType(packetChat.getChatType());
 
-                            chat.addMessage(m);
+                        chat.addMessage(m);
 
-                        }else if(packet instanceof PacketCompetitor)
-                        {
-                            PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
-                            competitors.add(packetCompetitor.getCompetitor());
-                        }else if(packet instanceof PacketCompetitorJoin)
-                        {
-                            PacketCompetitorJoin packetCompetitorJoin = (PacketCompetitorJoin) packet;
-                            Competitor competitor = packetCompetitorJoin.getCompetitor();
+                    }else if(packet instanceof PacketCompetitor)
+                    {
+                        PacketCompetitor packetCompetitor = (PacketCompetitor)packet;
+                        competitors.add(packetCompetitor.getCompetitor());
+                    }else if(packet instanceof PacketCompetitorJoin)
+                    {
+                        PacketCompetitorJoin packetCompetitorJoin = (PacketCompetitorJoin) packet;
+                        Competitor competitor = packetCompetitorJoin.getCompetitor();
 
-                            if(competitors.size() == 0)
-                            {
-                                player.setUser(competitor.getUser());
-                                player.setPosition(competitor.getPosition());
-                                competitors.add(player);
-                            }else{
-                                competitors.add(competitor);
-                            }
-                        }else if(packet instanceof PacketCompetitorMovement)
+                        if(competitors.size() == 0)
                         {
-                            PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
-                            Competitor competitor = getCompetitorById(competitorMovement.getUserId());
-                            competitor.processMovement(competitorMovement.getMovementAction());
-                        }else if(packet instanceof PacketLoot)
-                        {
-                            PacketLoot pl = (PacketLoot)packet;
-                            Lootbag lootbag = new Lootbag(pl.getPoint().x, pl.getPoint().y, pl.getInventory());
-                            drops.add(lootbag);
+                            player.setUser(competitor.getUser());
+                            player.setPosition(competitor.getPosition());
+                            competitors.add(player);
+                        }else{
+                            competitors.add(competitor);
                         }
-                        else if (packet instanceof PacketInventory)
-                        {
-                            PacketInventory packetInventory = (PacketInventory) packet;
-                            inventoryUI.setInventory(packetInventory.getInventory());
-                        }else if(packet instanceof PacketPositionCorrection)
-                        {
-                            PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
-                            Competitor c = getCompetitorById(ppc.getUserId());
-                            c.correctPosition(ppc.getPosition(), ppc.getTime());
-                        }else if(packet instanceof PacketDeath)
-                        {
-                            final PacketDeath packetDeath = (PacketDeath) packet;
-                            if(player.getUser().getUserId() == ((PacketDeath) packet).getUserId())
-                            {
-                                gameManager.sceneManager.popScreen();
-                            }
-                            competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (InstantiationException e) {
-                        e.printStackTrace();
-                    } catch (InvalidPacketDataException e) {
-                        e.printStackTrace();
+                    }else if(packet instanceof PacketCompetitorMovement)
+                    {
+                        PacketCompetitorMovement competitorMovement = (PacketCompetitorMovement) packet;
+                        Competitor competitor = getCompetitorById(competitorMovement.getUserId());
+                        competitor.processMovement(competitorMovement.getMovementAction());
+                    }else if(packet instanceof PacketLoot)
+                    {
+                        PacketLoot pl = (PacketLoot)packet;
+                        Lootbag lootbag = new Lootbag(pl.getPoint().x, pl.getPoint().y, pl.getInventory());
+                        drops.add(lootbag);
                     }
+                    else if (packet instanceof PacketInventory)
+                    {
+                        PacketInventory packetInventory = (PacketInventory) packet;
+                        inventoryUI.setInventory(packetInventory.getInventory());
+                    }else if(packet instanceof PacketPositionCorrection)
+                    {
+                        PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
+                        Competitor c = getCompetitorById(ppc.getUserId());
+                        c.correctPosition(ppc.getPosition(), ppc.getTime());
+                    }else if(packet instanceof PacketDeath)
+                    {
+                        final PacketDeath packetDeath = (PacketDeath) packet;
+                        if(player.getUser().getUserId() == ((PacketDeath) packet).getUserId())
+                        {
+                            Thread.currentThread().interrupt();
+                            Gdx.app.postRunnable(() -> {
+                                gameManager.sceneManager.popScreen();
+                            });
+
+                        }
+                        competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvalidPacketDataException e) {
+                    e.printStackTrace();
                 }
             }
-        }).start();
+        }, "Client-Listener").start();
     }
 
     @Override
@@ -335,7 +333,7 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.line(WIDTH/2, 0, WIDTH/2, HEIGHT);
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
-        this.debugRenderer.rect(player.getPosition().x - playerDummy.getWidth()/2, player.getPosition().y - playerDummy.getWidth()/2, playerDummy.getWidth(), playerDummy.getHeight());
+        this.debugRenderer.rect(player.getPosition().x - playerDummy.getWidth()/2, player.getPosition().y - playerDummy.getHeight()/2, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
 
         super.render(delta);
