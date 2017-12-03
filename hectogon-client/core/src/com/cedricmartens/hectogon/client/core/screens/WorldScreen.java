@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -115,7 +116,7 @@ public class WorldScreen extends StageScreen {
         inventoryUI.setWidth(textureInventory.getWidth() * 2);
         inventoryUI.setHeight(textureInventory.getHeight() * 2);
         inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
-        inventoryUI.setY(0);
+        inventoryUI.setY(100);
         inventoryUI.setDropListener((item, qty) -> {
             PacketDropItem packetDropItem = new PacketDropItem();
             packetDropItem.setItem(item);
@@ -127,6 +128,30 @@ public class WorldScreen extends StageScreen {
                 e.printStackTrace();
             }
         });
+
+        String[] icons = new String[]{"icons/backpack.png", "items/steel_sword.png"};
+
+        for(int i = 0; i < icons.length; i++)
+        {
+            Texture txtFrame = assetManager.get("ui/frame.png", Texture.class);
+            Texture txtChild = assetManager.get(icons[i], Texture.class);
+
+            Image image = new Image(txtFrame);
+            Image child = new Image(txtChild);
+
+            image.setWidth(image.getWidth());
+            image.setHeight(image.getHeight());
+
+            child.setWidth(child.getWidth());
+            child.setHeight(child.getHeight());
+
+            image.setX(1500 + i * image.getWidth());
+            child.setX(1500 + i * image.getWidth() + 8);
+            child.setY(8);
+            getStage().addActor(image);
+            getStage().addActor(child);
+        }
+
         inventoryUI.setDebug(true);
         inventoryUI.debugTable();
 
@@ -143,23 +168,20 @@ public class WorldScreen extends StageScreen {
         chatInput.setWidth(WIDTH / 2.5f);
         chatInput.setX(15);
         chatInput.setY(15);
-        chatInput.setOnSendAction(new OnSend() {
-            @Override
-            public void send() {
-                if (chatInput.getText().length() > 0) {
-                    PacketChat packetChat = new PacketChat(chatInput.getText(), player.getUser().getUserId(), ChatType.LOCAL);
-                    try {
-                        Packet.writeHeader(PacketChat.class, socket.getOutputStream());
-                        packetChat.writeTo(socket.getOutputStream());
-                        Message message = new Message();
-                        message.setSender(player.getUser());
-                        message.setContents(chatInput.getText());
-                        message.setChatType(ChatType.GLOBAL);
+        chatInput.setOnSendAction(() -> {
+            if (chatInput.getText().length() > 0) {
+                PacketChat packetChat = new PacketChat(chatInput.getText(), player.getUser().getUserId(), ChatType.LOCAL);
+                try {
+                    Packet.writeHeader(PacketChat.class, socket.getOutputStream());
+                    packetChat.writeTo(socket.getOutputStream());
+                    Message message = new Message();
+                    message.setSender(player.getUser());
+                    message.setContents(chatInput.getText());
+                    message.setChatType(ChatType.GLOBAL);
 
-                        chat.addMessage(message);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    chat.addMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         });
