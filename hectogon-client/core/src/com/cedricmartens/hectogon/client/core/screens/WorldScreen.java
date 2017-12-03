@@ -297,8 +297,12 @@ public class WorldScreen extends StageScreen {
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
+        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
+        float playerOffsetX = playerDummy.getWidth()/2;
+        float playerOffsetY = playerDummy.getHeight()/2;
+
         worldCamera.position.x = player.getPosition().x;
-        worldCamera.position.y = player.getPosition().y;
+        worldCamera.position.y = player.getPosition().y + playerOffsetY;
         worldCamera.update();
 
         batch.setProjectionMatrix(this.worldCamera.combined);
@@ -329,11 +333,8 @@ public class WorldScreen extends StageScreen {
             batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
 
 
-        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
-        float playerOffsetX = playerDummy.getWidth()/2;
-        float playerOffsetY = playerDummy.getHeight()/2;
         for(Competitor c : competitors)
-            batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y - playerOffsetY);
+            batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y);
 
         this.batch.end();
 
@@ -342,8 +343,9 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.line(0, HEIGHT/2, WIDTH, HEIGHT/2);
         this.debugRenderer.line(WIDTH/2, 0, WIDTH/2, HEIGHT);
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
+        this.debugRenderer.line(player.getPosition().x - 500, player.getPosition().y, player.getPosition().x + 500, player.getPosition().y);
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
-        this.debugRenderer.rect(player.getPosition().x - playerDummy.getWidth()/2, player.getPosition().y - playerDummy.getHeight()/2, playerDummy.getWidth(), playerDummy.getHeight());
+        this.debugRenderer.rect(player.getPosition().x - playerOffsetX, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
 
         super.render(delta);
