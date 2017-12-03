@@ -107,7 +107,6 @@ public class Match
 
     public boolean canJoin()
     {
-        //TODO improve this
         return !hasStarted && players.size() < MAX_SLOTS;
     }
 
@@ -162,5 +161,14 @@ public class Match
         }
 
         return names;
+    }
+
+    public void startMatch()
+    {
+        if(hasStarted)
+            throw new IllegalStateException("Cannot start a match if it has already started!");
+
+        hasStarted = true;
+        startTime = System.currentTimeMillis();
     }
 }

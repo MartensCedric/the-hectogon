@@ -14,7 +14,6 @@ public class InventoryTable extends Table
 {
     protected InventorySlotImage[] inventorySlotImages;
     protected Inventory inventory;
-    protected Item selectedItem;
     protected final int ROWS = 3;
     protected final int COLUMNS = 4;
 

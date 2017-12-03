@@ -10,7 +10,9 @@ import com.cedricmartens.commons.storage.inventory.Item;
 
 public class InventoryUI extends InventoryTable
 {
-    private DropListener dropListener;
+    protected DropListener dropListener;
+    protected Item selectedItem;
+    protected int selectedAmount = 0;
 
     public InventoryUI(Inventory inventory)
     {
@@ -40,12 +42,11 @@ public class InventoryUI extends InventoryTable
                 @Override
                 public void dragStart(InputEvent event, float x, float y, int pointer) {
 
-                    System.out.println("Drag");
                     if(is.getItem() != Item.empty_slot &&
                             selectedItem == null)
                     {
                         selectedItem = is.getItem();
-                        System.out.println("DragStart " + selectedItem.getName());
+                        selectedAmount = is.getQuantity();
                         is.clear();
                         redraw();
                     }
@@ -64,25 +65,28 @@ public class InventoryUI extends InventoryTable
                         InventorySlot is = isi.getInventorySlot();
                         if(is.getItem() == Item.empty_slot)
                         {
-                            System.out.println("Dragstop empty slot");
                             is.setItem(selectedItem);
-                            selectedItem = null;
-                        }else{
+                            is.add(selectedAmount);
+                        }else
+                        {
                             Item tempItem = is.getItem();
-                            System.out.println("DragStop " + tempItem.getName());
+                            int tempAmount = is.getQuantity();
+                            is.clear();
                             is.setItem(selectedItem);
-                            inventory.addItem(tempItem);
-                            selectedItem = null;
+                            is.add(selectedAmount);
+                            inventory.addItem(tempItem, tempAmount);
                         }
+
+                        clearSelectedItem();
+
                         init();
                         redraw();
-                    }else{
-
+                    }else
+                    {
                         if(dropListener != null)
-                        {
                             dropListener.drop(selectedItem, 1);
-                        }
-                        selectedItem = null;
+
+                        clearSelectedItem();
                     }
                 }
             });
@@ -92,10 +96,16 @@ public class InventoryUI extends InventoryTable
     public void clearSelectedItem()
     {
         selectedItem = null;
+        selectedAmount = 0;
     }
 
     public Item getSelectedItem()
     {
         return selectedItem;
+    }
+
+    public int getSelectedAmount()
+    {
+        return selectedAmount;
     }
 }

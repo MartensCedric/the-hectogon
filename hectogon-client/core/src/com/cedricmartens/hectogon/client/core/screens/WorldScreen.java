@@ -80,9 +80,9 @@ public class WorldScreen extends StageScreen {
         super(gameManager);
 
         this.socket = gameManager.socket;
-        this.competitors = new ArrayList<Competitor>();
-        this.decorations = new ArrayList<Entity>();
-        this.drops = new ArrayList<Lootbag>();
+        this.competitors = new ArrayList<>();
+        this.decorations = new ArrayList<>();
+        this.drops = new ArrayList<>();
 
         for(int i = 0; i < 100; i++)
         {
@@ -116,18 +116,15 @@ public class WorldScreen extends StageScreen {
         inventoryUI.setHeight(textureInventory.getHeight() * 2);
         inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
         inventoryUI.setY(0);
-        inventoryUI.setDropListener(new DropListener() {
-            @Override
-            public void drop(Item item, int qty) {
-                PacketDropItem packetDropItem = new PacketDropItem();
-                packetDropItem.setItem(item);
-                packetDropItem.setQty(qty);
-                try {
-                    Packet.writeHeader(PacketDropItem.class, socket.getOutputStream());
-                    packetDropItem.writeTo(socket.getOutputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        inventoryUI.setDropListener((item, qty) -> {
+            PacketDropItem packetDropItem = new PacketDropItem();
+            packetDropItem.setItem(item);
+            packetDropItem.setQty(qty);
+            try {
+                Packet.writeHeader(PacketDropItem.class, socket.getOutputStream());
+                packetDropItem.writeTo(socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         inventoryUI.setDebug(true);
@@ -167,13 +164,10 @@ public class WorldScreen extends StageScreen {
             }
         });
 
-        chatInput.setOnFocusChange(new OnFocusChange() {
-            @Override
-            public void focus(boolean isFocus) {
-                if(player != null)
-                {
-                    player.setInputEnabled(!isFocus);
-                }
+        chatInput.setOnFocusChange(isFocus -> {
+            if(player != null)
+            {
+                player.setInputEnabled(!isFocus);
             }
         });
 
@@ -183,7 +177,7 @@ public class WorldScreen extends StageScreen {
             @Override
             public boolean keyTyped(InputEvent event, char character) {
 
-                if(character == '\r')
+                if(character == '\r') //'\r' is enter character
                 {
                     getStage().setKeyboardFocus(chatInput);
                     return true;
@@ -252,9 +246,7 @@ public class WorldScreen extends StageScreen {
                         if(player.getUser().getUserId() == ((PacketDeath) packet).getUserId())
                         {
                             Thread.currentThread().interrupt();
-                            Gdx.app.postRunnable(() -> {
-                                gameManager.sceneManager.popScreen();
-                            });
+                            Gdx.app.postRunnable(() -> gameManager.sceneManager.popScreen());
 
                         }
                         competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
@@ -280,15 +272,12 @@ public class WorldScreen extends StageScreen {
         if(!playerHasConnected())
             return;
 
-        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
-
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
         worldCamera.position.x = player.getPosition().x;
         worldCamera.position.y = player.getPosition().y;
         worldCamera.update();
-
 
         batch.setProjectionMatrix(this.worldCamera.combined);
         this.batch.begin();
@@ -313,17 +302,17 @@ public class WorldScreen extends StageScreen {
         Texture txtLb = assetManager.get("interactive/lootbag.png", Texture.class);
         float lbOffsetX = txtLb.getWidth()/2;
         float lbOffsetY = txtLb.getHeight()/2;
-        for(Lootbag l : drops)
-        {
-            batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
-        }
 
+        for(Lootbag l : drops)
+            batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
+
+
+        Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         float playerOffsetX = playerDummy.getWidth()/2;
         float playerOffsetY = playerDummy.getHeight()/2;
         for(Competitor c : competitors)
-        {
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y - playerOffsetY);
-        }
+
         this.batch.end();
 
         this.debugRenderer.begin();
@@ -349,6 +338,10 @@ public class WorldScreen extends StageScreen {
                     viewPort.getScreenWidth(), viewPort.getScreenHeight());
             this.uiBatch.draw(textureItem, pos.x - textureItem.getWidth(), pos.y - textureItem.getHeight(),
                     textureItem.getWidth() * 2, textureItem.getHeight() * 2);
+            if(this.inventoryUI.getSelectedAmount() > 1)
+                textureUtil.getFont().draw(uiBatch,
+                        Integer.toString(inventoryUI.getSelectedAmount()),
+                        pos.x + textureItem.getWidth()/2, pos.y - textureItem.getHeight()/2);
             this.uiBatch.end();
         }
     }
