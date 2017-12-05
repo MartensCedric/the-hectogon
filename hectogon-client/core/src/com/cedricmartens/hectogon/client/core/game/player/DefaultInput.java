@@ -1,44 +1,42 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
-import com.badlogic.gdx.Input;
 
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class DefaultInput implements InputService {
+
     @Override
-    public boolean fire(int keyCode)
-    {
-        return SPACE == keyCode || LEFT == keyCode;
+    public boolean fire(int code, InputType inputType) {
+        return inputType == InputType.KEY ? SPACE == code || LEFT == code : false;
     }
 
     @Override
-    public boolean toggleChatInput(int keyCode) {
-        return '\r' == keyCode;
+    public boolean toggleChatInput(int code, InputType inputType) {
+        return inputType == InputType.KEY ? '\r' == code : false;
     }
 
     @Override
-    public boolean toggleChatBox(int keyCode)
-    {
-        return 99 == keyCode; // 99 is lower case 'C'
+    public boolean toggleChatBox(int code, InputType inputType) {
+        return inputType == InputType.KEY ? 99 == code : false;
     }
 
     @Override
-    public boolean left(int keyCode) {
-        return LEFT == keyCode || A == keyCode;
+    public boolean left(int code, InputType inputType) {
+        return inputType == InputType.KEY ? LEFT == code || A == code : false;
     }
 
     @Override
-    public boolean right(int keyCode) {
-        return RIGHT == keyCode || D == keyCode;
+    public boolean right(int code, InputType inputType) {
+        return inputType == InputType.KEY ? RIGHT == code || D == code : false;
     }
 
     @Override
-    public boolean up(int keyCode) {
-        return UP == keyCode || W == keyCode;
+    public boolean up(int code, InputType inputType) {
+        return inputType == InputType.KEY ? UP == code || W == code : false;
     }
 
     @Override
-    public boolean down(int keyCode) {
-        return DOWN == keyCode || S == keyCode;
+    public boolean down(int code, InputType inputType) {
+        return inputType == InputType.KEY ? DOWN == code || S == code : false;
     }
 }

@@ -2,15 +2,46 @@ package com.cedricmartens.hectogon.client.core.game.player;
 
 public interface InputService
 {
-    boolean left(int keyCode);
-    boolean right(int keyCode);
-    boolean up(int keyCode);
-    boolean down(int keyCode);
+    default boolean left(int code) {
+        return left(code, InputType.KEY);
+    }
+    boolean left(int code, InputType inputType);
 
-    boolean fire(int keyCode);
+    default boolean right(int code) {
+        return right(code, InputType.KEY);
+    }
+    boolean right(int code, InputType inputType);
 
-    boolean toggleChatInput(int keyCode);
-    boolean toggleChatBox(int keyCode);
-    //boolean openInventory(int keyCode);
-    //boolean openEquipment(int keyCode);
+    default boolean up(int code) {
+        return up(code, InputType.KEY);
+    }
+    boolean up(int code, InputType inputType);
+
+    default boolean down(int code) {
+        return down(code, InputType.KEY);
+    }
+    boolean down(int code, InputType inputType);
+
+    default boolean fire(int code) {
+        return fire(code, InputType.KEY);
+    }
+    boolean fire(int code, InputType inputType);
+
+    default boolean toggleChatInput(int code) {
+        return toggleChatInput(code, InputType.KEY);
+    }
+    boolean toggleChatInput(int code, InputType inputType);
+
+    default boolean toggleChatBox(int code) {
+        return toggleChatBox(code, InputType.KEY);
+    }
+    boolean toggleChatBox(int code, InputType inputType);
+
+    //boolean openInventory(int code);
+    //boolean openEquipment(int code);
+
+    enum InputType{
+        KEY,
+        MOUSE
+    }
 }
