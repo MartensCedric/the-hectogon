@@ -38,6 +38,8 @@ import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
+import com.cedricmartens.hectogon.client.core.game.player.DefaultInput;
+import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.ui.UiUtil;
@@ -47,6 +49,7 @@ import com.cedricmartens.hectogon.client.core.ui.chat.OnFocusChange;
 import com.cedricmartens.hectogon.client.core.ui.chat.OnSend;
 import com.cedricmartens.hectogon.client.core.ui.inventory.DropListener;
 import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
+import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 import com.cedricmartens.hectogon.client.core.world.StartStone;
@@ -199,9 +202,15 @@ public class WorldScreen extends StageScreen {
             @Override
             public boolean keyTyped(InputEvent event, char character) {
 
-                if(character == '\r') //'\r' is enter character
+                InputService inputService = ServiceUtil.getServiceUtil().getInputService();
+                if(inputService.toggleChatInput(character))
                 {
                     getStage().setKeyboardFocus(chatInput);
+                    return true;
+                }else if(inputService.toggleChatBox(character) &&
+                        getStage().getKeyboardFocus() != chatInput)
+                {
+                    chat.toggleChatBox();
                     return true;
                 }
 

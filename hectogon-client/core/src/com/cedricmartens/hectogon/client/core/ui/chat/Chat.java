@@ -30,24 +30,29 @@ public class Chat extends ScrollPane
         this.toggleWindow.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                isOpen = !isOpen;
-                sizeChanged();
-                if(isOpen)
-                {
-                    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-                    style.up = chatStyle.closeChat;
-                    style.over = chatStyle.closeChatDown;
-                    toggleWindow.setStyle(style);
-                }else{
-                    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-                    style.up = chatStyle.openChat;
-                    style.over = chatStyle.openChatDown;
-                    toggleWindow.setStyle(style);
-                }
+                toggleChatBox();
             }
         });
 
         finishInit = true;
+    }
+
+    public void toggleChatBox()
+    {
+        isOpen = !isOpen;
+        sizeChanged();
+        if(isOpen)
+        {
+            ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+            style.up = chatStyle.closeChat;
+            style.over = chatStyle.closeChatDown;
+            toggleWindow.setStyle(style);
+        }else{
+            ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+            style.up = chatStyle.openChat;
+            style.over = chatStyle.openChatDown;
+            toggleWindow.setStyle(style);
+        }
     }
 
     @Override

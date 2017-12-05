@@ -8,7 +8,18 @@ public class DefaultInput implements InputService {
     @Override
     public boolean fire(int keyCode)
     {
-        return Input.Keys.SPACE == keyCode || Input.Buttons.LEFT == keyCode;
+        return SPACE == keyCode || LEFT == keyCode;
+    }
+
+    @Override
+    public boolean toggleChatInput(int keyCode) {
+        return '\r' == keyCode;
+    }
+
+    @Override
+    public boolean toggleChatBox(int keyCode)
+    {
+        return 99 == keyCode; // 99 is lower case 'C'
     }
 
     @Override

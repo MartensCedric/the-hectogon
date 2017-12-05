@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.cedricmartens.hectogon.client.core.game.player.InputService;
+import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 
 public class ChatInput extends TextField
 {
@@ -36,9 +38,14 @@ public class ChatInput extends TextField
 
     protected class ChatListener extends TextFieldClickListener
     {
+        public ChatListener()
+        {
+            super();
+        }
         @Override
         public boolean keyTyped(InputEvent event, char character) {
-            if(character == ENTER_DESKTOP)
+            InputService inputService = ServiceUtil.getServiceUtil().getInputService();
+            if(inputService.toggleChatInput(character))
             {
                 if(ChatInput.this.onSendAction != null)
                 {

@@ -1,20 +1,20 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.actions.MovementAction;
+import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 
 public class Player extends Competitor implements InputProcessor {
 
     private MovementListener movementListener;
-    private InputService inputService;
     private boolean inputEnabled;
 
     public Player(User user, Point position, MovementListener movementListener) {
         super(user, position);
-        this.inputService = new DefaultInput();
         movingUp = false;
         movingDown = false;
         movingLeft = false;
@@ -28,6 +28,7 @@ public class Player extends Competitor implements InputProcessor {
     {
         if(inputEnabled)
         {
+            InputService inputService = ServiceUtil.getServiceUtil().getInputService();
             if(inputService.left(keycode))
             {
                 movingLeft = true;
@@ -71,6 +72,7 @@ public class Player extends Competitor implements InputProcessor {
     {
         if(inputEnabled)
         {
+            InputService inputService = ServiceUtil.getServiceUtil().getInputService();
             if(inputService.left(keycode))
             {
                 movingLeft = false;
