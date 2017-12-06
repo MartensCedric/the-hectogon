@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -37,6 +38,7 @@ import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
+import com.cedricmartens.hectogon.client.core.game.Animator;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.DefaultInput;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
@@ -78,6 +80,7 @@ public class WorldScreen extends StageScreen {
     private List<Entity> decorations;
     private List<Lootbag> drops;
     private Player player;
+    private float elapsedTime = 0f;
 
     public WorldScreen(GameManager gameManager)
     {
@@ -299,7 +302,7 @@ public class WorldScreen extends StageScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        this.elapsedTime += delta;
         if(!playerHasConnected())
             return;
 

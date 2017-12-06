@@ -57,6 +57,8 @@ public class Hectogon extends SceneManager
 		assetManager.load("i18n/language", I18NBundle.class);
 		assetManager.finishLoading();
 
+		Animator animator = Animator.getAnimator();
+		animator.initializeAnimator(assetManager);
 		Pixmap pm = new Pixmap(Gdx.files.internal("cursors/main_cursor.png"));
 		Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
 		pm.dispose();
