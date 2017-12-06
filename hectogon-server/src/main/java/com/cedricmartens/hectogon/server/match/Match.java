@@ -3,6 +3,7 @@ package com.cedricmartens.hectogon.server.match;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.competitor.DeathReason;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
@@ -25,6 +26,7 @@ public class Match
     private int matchId;
     private boolean hasStarted;
     private long startTime;
+    private int tickIndex = 0;
 
     public Match(int matchId)
     {
@@ -146,8 +148,23 @@ public class Match
     public void tick(float delta)
     {
         for(Player p : players)
+           p.move(delta);
+
+        if(tickIndex % 60 == 0)
+            correctPlayerPositions();
+
+        tickIndex++;
+    }
+
+    private void correctPlayerPositions()
+    {
+        for(Player p : players)
         {
-            p.move(delta);
+            PacketPositionCorrection packetPositionCorrection = new PacketPositionCorrection();
+            packetPositionCorrection.setUserId(p.getUser().getUserId());
+            packetPositionCorrection.setPosition(p.getPosition());
+
+            sendToEveryone(packetPositionCorrection);
         }
     }
 

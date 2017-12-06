@@ -97,7 +97,7 @@ public class Competitor
         position.y = p.y;
         long diff = System.currentTimeMillis() - timeAtCorrection;
         System.out.println("Correction delta has " + diff + "ms");
-        move(diff/60.0f);
+        move(diff/1000.0f);
     }
 
 

@@ -51,9 +51,7 @@ public class Server implements Runnable
         Log.info("Server is serverUp to connecting sockets on port : " + port);
         new Thread(() -> {
             long time = System.currentTimeMillis();
-            long test = time;
             int targetTPS = 60;
-            int tickCount = 0;
             while(serverUp)
             {
                 long timeNow = System.currentTimeMillis();
@@ -71,7 +69,6 @@ public class Server implements Runnable
                         e.printStackTrace();
                     }
                 }
-                tickCount++;
             }
         }).start();
 

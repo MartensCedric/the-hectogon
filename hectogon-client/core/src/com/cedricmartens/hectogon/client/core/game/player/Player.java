@@ -1,6 +1,5 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;

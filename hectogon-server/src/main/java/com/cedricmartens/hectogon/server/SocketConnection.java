@@ -7,6 +7,7 @@ import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
+import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.authentication.*;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
@@ -32,6 +33,7 @@ public class SocketConnection implements SocketListener {
     private Socket socket;
     private int playerId = ANONYMOUS_PLAYER;
     private boolean listening = true;
+    private boolean updatingPlayer = true;
     private Server server;
     private Player player;
 
