@@ -38,6 +38,7 @@ import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
+import com.cedricmartens.hectogon.client.core.game.AnimationSequence;
 import com.cedricmartens.hectogon.client.core.game.Animator;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.DefaultInput;
