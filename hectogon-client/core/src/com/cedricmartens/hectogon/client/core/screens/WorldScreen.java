@@ -22,6 +22,7 @@ import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
+import com.cedricmartens.commons.entities.Rabbit;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -73,6 +74,7 @@ public class WorldScreen extends StageScreen {
     private List<Entity> decorations;
     private List<Lootbag> drops;
     private Player player;
+    private Rabbit rabbit = new Rabbit(2550, 30);
 
     public WorldScreen(GameManager gameManager)
     {
@@ -312,7 +314,7 @@ public class WorldScreen extends StageScreen {
 
         for(Entity e : decorations)
         {
-            if(e.getPosition().distanceBetweenPoint(player.getPosition()) < 500)
+            if(e.getPosition().distanceBetweenPoints(player.getPosition()) < 500)
             {
                 if(e instanceof StartStone)
                 {

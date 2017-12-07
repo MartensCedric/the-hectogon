@@ -54,11 +54,7 @@ public class Competitor
         }
     }
 
-    public void move(float direction, float deltaTime)
-    {
-        position.x += Math.cos(direction) * speed * deltaTime;
-        position.y += Math.sin(direction) * speed * deltaTime;
-    }
+
 
     public void move(float deltaTime)
     {

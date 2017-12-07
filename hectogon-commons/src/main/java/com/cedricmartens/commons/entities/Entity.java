@@ -17,4 +17,10 @@ public abstract class Entity
     public void setPosition(Point position) {
         this.position = position;
     }
+
+    public void move(float direction, float speed,  float deltaTime)
+    {
+        position.x += Math.cos(direction) * speed * deltaTime;
+        position.y += Math.sin(direction) * speed * deltaTime;
+    }
 }
