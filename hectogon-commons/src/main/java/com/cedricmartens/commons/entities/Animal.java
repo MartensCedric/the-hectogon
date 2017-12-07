@@ -51,4 +51,8 @@ public abstract class Animal extends Entity
     public void setDirection(Vector2 direction) {
         this.direction = direction;
     }
+
+    public Vector2 getDirection() {
+        return direction;
+    }
 }
