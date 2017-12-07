@@ -150,9 +150,6 @@ public class WorldScreen extends StageScreen {
             getStage().addActor(child);
         }
 
-        inventoryUI.setDebug(true);
-        inventoryUI.debugTable();
-
         getStage().addActor(inventoryUI);
 
         final Chat chat = new Chat(UiUtil.getHectogonSkin());

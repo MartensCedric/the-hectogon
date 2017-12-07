@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.client.core.ui.inventory;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -25,6 +26,11 @@ public class InventoryTable extends Table
         redraw();
     }
 
+    @Override
+    protected void drawBackground(Batch batch, float parentAlpha, float x, float y) {
+        super.drawBackground(batch, parentAlpha, x, y + 1);
+    }
+
     protected void init()
     {
         int n = 0;
@@ -40,7 +46,7 @@ public class InventoryTable extends Table
         {
             for(int j = 0; j < COLUMNS; j++)
             {
-                add(inventorySlotImages[i * COLUMNS + j]).width(64).height(64).expand().fill();
+                add(inventorySlotImages[i * COLUMNS + j]).width(64).height(64).pad(5);
             }
             row();
         }
@@ -55,7 +61,6 @@ public class InventoryTable extends Table
         for(InventorySlot is : inventory)
         {
             inventorySlotImages[n].setInventorySlot(is);
-            inventorySlotImages[n].setDebug(true);
             if(is.getItem() != Item.empty_slot)
             {
                 Texture textureItem = textureUtil.getItemTexture(is.getItem());
