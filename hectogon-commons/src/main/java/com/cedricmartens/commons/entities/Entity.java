@@ -8,6 +8,7 @@ public abstract class Entity
     {
         setPosition(new Point(x, y));
     }
+    public Entity(Point position) { setPosition(position); }
     private Point position;
 
     public Point getPosition() {

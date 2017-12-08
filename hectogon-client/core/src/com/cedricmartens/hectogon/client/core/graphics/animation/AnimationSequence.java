@@ -56,4 +56,9 @@ public abstract class AnimationSequence<T extends TextureRegion>
             return isFinished;
         else return false;
     }
+
+    public T getFrameAtIndex(int i)
+    {
+        return this.animation.getKeyFrames()[i];
+    }
 }

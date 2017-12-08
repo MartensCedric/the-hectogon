@@ -61,10 +61,6 @@ public class Player extends Competitor implements InputProcessor {
         this.user = user;
     }
 
-    public void setPosition(Point position)
-    {
-        this.position = position;
-    }
 
     @Override
     public boolean keyUp(int keycode)

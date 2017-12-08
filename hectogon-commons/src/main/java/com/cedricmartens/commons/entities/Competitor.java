@@ -4,10 +4,9 @@ import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.networking.actions.MovementAction;
 
-public class Competitor
+public class Competitor extends Entity
 {
     protected User user;
-    protected Point position;
     protected float speed;
 
     protected boolean movingUp;
@@ -17,8 +16,8 @@ public class Competitor
 
     public Competitor(User user, Point position)
     {
+        super(position);
         this.user = user;
-        this.position = position;
         this.speed = 170;
     }
 
@@ -89,18 +88,12 @@ public class Competitor
 
     public void correctPosition(Point p, long timeAtCorrection)
     {
-        position.x = p.x;
-        position.y = p.y;
+        setPosition(p);
         long diff = System.currentTimeMillis() - timeAtCorrection;
         System.out.println("Correction delta has " + diff + "ms");
         move(diff/1000.0f);
     }
 
-
-    public Point getPosition()
-    {
-        return position;
-    }
 
     @Override
     public boolean equals(Object o) {

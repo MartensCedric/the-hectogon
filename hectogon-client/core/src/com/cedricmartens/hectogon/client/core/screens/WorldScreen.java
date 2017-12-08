@@ -306,7 +306,11 @@ public class WorldScreen extends StageScreen {
             return;
 
         for(Rabbit r : rabbits)
+        {
             r.update(delta);
+            r.updateState(competitors);
+        }
+
 
         for(Competitor competitor : competitors)
             competitor.move(delta);

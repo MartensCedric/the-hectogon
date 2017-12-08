@@ -3,6 +3,7 @@ package com.cedricmartens.hectogon.client.core.graphics.animation;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.cedricmartens.commons.entities.AnimalState;
 import com.cedricmartens.commons.entities.Rabbit;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
@@ -10,17 +11,16 @@ import com.cedricmartens.commons.util.MathUtil;
 /**
  * Created by Cedric Martens on 2017-12-08.
  */
-public class RabbitAnimation extends AnimationSequence<TextureRegion>
+public class RabbitAnimation extends AnimalAnimation<Rabbit>
 {
     private Animation<TextureRegion> bunnyUp;
     private Animation<TextureRegion> bunnyDown;
     private Animation<TextureRegion> bunnyLeft;
     private Animation<TextureRegion> bunnyRight;
-    private Rabbit rabbit;
     public RabbitAnimation(Rabbit rabbit) {
         super();
         Animator animator = Animator.getAnimator();
-        this.rabbit = rabbit;
+        this.animal = rabbit;
         this.bunnyUp = animator.get("bunny_up");
         this.bunnyDown = animator.get("bunny_down");
         this.bunnyLeft = animator.get("bunny_left");
@@ -48,13 +48,14 @@ public class RabbitAnimation extends AnimationSequence<TextureRegion>
 
     @Override
     public void update(float delta) {
-        setAnimationFromFuzzyDirection(MathUtil.getFuzzyDirection(rabbit.getDirection().angleRad()));
-        super.update(delta);
-    }
+        if(animal.getAnimalState() == AnimalState.FLEEING)
+        {
+            setSpeed(5);
+        }else{
+            setSpeed(1);
+        }
 
-    @Override
-    public void draw(Batch batch) {
-        super.draw(batch, rabbit.getPosition().x - getCurrentFrame().getRegionWidth()/2,
-                rabbit.getPosition().y - getCurrentFrame().getRegionHeight()/2);
+        setAnimationFromFuzzyDirection(MathUtil.getFuzzyDirection(animal.getDirection().angleRad()));
+        super.update(delta);
     }
 }
