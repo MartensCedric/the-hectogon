@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game.animation;
+package com.cedricmartens.hectogon.client.core.graphics.animation;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cedricmartens.commons.entities.Rabbit;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
-import com.cedricmartens.hectogon.client.core.game.AnimationSequence;
-import com.cedricmartens.hectogon.client.core.game.Animator;
 
 /**
  * Created by Cedric Martens on 2017-12-08.

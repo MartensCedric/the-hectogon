@@ -6,7 +6,7 @@ public class Rabbit extends Animal {
 
     public Rabbit(float x, float y) {
         super(x, y);
-        speed = 30;
+        speed = 8;
         direction = new Vector2().setToRandomDirection();
         animalState = AnimalState.WANDERING;
     }

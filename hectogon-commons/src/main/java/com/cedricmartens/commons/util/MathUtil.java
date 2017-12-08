@@ -359,6 +359,8 @@ public class MathUtil
      */
     static public FuzzyDirection getFuzzyDirection(float direction)
     {
+        if(direction < 0)
+            direction += 2 * Math.PI;
         if(direction > 7.0f * Math.PI / 4 || direction < Math.PI / 4)
             return FuzzyDirection.RIGHT;
 

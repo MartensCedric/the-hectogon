@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.game;
+package com.cedricmartens.hectogon.client.core.graphics.animation;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;

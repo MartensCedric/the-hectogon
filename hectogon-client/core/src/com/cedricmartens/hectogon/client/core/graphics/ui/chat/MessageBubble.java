@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.ui.chat;
+package com.cedricmartens.hectogon.client.core.graphics.ui.chat;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;

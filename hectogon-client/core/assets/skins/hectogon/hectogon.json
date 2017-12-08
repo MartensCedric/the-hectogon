@@ -177,7 +177,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 		stageBackground: dialogDim
 	}
 }
-com.cedricmartens.hectogon.client.core.ui.chat.Chat$ChatStyle: {
+com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat$ChatStyle: {
 	default: {
 		openChat: open
 		openChatDown: open_down

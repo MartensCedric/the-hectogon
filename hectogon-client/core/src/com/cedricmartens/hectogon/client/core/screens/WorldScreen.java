@@ -37,16 +37,16 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
-import com.cedricmartens.hectogon.client.core.game.AnimationSequence;
-import com.cedricmartens.hectogon.client.core.game.animation.RabbitAnimation;
+import com.cedricmartens.hectogon.client.core.graphics.animation.AnimationSequence;
+import com.cedricmartens.hectogon.client.core.graphics.animation.RabbitAnimation;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
-import com.cedricmartens.hectogon.client.core.ui.UiUtil;
-import com.cedricmartens.hectogon.client.core.ui.chat.Chat;
-import com.cedricmartens.hectogon.client.core.ui.chat.ChatInput;
-import com.cedricmartens.hectogon.client.core.ui.inventory.InventoryUI;
+import com.cedricmartens.hectogon.client.core.graphics.ui.UiUtil;
+import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
+import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
@@ -305,13 +305,15 @@ public class WorldScreen extends StageScreen {
         if(!playerHasConnected())
             return;
 
+        for(Rabbit r : rabbits)
+            r.update(delta);
+
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
         for(AnimationSequence<TextureRegion> t : animations)
-        {
             t.update(delta);
-        }
+
 
         Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         float playerOffsetX = playerDummy.getWidth()/2;
@@ -349,9 +351,8 @@ public class WorldScreen extends StageScreen {
             batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
 
         for(AnimationSequence<TextureRegion> a : animations)
-        {
             a.draw(batch);
-        }
+
 
         for(Competitor c : competitors)
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y);

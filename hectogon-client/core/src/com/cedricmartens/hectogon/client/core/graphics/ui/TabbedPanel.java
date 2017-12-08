@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.ui;
+package com.cedricmartens.hectogon.client.core.graphics.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

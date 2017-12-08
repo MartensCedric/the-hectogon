@@ -40,5 +40,14 @@ public class MathTest
 
         direction = MathUtil.getFuzzyDirection(2);
         Assert.assertEquals(FuzzyDirection.UP, direction);
+
+        direction = MathUtil.getFuzzyDirection(1.7270707f);
+        Assert.assertEquals(FuzzyDirection.UP, direction);
+
+        direction = MathUtil.getFuzzyDirection(-1.9866968f);
+        Assert.assertEquals(FuzzyDirection.DOWN, direction);
+
+        direction = MathUtil.getFuzzyDirection(-2.5140026f);
+        Assert.assertEquals(FuzzyDirection.LEFT, direction);
     }
 }
