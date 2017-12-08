@@ -37,6 +37,8 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.hectogon.client.core.game.AnimationSequence;
+import com.cedricmartens.hectogon.client.core.game.animation.RabbitAnimation;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
@@ -74,11 +76,17 @@ public class WorldScreen extends StageScreen {
     private List<Entity> decorations;
     private List<Lootbag> drops;
     private Player player;
-    private Rabbit rabbit = new Rabbit(2550, 30);
+    private Rabbit[] rabbits = new Rabbit[10];
+    private RabbitAnimation[] animations = new RabbitAnimation[10];
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
+        for(int i  = 0; i < rabbits.length; i++)
+        {
+            rabbits[i] = new Rabbit(2500 + i * 100, 30);
+            animations[i] = new RabbitAnimation(rabbits[i]);
+        }
 
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<>();
@@ -300,6 +308,11 @@ public class WorldScreen extends StageScreen {
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
+        for(AnimationSequence<TextureRegion> t : animations)
+        {
+            t.update(delta);
+        }
+
         Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         float playerOffsetX = playerDummy.getWidth()/2;
         float playerOffsetY = playerDummy.getHeight()/2;
@@ -335,6 +348,10 @@ public class WorldScreen extends StageScreen {
         for(Lootbag l : drops)
             batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
 
+        for(AnimationSequence<TextureRegion> a : animations)
+        {
+            a.draw(batch);
+        }
 
         for(Competitor c : competitors)
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y);

@@ -1,19 +1,26 @@
 package com.cedricmartens.hectogon.client.core.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.cedricmartens.commons.util.FuzzyDirection;
 
-public class AnimationSequence<T>
+public abstract class AnimationSequence<T extends TextureRegion>
 {
     private boolean isFinished;
     private float time;
     private Animation<T> animation;
     private float speed;
 
-    public AnimationSequence(Animation<T> animation)
+    public AnimationSequence()
     {
-        this.animation = animation;
         this.time = 0;
         this.setSpeed(1);
+    }
+
+    public void setAnimation(Animation<T> animation)
+    {
+        this.animation = animation;
     }
 
     public void setSpeed(float speed)
@@ -28,10 +35,19 @@ public class AnimationSequence<T>
             isFinished = true;
     }
 
+    public void draw(Batch batch, float x, float y)
+    {
+        batch.draw(getCurrentFrame(), x, y);
+    }
+    public abstract void draw(Batch batch);
+
+    protected abstract void setAnimationFromFuzzyDirection(FuzzyDirection fuzzyDirection);
+
     public T getCurrentFrame()
     {
         return this.animation.getKeyFrame(time);
     }
+
 
     public boolean isFinished()
     {
