@@ -49,6 +49,7 @@ import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.graphics.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
+import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
@@ -226,6 +227,7 @@ public class WorldScreen extends StageScreen {
                     Packet packet = Packet.readHeader(socket.getInputStream());
                     packet.readFrom(socket.getInputStream());
                     System.out.println(packet.getClass().getSimpleName());
+
                     if (packet instanceof PacketChat) {
                         PacketChat packetChat = (PacketChat) packet;
                         User u = WorldScreen.this.getCompetitorById(packetChat.getSenderId()).getUser();
@@ -235,6 +237,11 @@ public class WorldScreen extends StageScreen {
                         m.setChatType(packetChat.getChatType());
 
                         chat.addMessage(m);
+
+                        Competitor c = getCompetitorById(m.getSender().getUserId());
+
+                        MessageBubble messageBubble = new MessageBubble(c, m.getContents(), UiUtil.getChatSkin());
+                        getStage().addActor(messageBubble);
 
                     }else if(packet instanceof PacketCompetitor)
                     {
@@ -292,7 +299,11 @@ public class WorldScreen extends StageScreen {
                         {
                             if(animals.get(i).getId() == animal.getId())
                             {
-                                animals.set(i, animal);
+                                synchronized (animals)
+                                {
+                                    animals.set(i, animal);
+                                }
+
                                 for(int j = 0; j < animalAnimations.size(); j++)
                                 {
                                     AnimalAnimation aa = animalAnimations.get(j);
@@ -387,7 +398,6 @@ public class WorldScreen extends StageScreen {
 
         for(AnimationSequence<TextureRegion> a : animalAnimations)
             a.draw(batch);
-
 
         for(Competitor c : competitors)
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y);

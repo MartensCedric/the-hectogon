@@ -47,7 +47,7 @@ public enum  PacketType
     public static Class<? extends Packet> getById(int id)
     {
         if(id <= Packet.NO_ID || id >= values().length)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Packet with ID " + id + " not found!");
 
         return values()[id].type;
     }
