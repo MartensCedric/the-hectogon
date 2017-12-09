@@ -20,15 +20,15 @@ import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.chat.Message;
-import com.cedricmartens.commons.entities.Animal;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
-import com.cedricmartens.commons.entities.Rabbit;
+import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
+import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.competitor.PacketDeath;
@@ -84,6 +84,8 @@ public class WorldScreen extends StageScreen {
     {
         super(gameManager);
 
+        this.animals = new ArrayList<>();
+        this.animations = new ArrayList<>();
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<>();
         this.decorations = new ArrayList<>();
@@ -279,6 +281,25 @@ public class WorldScreen extends StageScreen {
 
                         }
                         competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
+                    }else if(packet instanceof PacketAnimalUpdate)
+                    {
+                        PacketAnimalUpdate animalUpdate = (PacketAnimalUpdate)packet;
+                        Animal animal = animalUpdate.getAnimal();
+                        boolean animalFound = false;
+                        for(int i = 0; i < animals.size() && !animalFound; i++)
+                        {
+                            if(animals.get(i).getId() == animal.getId())
+                            {
+                                animals.set(i, animal);
+                                animalFound = true;
+                            }
+                        }
+
+                        if(!animalFound)
+                        {
+                            animals.add(animal);
+                            System.out.println("Animal added it's a " + animal.getClass().getSimpleName());
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -1,11 +1,12 @@
 package com.cedricmartens.hectogon.server.match;
 
 import com.cedricmartens.commons.Point;
-import com.cedricmartens.commons.entities.Animal;
 import com.cedricmartens.commons.entities.Competitor;
-import com.cedricmartens.commons.entities.Rabbit;
+import com.cedricmartens.commons.entities.animal.Animal;
+import com.cedricmartens.commons.entities.animal.Rabbit;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
+import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
 import com.cedricmartens.commons.networking.competitor.DeathReason;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
@@ -88,6 +89,17 @@ public class Match
             player.sendPacket(packetInventory);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        for(Animal a : animals)
+        {
+            PacketAnimalUpdate packetAnimalUpdate = new PacketAnimalUpdate();
+            packetAnimalUpdate.setAnimal(a);
+            try {
+                player.sendPacket(packetAnimalUpdate);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

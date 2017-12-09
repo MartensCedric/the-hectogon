@@ -1,10 +1,10 @@
 package com.cedricmartens.hectogon.client.core.graphics.animation;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.cedricmartens.commons.entities.AnimalState;
-import com.cedricmartens.commons.entities.Rabbit;
+import com.cedricmartens.commons.entities.animal.AnimalState;
+import com.cedricmartens.commons.entities.animal.Rabbit;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
 

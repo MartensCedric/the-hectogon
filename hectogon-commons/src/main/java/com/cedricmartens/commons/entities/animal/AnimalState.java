@@ -1,4 +1,4 @@
-package com.cedricmartens.commons.entities;
+package com.cedricmartens.commons.entities.animal;
 
 public enum AnimalState
 {

@@ -1,6 +1,6 @@
 package com.cedricmartens.commons.networking.animal;
 
-import com.cedricmartens.commons.entities.Animal;
+import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 

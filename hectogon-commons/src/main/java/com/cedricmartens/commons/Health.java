@@ -25,4 +25,28 @@ public class Health implements CustomSerializable
         dataOutputStream.writeFloat(maxHealth);
         dataOutputStream.writeFloat(regenRate);
     }
+
+    public float getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public void setCurrentHealth(float currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
+    public float getMaxHealth() {
+        return maxHealth;
+    }
+
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+
+    public float getRegenRate() {
+        return regenRate;
+    }
+
+    public void setRegenRate(float regenRate) {
+        this.regenRate = regenRate;
+    }
 }

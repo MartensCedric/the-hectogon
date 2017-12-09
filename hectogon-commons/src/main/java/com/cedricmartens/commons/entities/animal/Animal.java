@@ -1,14 +1,15 @@
-package com.cedricmartens.commons.entities;
+package com.cedricmartens.commons.entities.animal;
 
 import com.cedricmartens.commons.Health;
-import com.cedricmartens.commons.networking.CustomSerializable;
+import com.cedricmartens.commons.entities.Entity;
+import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
 import java.io.*;
 import java.util.List;
 
-public abstract class Animal extends Entity implements CustomSerializable
+public abstract class Animal extends Entity
 {
     protected int id;
     protected Health health;
@@ -172,15 +173,27 @@ public abstract class Animal extends Entity implements CustomSerializable
     }
 
     @Override
-    public void readFrom(InputStream inputStream) throws IOException {
+    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
+        super.readFrom(inputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
+        health = new Health();
+        health.readFrom(dataInputStream);
+        currentSpeed = dataInputStream.readFloat();
+        int animalStateId = dataInputStream.readInt();
+        if(animalStateId >= 0 && animalStateId < AnimalState.values().length)
+        {
+            animalState = AnimalState.values()[animalStateId];
+        }else throw new InvalidPacketDataException();
+        id = dataInputStream.readInt();
     }
 
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
+        super.writeTo(outputStream);
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         health.writeTo(outputStream);
         dataOutputStream.writeFloat(currentSpeed);
         dataOutputStream.writeInt(animalState.ordinal());
+        dataOutputStream.writeInt(id);
     }
 }

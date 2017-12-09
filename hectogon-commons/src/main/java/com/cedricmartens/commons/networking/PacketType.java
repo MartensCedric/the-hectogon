@@ -3,6 +3,8 @@ package com.cedricmartens.commons.networking;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
+import com.cedricmartens.commons.networking.animal.PacketAnimalDeath;
+import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
 import com.cedricmartens.commons.networking.authentication.PacketInLogin;
 import com.cedricmartens.commons.networking.authentication.PacketInRegister;
 import com.cedricmartens.commons.networking.authentication.PacketOutLogin;
@@ -29,7 +31,9 @@ public enum  PacketType
     LOOT(PacketLoot.class),
     DROP(PacketDropItem.class),
     CORRECTION(PacketPositionCorrection.class),
-    DEATH(PacketDeath.class)
+    DEATH(PacketDeath.class),
+    ANIMAL_DEATH(PacketAnimalDeath.class),
+    ANIMAL_UPDATE(PacketAnimalUpdate.class)
     ;
 
     private Class<? extends Packet> type;

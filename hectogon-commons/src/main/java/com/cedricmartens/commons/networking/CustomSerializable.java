@@ -6,6 +6,6 @@ import java.io.OutputStream;
 
 public interface CustomSerializable
 {
-    void readFrom(InputStream inputStream) throws IOException;
+    void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException;
     void writeTo(OutputStream outputStream) throws IOException;
 }
