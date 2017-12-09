@@ -23,6 +23,7 @@ import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.animal.Animal;
+import com.cedricmartens.commons.entities.animal.Rabbit;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -38,6 +39,7 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.hectogon.client.core.graphics.animation.AnimalAnimation;
 import com.cedricmartens.hectogon.client.core.graphics.animation.AnimationSequence;
 import com.cedricmartens.hectogon.client.core.graphics.animation.RabbitAnimation;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
@@ -78,14 +80,14 @@ public class WorldScreen extends StageScreen {
     private List<Lootbag> drops;
     private Player player;
     private List<Animal> animals;
-    private List<AnimationSequence<TextureRegion>> animations;
+    private List<AnimalAnimation<?>> animalAnimations;
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
 
         this.animals = new ArrayList<>();
-        this.animations = new ArrayList<>();
+        this.animalAnimations = new ArrayList<>();
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<>();
         this.decorations = new ArrayList<>();
@@ -291,6 +293,15 @@ public class WorldScreen extends StageScreen {
                             if(animals.get(i).getId() == animal.getId())
                             {
                                 animals.set(i, animal);
+                                for(int j = 0; j < animalAnimations.size(); j++)
+                                {
+                                    AnimalAnimation aa = animalAnimations.get(j);
+                                    if(aa.getAnimal().getId() == animal.getId())
+                                    {
+                                        aa.setAnimal(animal);
+                                        break;
+                                    }
+                                }
                                 animalFound = true;
                             }
                         }
@@ -298,6 +309,13 @@ public class WorldScreen extends StageScreen {
                         if(!animalFound)
                         {
                             animals.add(animal);
+                            if(animal instanceof Rabbit)
+                            {
+                                Rabbit rabbit = (Rabbit) animal;
+                                RabbitAnimation rabbitAnimation = new RabbitAnimation(rabbit);
+                                animalAnimations.add(rabbitAnimation);
+                            }
+
                             System.out.println("Animal added it's a " + animal.getClass().getSimpleName());
                         }
                     }
@@ -325,7 +343,10 @@ public class WorldScreen extends StageScreen {
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
-        for(AnimationSequence<TextureRegion> t : animations)
+        for(Animal a : animals)
+            a.update(delta);
+
+        for(AnimationSequence<TextureRegion> t : animalAnimations)
             t.update(delta);
 
 
@@ -364,7 +385,7 @@ public class WorldScreen extends StageScreen {
         for(Lootbag l : drops)
             batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
 
-        for(AnimationSequence<TextureRegion> a : animations)
+        for(AnimationSequence<TextureRegion> a : animalAnimations)
             a.draw(batch);
 
 

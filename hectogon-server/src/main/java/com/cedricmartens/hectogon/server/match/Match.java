@@ -173,6 +173,17 @@ public class Match
         for(Player p : players)
            p.move(delta);
 
+        for(Animal a : animals)
+        {
+            a.update(delta);
+            if(a.updateState(players))
+            {
+                PacketAnimalUpdate animalUpdate = new PacketAnimalUpdate();
+                animalUpdate.setAnimal(a);
+                sendToEveryone(animalUpdate);
+            }
+        }
+
         if(tickIndex % 60 == 0)
             correctPlayerPositions();
 

@@ -8,6 +8,8 @@ public class Rabbit extends Animal {
     public Rabbit()
     {
         super(0, 0);
+        adrenalineSpeed = 80;
+        wanderSpeed = 8;
     }
 
     public Rabbit(float x, float y) {

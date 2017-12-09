@@ -21,4 +21,14 @@ public abstract class AnimalAnimation<T extends Animal> extends AnimationSequenc
         super.draw(batch, animal.getPosition().x - getCurrentFrame().getRegionWidth()/2,
                 animal.getPosition().y - getCurrentFrame().getRegionHeight()/2);
     }
+
+    public T getAnimal()
+    {
+        return animal;
+    }
+
+    public void setAnimal(T animal)
+    {
+        this.animal = animal;
+    }
 }

@@ -16,9 +16,14 @@ package com.cedricmartens.commons.util;
  * limitations under the License.
  ******************************************************************************/
 
+import com.cedricmartens.commons.networking.CustomSerializable;
+import com.cedricmartens.commons.networking.InvalidPacketDataException;
+
+import java.io.*;
+
 /** Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
  * @author badlogicgames@gmail.com */
-public class Vector2 {
+public class Vector2 implements CustomSerializable {
     private static final long serialVersionUID = 913902788239530931L;
 
     public final static Vector2 X = new Vector2(1, 0);
@@ -466,5 +471,19 @@ public class Vector2 {
         this.x = 0;
         this.y = 0;
         return this;
+    }
+
+    @Override
+    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        x = dataInputStream.readFloat();
+        y = dataInputStream.readFloat();
+    }
+
+    @Override
+    public void writeTo(OutputStream outputStream) throws IOException {
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        dataOutputStream.writeFloat(x);
+        dataOutputStream.writeFloat(y);
     }
 }

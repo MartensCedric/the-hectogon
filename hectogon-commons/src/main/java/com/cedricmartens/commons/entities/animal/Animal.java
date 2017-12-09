@@ -65,6 +65,11 @@ public abstract class Animal extends Entity
         move((float) (direction.angleRad() + 2 * Math.PI), currentSpeed, delta);
     }
 
+    /**
+     * Checks if a target is nearby
+     * @param entityList the list of possible targets
+     * @return true if a target is found, otherwise false
+     */
     protected boolean checkForTarget(List<? extends Entity> entityList)
     {
         if(target == null)
@@ -91,10 +96,16 @@ public abstract class Animal extends Entity
         return false;
     }
 
-    public void updateState(List<? extends Entity> entityList)
+
+    /**
+     * Updates the animal state if it should
+     * @param entityList
+     * @return true if the animal was updated
+     */
+    public boolean updateState(List<? extends Entity> entityList)
     {
         if(checkForTarget(entityList))
-            return;
+            return true;
 
         switch (animalState) {
             case IDLE:
@@ -103,11 +114,16 @@ public abstract class Animal extends Entity
                 {
                     animalState = AnimalState.WANDERING;
                     getDirection().setToRandomDirection();
+                    return true;
                 }
                 break;
             case WANDERING:
                 changeState = MathUtil.randomBoolean(0.0005f);
-                if(changeState) animalState = AnimalState.IDLE;
+                if(changeState)
+                {
+                    animalState = AnimalState.IDLE;
+                    return true;
+                }
                 break;
             case FIGHTING:
                 break;
@@ -120,6 +136,7 @@ public abstract class Animal extends Entity
                     animalState = AnimalState.WANDERING;
                     target = null;
                     setCurrentSpeed(wanderSpeed);
+                    return true;
                 }else{
                     getDirection().set(getPosition().x -  target.getPosition().x,
                             getPosition().y - target.getPosition().y);
@@ -130,6 +147,8 @@ public abstract class Animal extends Entity
             case LOOTING:
                 break;
         }
+
+        return false;
     }
 
     public void setAnimalState(AnimalState animalState) {
@@ -175,9 +194,11 @@ public abstract class Animal extends Entity
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         super.readFrom(inputStream);
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
         health = new Health();
-        health.readFrom(dataInputStream);
+        health.readFrom(inputStream);
+        direction = new Vector2();
+        direction.readFrom(inputStream);
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
         currentSpeed = dataInputStream.readFloat();
         int animalStateId = dataInputStream.readInt();
         if(animalStateId >= 0 && animalStateId < AnimalState.values().length)
@@ -190,10 +211,12 @@ public abstract class Animal extends Entity
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         super.writeTo(outputStream);
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         health.writeTo(outputStream);
+        direction.writeTo(outputStream);
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeFloat(currentSpeed);
         dataOutputStream.writeInt(animalState.ordinal());
         dataOutputStream.writeInt(id);
+
     }
 }
