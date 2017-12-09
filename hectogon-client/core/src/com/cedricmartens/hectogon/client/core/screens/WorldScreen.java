@@ -20,6 +20,7 @@ import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.chat.ChatType;
 import com.cedricmartens.commons.chat.Message;
+import com.cedricmartens.commons.entities.Animal;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.Rabbit;
@@ -76,17 +77,12 @@ public class WorldScreen extends StageScreen {
     private List<Entity> decorations;
     private List<Lootbag> drops;
     private Player player;
-    private Rabbit[] rabbits = new Rabbit[10];
-    private RabbitAnimation[] animations = new RabbitAnimation[10];
+    private List<Animal> animals;
+    private List<AnimationSequence<TextureRegion>> animations;
 
     public WorldScreen(GameManager gameManager)
     {
         super(gameManager);
-        for(int i  = 0; i < rabbits.length; i++)
-        {
-            rabbits[i] = new Rabbit(2500 + i * 100, 30);
-            animations[i] = new RabbitAnimation(rabbits[i]);
-        }
 
         this.socket = gameManager.socket;
         this.competitors = new ArrayList<>();
@@ -304,13 +300,6 @@ public class WorldScreen extends StageScreen {
 
         if(!playerHasConnected())
             return;
-
-        for(Rabbit r : rabbits)
-        {
-            r.update(delta);
-            r.updateState(competitors);
-        }
-
 
         for(Competitor competitor : competitors)
             competitor.move(delta);

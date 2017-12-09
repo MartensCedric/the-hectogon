@@ -1,7 +1,9 @@
 package com.cedricmartens.hectogon.server.match;
 
 import com.cedricmartens.commons.Point;
+import com.cedricmartens.commons.entities.Animal;
 import com.cedricmartens.commons.entities.Competitor;
+import com.cedricmartens.commons.entities.Rabbit;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.competitor.DeathReason;
@@ -27,11 +29,20 @@ public class Match
     private boolean hasStarted;
     private long startTime;
     private int tickIndex = 0;
+    private int animalId = 0;
+    private List<Animal> animals;
 
     public Match(int matchId)
     {
         this.hasStarted = false;
         this.players = new ArrayList<>();
+        this.animals = new ArrayList<>();
+        for(int i = 0; i < 10; i++)
+        {
+            Rabbit rabbit = new Rabbit(2500 + i * 100, 30);
+            rabbit.setId(animalId++);
+            this.animals.add(rabbit);
+        }
         this.matchId = matchId;
     }
 

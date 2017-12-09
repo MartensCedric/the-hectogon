@@ -1,12 +1,14 @@
 package com.cedricmartens.commons.entities;
 
 import com.cedricmartens.commons.Health;
+import com.cedricmartens.commons.networking.CustomSerializable;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
+import java.io.*;
 import java.util.List;
 
-public abstract class Animal extends Entity
+public abstract class Animal extends Entity implements CustomSerializable
 {
     protected int id;
     protected Health health;
@@ -16,6 +18,11 @@ public abstract class Animal extends Entity
     protected float adrenalineSpeed;
     protected float currentSpeed;
     protected Vector2 direction;
+
+    public Animal()
+    {
+        super(0, 0);
+    }
 
     public Animal(float x, float y) {
         super(x, y);
@@ -66,7 +73,7 @@ public abstract class Animal extends Entity
                 if(!e.getClass().equals(getClass()))
                 {
                     if(MathUtil.distanceToPoint(e.getPosition().x, e.getPosition().y,
-                            getPosition().x, getPosition().y) < 50)
+                            getPosition().x, getPosition().y) < 150)
                     {
                         target = e;
                         getDirection().set(getPosition().x -  e.getPosition().x,
@@ -154,5 +161,26 @@ public abstract class Animal extends Entity
 
     public float getCurrentSpeed() {
         return currentSpeed;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public void readFrom(InputStream inputStream) throws IOException {
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+    }
+
+    @Override
+    public void writeTo(OutputStream outputStream) throws IOException {
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        health.writeTo(outputStream);
+        dataOutputStream.writeFloat(currentSpeed);
+        dataOutputStream.writeInt(animalState.ordinal());
     }
 }
