@@ -5,9 +5,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.cedricmartens.hectogon.client.core.graphics.animation.Animator;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.manager.SceneManager;
+import com.cedricmartens.hectogon.client.core.graphics.animation.Animator;
 import com.cedricmartens.hectogon.client.core.screens.MainMenuScreen;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 

@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.client.core.graphics.animation;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cedricmartens.commons.entities.animal.AnimalState;
 import com.cedricmartens.commons.entities.animal.Rabbit;
