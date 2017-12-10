@@ -1,12 +1,18 @@
 package com.cedricmartens.commons.entities.animal;
 
 import com.cedricmartens.commons.Health;
+import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
+import com.cedricmartens.commons.entities.Identifiable;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
+import com.cedricmartens.commons.networking.Serializer;
+import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public abstract class Animal extends Entity
@@ -20,10 +26,6 @@ public abstract class Animal extends Entity
     protected float currentSpeed;
     protected Vector2 direction;
 
-    public Animal()
-    {
-        super(0, 0);
-    }
 
     public Animal(float x, float y) {
         super(x, y);
@@ -97,6 +99,13 @@ public abstract class Animal extends Entity
     }
 
 
+    public void avoidTarget()
+    {
+        getDirection().set(getPosition().x -  target.getPosition().x,
+                getPosition().y - target.getPosition().y);
+        getDirection().nor();
+    }
+
     /**
      * Updates the animal state if it should
      * @param entityList
@@ -138,9 +147,7 @@ public abstract class Animal extends Entity
                     setCurrentSpeed(wanderSpeed);
                     return true;
                 }else{
-                    getDirection().set(getPosition().x -  target.getPosition().x,
-                            getPosition().y - target.getPosition().y);
-                    getDirection().nor();
+                    avoidTarget();
                 }
 
                 break;
@@ -183,40 +190,85 @@ public abstract class Animal extends Entity
         return currentSpeed;
     }
 
+    public Entity getTarget() {
+        return target;
+    }
+
+    public void setTarget(Entity target) {
+        this.target = target;
+    }
+
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    @Override
+    public void writeTo(OutputStream outputStream) throws IOException
+    {
+        super.writeTo(outputStream);
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        health.writeTo(outputStream);
+        direction.writeTo(outputStream);
+        boolean targetExists = target != null;
+        dataOutputStream.writeBoolean(targetExists);
+        if(targetExists)
+        {
+            dataOutputStream.writeUTF(target.getClass().getName());
+            target.writeTo(outputStream);
+        }
+        dataOutputStream.writeFloat(currentSpeed);
+        dataOutputStream.writeInt(animalState.ordinal());
     }
 
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         super.readFrom(inputStream);
-        health = new Health();
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        Health health = new Health();
         health.readFrom(inputStream);
         direction = new Vector2();
         direction.readFrom(inputStream);
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-        currentSpeed = dataInputStream.readFloat();
-        int animalStateId = dataInputStream.readInt();
-        if(animalStateId >= 0 && animalStateId < AnimalState.values().length)
+        boolean targetExists = dataInputStream.readBoolean();
+        if(targetExists)
         {
-            animalState = AnimalState.values()[animalStateId];
-        }else throw new InvalidPacketDataException();
-        id = dataInputStream.readInt();
-    }
+            String classEntityName = dataInputStream.readUTF();
+            try {
 
-    @Override
-    public void writeTo(OutputStream outputStream) throws IOException {
-        super.writeTo(outputStream);
-        health.writeTo(outputStream);
-        direction.writeTo(outputStream);
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeFloat(currentSpeed);
-        dataOutputStream.writeInt(animalState.ordinal());
-        dataOutputStream.writeInt(id);
+                if(classEntityName.endsWith("Player"))
+                    classEntityName = Competitor.class.getName();
 
+                Class<? extends Entity> classEntity = (Class<? extends Entity>) Class.forName(classEntityName);
+                Constructor <? extends Entity> ctor = classEntity.getConstructor();
+                target = ctor.newInstance();
+                target.readFrom(inputStream);
+                System.out.println("Target at :" + target.getPosition().x + ", " +
+                    target.getPosition().y + " -> id : " + target.getId());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+        currentSpeed = dataInputStream.readFloat();
+
+        int animalStateCode = dataInputStream.readInt();
+        if(animalStateCode < 0 || animalStateCode >= AnimalState.values().length)
+            throw new InvalidPacketDataException(animalStateCode + " is not a valid value for AnimalState");
+
+        animalState = AnimalState.values()[animalStateCode];
     }
 }
