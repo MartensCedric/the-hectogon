@@ -474,13 +474,6 @@ public class Vector2 implements CustomSerializable {
     }
 
     @Override
-    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-        x = dataInputStream.readFloat();
-        y = dataInputStream.readFloat();
-    }
-
-    @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeFloat(x);

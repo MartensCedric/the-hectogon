@@ -97,6 +97,13 @@ public abstract class Animal extends Entity
     }
 
 
+    public void avoidTarget()
+    {
+        getDirection().set(getPosition().x -  target.getPosition().x,
+                getPosition().y - target.getPosition().y);
+        getDirection().nor();
+    }
+
     /**
      * Updates the animal state if it should
      * @param entityList
@@ -138,9 +145,7 @@ public abstract class Animal extends Entity
                     setCurrentSpeed(wanderSpeed);
                     return true;
                 }else{
-                    getDirection().set(getPosition().x -  target.getPosition().x,
-                            getPosition().y - target.getPosition().y);
-                    getDirection().nor();
+                    avoidTarget();
                 }
 
                 break;
@@ -191,29 +196,16 @@ public abstract class Animal extends Entity
         this.id = id;
     }
 
-    @Override
-    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
-        super.readFrom(inputStream);
-        health = new Health();
-        health.readFrom(inputStream);
-        direction = new Vector2();
-        direction.readFrom(inputStream);
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-        currentSpeed = dataInputStream.readFloat();
-        int animalStateId = dataInputStream.readInt();
-        if(animalStateId >= 0 && animalStateId < AnimalState.values().length)
-        {
-            animalState = AnimalState.values()[animalStateId];
-        }else throw new InvalidPacketDataException();
-        id = dataInputStream.readInt();
-    }
 
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         super.writeTo(outputStream);
         health.writeTo(outputStream);
         direction.writeTo(outputStream);
+        boolean targetExists = target != null;
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        dataOutputStream.writeBoolean(targetExists);
+        if(targetExists) target.writeTo(outputStream);
         dataOutputStream.writeFloat(currentSpeed);
         dataOutputStream.writeInt(animalState.ordinal());
         dataOutputStream.writeInt(id);

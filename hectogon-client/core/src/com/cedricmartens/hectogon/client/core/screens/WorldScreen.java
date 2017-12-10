@@ -23,6 +23,7 @@ import com.cedricmartens.commons.chat.Message;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.animal.Animal;
+import com.cedricmartens.commons.entities.animal.AnimalState;
 import com.cedricmartens.commons.entities.animal.Rabbit;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
@@ -355,7 +356,12 @@ public class WorldScreen extends StageScreen {
             competitor.move(delta);
 
         for(Animal a : animals)
+        {
             a.update(delta);
+            if(a.getAnimalState() == AnimalState.FLEEING)
+                a.avoidTarget();
+        }
+
 
         for(AnimationSequence<TextureRegion> t : animalAnimations)
             t.update(delta);

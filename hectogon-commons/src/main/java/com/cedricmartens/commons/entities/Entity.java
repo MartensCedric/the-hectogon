@@ -3,8 +3,11 @@ package com.cedricmartens.commons.entities;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.networking.CustomSerializable;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
+import com.cedricmartens.commons.util.Vector2;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class Entity implements CustomSerializable
 {
@@ -30,15 +33,9 @@ public abstract class Entity implements CustomSerializable
     }
 
     @Override
-    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
-        DataInputStream dataInputStream = new DataInputStream(inputStream);
-        position = new Point(dataInputStream.readFloat(),
-                dataInputStream.readFloat());
-    }
-
-    @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        dataOutputStream.writeUTF(getClass().getName());
         dataOutputStream.writeFloat(position.x);
         dataOutputStream.writeFloat(position.y);
     }
