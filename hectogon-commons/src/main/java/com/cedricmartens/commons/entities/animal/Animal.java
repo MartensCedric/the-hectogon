@@ -3,10 +3,7 @@ package com.cedricmartens.commons.entities.animal;
 import com.cedricmartens.commons.Health;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
-import com.cedricmartens.commons.entities.Identifiable;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
-import com.cedricmartens.commons.networking.Serializer;
-import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
