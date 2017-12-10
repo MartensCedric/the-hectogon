@@ -2,11 +2,15 @@ package com.cedricmartens.commons.entities.animal;
 
 import com.cedricmartens.commons.Health;
 import com.cedricmartens.commons.entities.Entity;
+import com.cedricmartens.commons.entities.Identifiable;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
+import com.cedricmartens.commons.networking.Serializer;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public abstract class Animal extends Entity
@@ -20,10 +24,6 @@ public abstract class Animal extends Entity
     protected float currentSpeed;
     protected Vector2 direction;
 
-    public Animal()
-    {
-        super(0, 0);
-    }
 
     public Animal(float x, float y) {
         super(x, y);
@@ -188,27 +188,66 @@ public abstract class Animal extends Entity
         return currentSpeed;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
 
     @Override
-    public void writeTo(OutputStream outputStream) throws IOException {
+    public void writeTo(OutputStream outputStream) throws IOException
+    {
         super.writeTo(outputStream);
+        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         health.writeTo(outputStream);
         direction.writeTo(outputStream);
         boolean targetExists = target != null;
-        DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeBoolean(targetExists);
-        if(targetExists) target.writeTo(outputStream);
+        if(targetExists)
+        {
+            dataOutputStream.writeUTF(target.getClass().getName());
+            target.writeTo(outputStream);
+        }
         dataOutputStream.writeFloat(currentSpeed);
         dataOutputStream.writeInt(animalState.ordinal());
         dataOutputStream.writeInt(id);
+    }
+
+    @Override
+    public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
+        super.readFrom(inputStream);
+        DataInputStream dataInputStream = new DataInputStream(inputStream);
+        Health health = new Health();
+        health.readFrom(inputStream);
+        Vector2 direction = new Vector2();
+        direction.readFrom(inputStream);
+        boolean targetExists = dataInputStream.readBoolean();
+        Entity target = null;
+        if(targetExists)
+        {
+            String classEntityName = dataInputStream.readUTF();
+            try {
+                Class<? extends Entity> classEntity = (Class<? extends Entity>) Class.forName(classEntityName);
+                Constructor <? extends Entity> ctor = classEntity.getConstructor();
+                target = ctor.newInstance();
+                target.readFrom(inputStream);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }

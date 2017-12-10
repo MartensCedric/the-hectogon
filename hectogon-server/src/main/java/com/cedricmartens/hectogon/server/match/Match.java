@@ -41,7 +41,7 @@ public class Match
         for(int i = 0; i < 10; i++)
         {
             Rabbit rabbit = new Rabbit(2500 + i * 100, 30);
-            rabbit.setId(animalId++);
+            rabbit.setId(animalId--);
             this.animals.add(rabbit);
         }
         this.matchId = matchId;

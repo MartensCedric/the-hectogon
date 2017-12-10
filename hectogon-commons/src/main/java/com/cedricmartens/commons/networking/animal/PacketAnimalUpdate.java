@@ -39,7 +39,7 @@ public class PacketAnimalUpdate extends Packet
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeUTF(animal.getClass().getName());
+
         animal.writeTo(dataOutputStream);
     }
 

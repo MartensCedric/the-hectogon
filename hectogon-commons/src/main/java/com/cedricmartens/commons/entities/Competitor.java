@@ -14,6 +14,11 @@ public class Competitor extends Entity
     protected boolean movingLeft;
     protected boolean movingRight;
 
+    public Competitor()
+    {
+        super();
+    }
+
     public Competitor(User user, Point position)
     {
         super(position);
@@ -148,5 +153,15 @@ public class Competitor extends Entity
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    @Override
+    public int getId() {
+        return user.getUserId();
+    }
+
+    @Override
+    public void setId(int id) {
+        user.setUserId(id);
     }
 }
