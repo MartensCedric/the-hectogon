@@ -20,4 +20,14 @@ public class Lootbag extends Entity
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(int id) {
+
+    }
 }

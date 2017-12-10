@@ -60,6 +60,7 @@ public class Match
 
     public void addPlayer(Player player)
     {
+        Log.trace(player.getId() + " has joined!");
         this.players.add(player);
         PacketCompetitorJoin packetCompetitorJoin = new PacketCompetitorJoin();
         packetCompetitorJoin.setCompetitor(new Competitor(player.getUser(), player.getPosition()));
@@ -79,6 +80,7 @@ public class Match
             }
         }
 
+        Log.trace("Filling up the inventory of player id " + player.getId());
         player.getInventory().addItem(Item.bow_wood, 2);
         player.getInventory().addItem(Item.bomb, 1);
         player.getInventory().addItem(Item.arr_wood, 17);
@@ -91,6 +93,7 @@ public class Match
             e.printStackTrace();
         }
 
+        Log.trace("Notifying player id " + player.getId() + " of current animals");
         for(Animal a : animals)
         {
             PacketAnimalUpdate packetAnimalUpdate = new PacketAnimalUpdate();

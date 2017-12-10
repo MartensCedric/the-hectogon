@@ -162,6 +162,9 @@ public class Competitor extends Entity
 
     @Override
     public void setId(int id) {
-        user.setUserId(id);
+        if(user == null)
+            user = new User(id, "");
+        else
+            user.setUserId(id);
     }
 }

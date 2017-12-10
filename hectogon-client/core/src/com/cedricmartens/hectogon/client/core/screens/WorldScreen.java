@@ -295,6 +295,11 @@ public class WorldScreen extends StageScreen {
                     {
                         PacketAnimalUpdate animalUpdate = (PacketAnimalUpdate)packet;
                         Animal animal = animalUpdate.getAnimal();
+
+                        //TODO optimize
+                        if(animal.getTarget() != null)
+                            animal.setTarget(getCompetitorById(animal.getTarget().getId()));
+
                         boolean animalFound = false;
                         for(int i = 0; i < animals.size() && !animalFound; i++)
                         {

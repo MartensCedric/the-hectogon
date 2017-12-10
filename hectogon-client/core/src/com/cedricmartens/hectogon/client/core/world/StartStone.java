@@ -8,4 +8,14 @@ public class StartStone extends Entity
     {
         super(x, y);
     }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(int id) {
+
+    }
 }

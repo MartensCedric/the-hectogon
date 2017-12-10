@@ -1,10 +1,12 @@
 package com.cedricmartens.commons.entities.animal;
 
 import com.cedricmartens.commons.Health;
+import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.Identifiable;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Serializer;
+import com.cedricmartens.commons.networking.authentication.RegisterStatus;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 
@@ -188,6 +190,14 @@ public abstract class Animal extends Entity
         return currentSpeed;
     }
 
+    public Entity getTarget() {
+        return target;
+    }
+
+    public void setTarget(Entity target) {
+        this.target = target;
+    }
+
     @Override
     public int getId() {
         return id;
@@ -215,7 +225,6 @@ public abstract class Animal extends Entity
         }
         dataOutputStream.writeFloat(currentSpeed);
         dataOutputStream.writeInt(animalState.ordinal());
-        dataOutputStream.writeInt(id);
     }
 
     @Override
@@ -224,18 +233,23 @@ public abstract class Animal extends Entity
         DataInputStream dataInputStream = new DataInputStream(inputStream);
         Health health = new Health();
         health.readFrom(inputStream);
-        Vector2 direction = new Vector2();
+        direction = new Vector2();
         direction.readFrom(inputStream);
         boolean targetExists = dataInputStream.readBoolean();
-        Entity target = null;
         if(targetExists)
         {
             String classEntityName = dataInputStream.readUTF();
             try {
+
+                if(classEntityName.endsWith("Player"))
+                    classEntityName = Competitor.class.getName();
+
                 Class<? extends Entity> classEntity = (Class<? extends Entity>) Class.forName(classEntityName);
                 Constructor <? extends Entity> ctor = classEntity.getConstructor();
                 target = ctor.newInstance();
                 target.readFrom(inputStream);
+                System.out.println("Target at :" + target.getPosition().x + ", " +
+                    target.getPosition().y + " -> id : " + target.getId());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -249,5 +263,12 @@ public abstract class Animal extends Entity
             }
         }
 
+        currentSpeed = dataInputStream.readFloat();
+
+        int animalStateCode = dataInputStream.readInt();
+        if(animalStateCode < 0 || animalStateCode >= AnimalState.values().length)
+            throw new InvalidPacketDataException(animalStateCode + " is not a valid value for AnimalState");
+
+        animalState = AnimalState.values()[animalStateCode];
     }
 }
