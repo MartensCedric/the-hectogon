@@ -8,5 +8,6 @@ public enum LoginStatus
     OK,
     INCORRECT_INFO,
     BANNED,
+    ALREADY_LOGGED,
     UNEXPECTED_ERROR
 }

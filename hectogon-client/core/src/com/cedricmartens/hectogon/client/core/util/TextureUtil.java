@@ -44,6 +44,9 @@ public class TextureUtil
         itemMap.put(Item.bow_wood, assetManager.get("items/bow_wood.png", Texture.class));
         itemMap.put(Item.arr_wood,assetManager.get("items/arr_wood.png", Texture.class));
         itemMap.put(Item.swd_steel, assetManager.get("items/steel_sword.png", Texture.class));
+        itemMap.put(Item.carrot, assetManager.get("items/carrot.png", Texture.class));
+        itemMap.put(Item.apple, assetManager.get("items/apple.png", Texture.class));
+        itemMap.put(Item.banana, assetManager.get("items/banana.png", Texture.class));
     }
 
     public static TextureUtil getTextureUtil()

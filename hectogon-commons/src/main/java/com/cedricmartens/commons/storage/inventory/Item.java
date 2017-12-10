@@ -15,7 +15,10 @@ public enum  Item {
     dagger_copper("Copper Dagger", "A dagger made out of copper", 1),
     land_mine("Land mine", "Very powerful explosive, needs to be stepped on to be triggered", 4),
     bomb("Bomb", "Produces a large blast.", 1),
-    fish_rod("Fishing rod", "A tool to catch the fish", 1);
+    fish_rod("Fishing rod", "A tool to catch the fish", 1),
+    carrot("Carrot", "A carrot", 4),
+    banana("Banana", "A banana", 4),
+    apple("Apple", "An apple a day keeps the other players away!", 1);
 
     private String name;
     private String desc;

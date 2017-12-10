@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.server.match;
 
 import com.cedricmartens.commons.Point;
+import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.entities.animal.Rabbit;
@@ -85,6 +86,7 @@ public class Match
         player.getInventory().addItem(Item.bomb, 1);
         player.getInventory().addItem(Item.arr_wood, 17);
         player.getInventory().addItem(Item.swd_steel, 2);
+        player.getInventory().addItem(Item.carrot, 3);
         PacketInventory packetInventory = new PacketInventory();
         packetInventory.setInventory(player.getInventory());
         try {
@@ -160,15 +162,14 @@ public class Match
         Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name());
     }
 
-    public Player getPlayerById(int playerId)
-    {
+    public Player getPlayerById(int playerId) throws UserNotFoundException {
         for(Player player : players)
         {
             if(player.getUser().getUserId() == playerId)
                 return player;
         }
 
-        throw new IllegalStateException();
+        throw new UserNotFoundException();
     }
 
     public void tick(float delta)

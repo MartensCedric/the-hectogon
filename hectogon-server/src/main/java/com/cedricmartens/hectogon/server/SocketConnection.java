@@ -75,7 +75,7 @@ public class SocketConnection implements SocketListener {
                 if (packet instanceof PacketInLogin)
                 {
                     PacketInLogin packetInLogin = (PacketInLogin) packet;
-                    AuthenticationService authService = new DatabaseAuthentication();
+                    AuthenticationService authService = new DatabaseAuthentication(server);
                     LoginStatus loginStatus = authService.login(packetInLogin.getUsername(), packetInLogin.getPassword());
 
                     PacketOutLogin packetOutLogin = new PacketOutLogin();
@@ -101,7 +101,7 @@ public class SocketConnection implements SocketListener {
                 }else if(packet instanceof PacketInRegister)
                 {
                     PacketInRegister packetInRegister = (PacketInRegister) packet;
-                    AuthenticationService authService = new DatabaseAuthentication();
+                    AuthenticationService authService = new DatabaseAuthentication(server);
                     RegisterStatus registerStatus = authService.register(packetInRegister.getUsername(),
                             packetInRegister.getEmail(), packetInRegister.getPassword());
 

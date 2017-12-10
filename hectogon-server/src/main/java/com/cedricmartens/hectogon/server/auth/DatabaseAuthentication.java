@@ -2,6 +2,7 @@ package com.cedricmartens.hectogon.server.auth;
 
 import com.cedricmartens.commons.networking.authentication.LoginStatus;
 import com.cedricmartens.commons.networking.authentication.RegisterStatus;
+import com.cedricmartens.hectogon.server.Server;
 import com.cedricmartens.hectogon.server.db.DatabaseManager;
 import com.cedricmartens.hectogon.server.db.IllegalDatabaseStateException;
 
@@ -10,14 +11,24 @@ import java.sql.SQLException;
 
 public class DatabaseAuthentication implements AuthenticationService {
 
+    private Server server;
+
+    public DatabaseAuthentication(Server server) {
+        this.server = server;
+    }
+
     @Override
     public LoginStatus login(String username, String password) {
 
         DatabaseManager dbManager = DatabaseManager.getDatabaseManager();
         try {
+
             int userId = dbManager.login(username, password);
             if(userId == DatabaseManager.NO_RESULTS)
                 return LoginStatus.INCORRECT_INFO;
+
+            if(server.isLogged(userId))
+                return LoginStatus.ALREADY_LOGGED;
 
             logLogIn(userId);
             return LoginStatus.OK;

@@ -1,10 +1,8 @@
 package com.cedricmartens.hectogon.server;
 
+import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.hectogon.server.db.DatabaseManager;
-import com.cedricmartens.hectogon.server.match.Match;
-import com.cedricmartens.hectogon.server.match.MatchMock;
-import com.cedricmartens.hectogon.server.match.MatchService;
-import com.cedricmartens.hectogon.server.match.NoMatchFoundException;
+import com.cedricmartens.hectogon.server.match.*;
 import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
@@ -138,5 +136,19 @@ public class Server implements Runnable
     {
         for(Match m : matches)
             m.tick(delta);
+    }
+
+    public boolean isLogged(int userId)
+    {
+        for(Match match : matches)
+        {
+            try {
+                match.getPlayerById(userId);
+                return true;
+            } catch (UserNotFoundException e) {
+
+            }
+        }
+        return false;
     }
 }

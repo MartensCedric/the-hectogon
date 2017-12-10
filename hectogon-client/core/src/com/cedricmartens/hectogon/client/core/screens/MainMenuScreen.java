@@ -103,6 +103,9 @@ public class MainMenuScreen extends StageScreen
                                  case BANNED:
                                      lblError.setText(gameManager.i18NBundle.get("login_banned"));
                                      break;
+                                 case ALREADY_LOGGED:
+                                     lblError.setText(gameManager.i18NBundle.get("already_logged"));
+                                     break;
                                  case UNEXPECTED_ERROR:
                                      lblError.setText(gameManager.i18NBundle.get("unexpected_error"));
                                      break;

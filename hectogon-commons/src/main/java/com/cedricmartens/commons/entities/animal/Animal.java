@@ -69,7 +69,7 @@ public abstract class Animal extends Entity
      * @param entityList the list of possible targets
      * @return true if a target is found, otherwise false
      */
-    protected boolean checkForTarget(List<? extends Entity> entityList)
+    public boolean checkForTarget(List<? extends Entity> entityList)
     {
         if(target == null)
         {
@@ -112,7 +112,7 @@ public abstract class Animal extends Entity
     {
         if(checkForTarget(entityList))
             return true;
-
+        
         switch (animalState) {
             case IDLE:
                 boolean changeState = MathUtil.randomBoolean(0.005f);
