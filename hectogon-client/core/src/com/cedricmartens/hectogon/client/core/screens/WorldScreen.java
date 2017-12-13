@@ -201,7 +201,6 @@ public class WorldScreen extends StageScreen {
         });
 
         getStage().addActor(chatInput);
-
         getStage().getRoot().addCaptureListener(new InputListener(){
             @Override
             public boolean keyTyped(InputEvent event, char character) {
@@ -216,6 +215,11 @@ public class WorldScreen extends StageScreen {
                 {
                     chat.toggleChatBox();
                     return true;
+                }
+
+                if(inputService.openInventory(character))
+                {
+                    inventoryUI.setVisible(!inventoryUI.isVisible());
                 }
 
                 return super.keyTyped(event, character);
@@ -357,20 +361,7 @@ public class WorldScreen extends StageScreen {
         if(!playerHasConnected())
             return;
 
-        for(Competitor competitor : competitors)
-            competitor.move(delta);
-
-        for(Animal a : animals)
-        {
-            a.update(delta);
-            if(a.getAnimalState() == AnimalState.FLEEING)
-                a.avoidTarget();
-        }
-
-
-        for(AnimationSequence<TextureRegion> t : animalAnimations)
-            t.update(delta);
-
+        update(delta);
 
         Texture playerDummy = assetManager.get("character/dummy.png", Texture.class);
         float playerOffsetX = playerDummy.getWidth()/2;
@@ -445,6 +436,23 @@ public class WorldScreen extends StageScreen {
                         pos.x + textureItem.getWidth()/2, pos.y - textureItem.getHeight()/2);
             this.uiBatch.end();
         }
+    }
+
+    private void update(float delta)
+    {
+        for(Competitor competitor : competitors)
+            competitor.move(delta);
+
+        for(Animal a : animals)
+        {
+            a.update(delta);
+            if(a.getAnimalState() == AnimalState.FLEEING)
+                a.avoidTarget();
+        }
+
+
+        for(AnimationSequence<TextureRegion> t : animalAnimations)
+            t.update(delta);
     }
 
     private Competitor getCompetitorById(int id)

@@ -37,7 +37,8 @@ public interface InputService
     }
     boolean toggleChatBox(int code, InputType inputType);
 
-    //boolean openInventory(int code);
+    default boolean openInventory(int code) { return openInventory(code, InputType.KEY); }
+    boolean openInventory(int code, InputType inputType);
     //boolean openEquipment(int code);
 
     enum InputType{
