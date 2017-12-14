@@ -360,13 +360,15 @@ public class WorldScreen extends StageScreen {
         for(Competitor competitor : competitors)
             competitor.move(delta);
 
-        for(Animal a : animals)
+        synchronized (animals)
         {
-            a.update(delta);
-            if(a.getAnimalState() == AnimalState.FLEEING)
-                a.avoidTarget();
+            for(Animal a : animals)
+            {
+                a.update(delta);
+                if(a.getAnimalState() == AnimalState.FLEEING)
+                    a.avoidTarget();
+            }
         }
-
 
         for(AnimationSequence<TextureRegion> t : animalAnimations)
             t.update(delta);

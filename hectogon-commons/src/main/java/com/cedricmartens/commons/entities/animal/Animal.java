@@ -112,7 +112,7 @@ public abstract class Animal extends Entity
     {
         if(checkForTarget(entityList))
             return true;
-        
+
         switch (animalState) {
             case IDLE:
                 boolean changeState = MathUtil.randomBoolean(0.005f);
