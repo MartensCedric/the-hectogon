@@ -39,4 +39,9 @@ public class DefaultInput implements InputService {
     public boolean down(int code, InputType inputType) {
         return inputType == InputType.KEY ? DOWN == code || S == code : false;
     }
+
+    @Override
+    public boolean openInventory(int code, InputType inputType) {
+        return inputType == InputType.KEY ? 105 == code : false;
+    }
 }

@@ -29,27 +29,35 @@ public class Hectogon extends SceneManager
 		gameManager.sceneManager = this;
 
 		assetManager.load("test.png", Texture.class);
+
 		assetManager.load("ui/inventory.png", Texture.class);
 		assetManager.load("ui/frame.png", Texture.class);
+
 		assetManager.load("icons/backpack.png", Texture.class);
 		assetManager.load("icons/perks/bloodthirst_perk.png", Texture.class);
 		assetManager.load("icons/perks/hunter_perk.png", Texture.class);
 		assetManager.load("icons/perks/tank_perk.png", Texture.class);
-		assetManager.load("items/bow_wood.png", Texture.class);
-		assetManager.load("items/bomb.png", Texture.class);
-		assetManager.load("items/apple.png", Texture.class);
-		assetManager.load("items/banana.png", Texture.class);
-		assetManager.load("items/carrot.png", Texture.class);
-		assetManager.load("items/bomb_fusing_animation.png", Texture.class);
+
 		assetManager.load("items/arr_wood.png", Texture.class);
 		assetManager.load("items/arrow_wood.png", Texture.class);
+		assetManager.load("items/apple.png", Texture.class);
+		assetManager.load("items/bomb.png", Texture.class);
+		assetManager.load("items/bomb_fusing_animation.png", Texture.class);
+		assetManager.load("items/bow_wood.png", Texture.class);
+		assetManager.load("items/banana.png", Texture.class);
+		assetManager.load("items/carrot.png", Texture.class);
+		assetManager.load("items/meat.png", Texture.class);
 		assetManager.load("items/steel_sword.png", Texture.class);
+		assetManager.load("items/wooden_shield.png", Texture.class);
+
 		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);
+
 		assetManager.load("interactive/chest.png", Texture.class);
 		assetManager.load("interactive/lootbag.png", Texture.class);
 		assetManager.load("misc/startstone.png", Texture.class);
 		assetManager.load("character/dummy.png", Texture.class);
+
 		assetManager.load("animals/bunny/bunny-left.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-left-animation.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-right.png", Texture.class);
@@ -58,7 +66,9 @@ public class Hectogon extends SceneManager
 		assetManager.load("animals/bunny/bunny-down-animation.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-up.png", Texture.class);
 		assetManager.load("animals/bunny/bunny-up-animation.png", Texture.class);
+
 		assetManager.load("i18n/language", I18NBundle.class);
+		assetManager.load("cursors/main_cursor.png", Texture.class);
 		assetManager.finishLoading();
 
 		Animator animator = Animator.getAnimator();

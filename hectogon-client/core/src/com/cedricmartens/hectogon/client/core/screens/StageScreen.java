@@ -30,7 +30,6 @@ public abstract class StageScreen implements Screen
         stage.draw();
     }
 
-
     public Stage getStage() {
         return stage;
     }
