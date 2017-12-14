@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.client.core.graphics.ui.chat;
 
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,35 +26,14 @@ public class MessageBubble extends Label
         this.creationTime = System.currentTimeMillis();
     }
 
-
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-        if(getStage() != null)
-        {
-            float x = target.getPosition().x;
-            float y = target.getPosition().y;
-            Viewport viewport = getStage().getViewport();
+        float x = target.getPosition().x;
+        float y = target.getPosition().y;
 
-            Vector3 v3 = getStage().getCamera().project(
-                    new Vector3(x, y, 0),
-                    viewport.getScreenX(),
-                    viewport.getScreenY(),
-                    viewport.getScreenWidth(),
-                    viewport.getScreenHeight());
-
-
-            setX(v3.x);
-            setY(v3.y);
-            if(shouldRemove())
-            {
-                for(Actor actor : getStage().getActors())
-                {
-                    if(actor.equals(this))
-                        actor.remove();
-                }
-            }
-        }
+        setX(x);
+        setY(y + 50);
 
         super.draw(batch, parentAlpha);
     }
