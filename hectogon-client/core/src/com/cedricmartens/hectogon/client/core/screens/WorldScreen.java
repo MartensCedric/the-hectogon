@@ -40,6 +40,7 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
@@ -51,6 +52,8 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.GroundInventory;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryTable;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
@@ -75,6 +78,7 @@ public class WorldScreen extends StageScreen {
     private AssetManager assetManager;
     private Socket socket;
     private InventoryUI inventoryUI;
+    private GroundInventory inventoryGround;
     private Inventory playerInv;
     private Chest chest;
     private List<Competitor> competitors;
@@ -120,9 +124,9 @@ public class WorldScreen extends StageScreen {
         this.playerInv = new Inventory(12);
         inventoryUI = new InventoryUI(playerInv);
         Texture textureInventory = gameManager.assetManager.get("ui/inventory.png", Texture.class);
-        Drawable drawableInventory = new TextureRegionDrawable(new TextureRegion(
-                textureInventory));
-        inventoryUI.setBackground(drawableInventory);
+
+        inventoryUI.setBackground(new TextureRegionDrawable(new TextureRegion(
+                textureInventory)));
         inventoryUI.setWidth(textureInventory.getWidth() * 2);
         inventoryUI.setHeight(textureInventory.getHeight() * 2);
         inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
@@ -138,6 +142,16 @@ public class WorldScreen extends StageScreen {
                 e.printStackTrace();
             }
         });
+
+        this.inventoryGround = new GroundInventory();
+        this.inventoryGround.setVisible(false);
+        this.inventoryGround.setBackground(new TextureRegionDrawable(new TextureRegion(
+                textureInventory)));
+        inventoryGround.setX(WIDTH - textureInventory.getWidth() * 2);
+        inventoryGround.setY(500);
+        inventoryGround.setDebug(true);
+        getStage().addActor(inventoryGround);
+
 
         String[] icons = new String[]{"icons/backpack.png", "items/steel_sword.png"};
 
@@ -423,21 +437,21 @@ public class WorldScreen extends StageScreen {
         }
     }
 
-    private void update(float delta) {
+    private void update(float delta)
+    {
         synchronized (competitors)
         {
             for (Competitor competitor : competitors)
                 competitor.move(delta);
         }
 
-        synchronized (animals) {
-
+        synchronized (animals)
+        {
             for (Animal a : animals) {
                 a.update(delta);
                 if (a.getAnimalState() == AnimalState.FLEEING)
                     a.avoidTarget();
             }
-
         }
 
         synchronized (animalAnimations)
@@ -445,6 +459,43 @@ public class WorldScreen extends StageScreen {
             for (AnimationSequence<TextureRegion> t : animalAnimations)
                 t.update(delta);
         }
+
+
+
+        if(!drops.isEmpty())
+        {
+            Lootbag closestDrop = getClosestDrop();
+
+            if(closestDrop != null &&
+                    closestDrop.getInventory() != inventoryGround.getInventory())
+            {
+                inventoryGround.setInventory(closestDrop.getInventory());
+                inventoryGround.setVisible(true);
+            }
+        }
+    }
+
+    private Lootbag getClosestDrop()
+    {
+        float bestDis = Float.MAX_VALUE;
+        Lootbag drop = null;
+        float range = 100;
+
+        for(Lootbag lootbag : drops)
+        {
+            float disPlayer = MathUtil.distanceToPoint(
+                    lootbag.getPosition().x,
+                    lootbag.getPosition().y,
+                    player.getPosition().x,
+                    player.getPosition().y);
+
+            if(disPlayer < Math.min(bestDis, range))
+            {
+                drop = lootbag;
+                bestDis = disPlayer;
+            }
+        }
+        return drop;
     }
 
     private Competitor getCompetitorById(int id) {
