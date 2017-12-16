@@ -15,6 +15,7 @@ import com.cedricmartens.commons.networking.competitor.PacketDeath;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
+import com.cedricmartens.commons.networking.inventory.PacketLootUpdate;
 
 public enum  PacketType
 {
@@ -27,8 +28,9 @@ public enum  PacketType
     COMP_MOVEMENT(PacketCompetitorMovement.class),
     JOIN(PacketCompetitorJoin.class),
     COMPETITOR(PacketCompetitor.class),
-    INVENTORY(PacketInventory.class),
     LOOT(PacketLoot.class),
+    LOOT_UPDATE(PacketLootUpdate.class),
+    INVENTORY(PacketInventory.class),
     DROP(PacketDropItem.class),
     CORRECTION(PacketPositionCorrection.class),
     DEATH(PacketDeath.class),

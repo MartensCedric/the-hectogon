@@ -48,7 +48,6 @@ public abstract class AnimationSequence<T extends TextureRegion>
         return this.animation.getKeyFrame(time);
     }
 
-
     public boolean isFinished()
     {
         if(animation.getPlayMode() == Animation.PlayMode.NORMAL

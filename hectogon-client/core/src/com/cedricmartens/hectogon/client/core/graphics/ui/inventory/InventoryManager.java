@@ -171,6 +171,21 @@ public class InventoryManager extends WidgetGroup
         return drop;
     }
 
+    public void updateLoot(int lootId, Inventory inventory)
+    {
+        Lootbag lootbag = getLootbagById(lootId);
+        lootbag.setInventory(inventory);
+    }
+
+    private synchronized Lootbag getLootbagById(int lootId)
+    {
+        for(Lootbag l : this.lootbagList)
+            if(l.getId() == lootId)
+                return l;
+
+        throw new LootbagNotFoundException();
+    }
+
     public void setPlayerInventory(Inventory playerInventory) {
         this.inventoryUI.setInventory(playerInventory);
     }

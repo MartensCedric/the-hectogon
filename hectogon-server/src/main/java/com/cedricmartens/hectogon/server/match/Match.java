@@ -242,7 +242,7 @@ public class Match
 
         player.getInventory().removeItem(item, qty);
 
-        Lootbag closestLb = getClosestLootbag(player.getPosition().x, player.getPosition().x);
+        Lootbag closestLb = getClosestLootbag(player.getPosition().x, player.getPosition().y);
         if(closestLb == null)
         {
             PacketLoot packetLoot = new PacketLoot();
@@ -262,6 +262,7 @@ public class Match
             PacketLootUpdate packetLootUpdate = new PacketLootUpdate();
             packetLootUpdate.setLootId(closestLb.getId());
             packetLootUpdate.setInventory(closestLb.getInventory());
+            sendToEveryone(packetLootUpdate);
         }
     }
 
