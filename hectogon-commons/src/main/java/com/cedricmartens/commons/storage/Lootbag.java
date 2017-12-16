@@ -6,6 +6,7 @@ import com.cedricmartens.commons.storage.inventory.Inventory;
 public class Lootbag extends Entity
 {
     private Inventory inventory;
+    private int lootbagId;
 
     public Lootbag(float x, float y, Inventory inventory)
     {
@@ -23,11 +24,11 @@ public class Lootbag extends Entity
 
     @Override
     public int getId() {
-        return 0;
+        return lootbagId;
     }
 
     @Override
     public void setId(int id) {
-
+        this.lootbagId = id;
     }
 }

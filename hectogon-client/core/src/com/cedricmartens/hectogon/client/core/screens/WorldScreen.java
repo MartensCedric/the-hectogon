@@ -236,9 +236,12 @@ public class WorldScreen extends StageScreen {
                     } else if (packet instanceof PacketLoot) {
                         PacketLoot pl = (PacketLoot) packet;
                         Lootbag lootbag = new Lootbag(pl.getPoint().x, pl.getPoint().y, pl.getInventory());
+                        lootbag.setId(pl.getLootId());
                         inventoryManager.addLoot(lootbag);
+                        System.out.println("New loot with id " + pl.getLootId());
                     }else if(packet instanceof PacketLootUpdate) {
                         PacketLootUpdate plu = (PacketLootUpdate)packet;
+                        System.out.println("Update loot id : " + plu.getLootId());
                         inventoryManager.updateLoot(plu.getLootId(), plu.getInventory());
                     } else if (packet instanceof PacketInventory) {
                         PacketInventory packetInventory = (PacketInventory) packet;
@@ -252,7 +255,6 @@ public class WorldScreen extends StageScreen {
                         if (player.getUser().getUserId() == ((PacketDeath) packet).getUserId()) {
                             Thread.currentThread().interrupt();
                             Gdx.app.postRunnable(() -> gameManager.sceneManager.popScreen());
-
                         }
                         competitors.removeIf(p -> p.getUser().getUserId() == packetDeath.getUserId());
                     } else if (packet instanceof PacketAnimalUpdate) {

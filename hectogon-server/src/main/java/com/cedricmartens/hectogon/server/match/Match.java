@@ -253,9 +253,10 @@ public class Match
             Lootbag lootbag = new Lootbag(player.getPosition().x,
                                           player.getPosition().y,
                                             inventory);
+            lootbag.setId(lootbagId++);
             lootbags.add(lootbag);
             packetLoot.setInventory(inventory);
-            packetLoot.setLootId(lootbagId++);
+            packetLoot.setLootId(lootbag.getId());
             sendToEveryone(packetLoot);
         }else{
             closestLb.getInventory().addItem(item, qty);
