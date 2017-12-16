@@ -29,7 +29,7 @@ import static com.cedricmartens.hectogon.client.core.game.Hectogon.WIDTH;
 
 public class InventoryManager extends WidgetGroup
 {
-    private final static float PICK_UP_RANGE = 100;
+    private final static float PICK_UP_RANGE = 25;
 
     private InventoryUI inventoryUI;
     private GroundInventory groundInventory;
@@ -57,7 +57,7 @@ public class InventoryManager extends WidgetGroup
         inventoryUI.setWidth(textureInventory.getWidth() * 2);
         inventoryUI.setHeight(textureInventory.getHeight() * 2);
         inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
-        inventoryUI.setY(100);
+        inventoryUI.setY(50);
         inventoryUI.setDropListener((item, qty) -> {
             PacketDropItem packetDropItem = new PacketDropItem();
             packetDropItem.setItem(item);
@@ -74,9 +74,10 @@ public class InventoryManager extends WidgetGroup
         groundInventory.setVisible(false);
         groundInventory.setBackground(new TextureRegionDrawable(new TextureRegion(
                 textureInventory)));
+        groundInventory.setWidth(textureInventory.getWidth() * 2);
+        groundInventory.setHeight(textureInventory.getHeight() * 2);
         groundInventory.setX(WIDTH - textureInventory.getWidth() * 2);
-        groundInventory.setY(500);
-        groundInventory.setDebug(true);
+        groundInventory.setY(75 + textureInventory.getHeight() * 2);
 
         addActor(inventoryUI);
         addActor(groundInventory);
@@ -85,7 +86,7 @@ public class InventoryManager extends WidgetGroup
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-
+        batch.end();
         if (this.inventoryUI.getSelectedItem() != null)
         {
             this.uiBatch.setProjectionMatrix(getStage().getCamera().combined);
@@ -104,6 +105,7 @@ public class InventoryManager extends WidgetGroup
                         pos.x + textureItem.getWidth() / 2, pos.y - textureItem.getHeight() / 2);
             this.uiBatch.end();
         }
+        batch.begin();
     }
 
     public List<Lootbag> getLootbags()
