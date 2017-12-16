@@ -1,36 +1,32 @@
 package com.cedricmartens.commons.networking.inventory;
 
-import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 
 import java.io.*;
 
-public class PacketLoot extends PacketLootUpdate
+public class PacketLootUpdate extends PacketInventory
 {
-    private Point p;
+    private int lootId;
 
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
         super.readFrom(inputStream);
         DataInputStream dataInputStream = new DataInputStream(inputStream);
-        float x = dataInputStream.readFloat();
-        float y = dataInputStream.readFloat();
-        p = new Point(x, y);
+        lootId = dataInputStream.readInt();
     }
 
     @Override
     public void writeTo(OutputStream outputStream) throws IOException {
         super.writeTo(outputStream);
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-        dataOutputStream.writeFloat(p.x);
-        dataOutputStream.writeFloat(p.y);
+        dataOutputStream.writeInt(lootId);
     }
 
-    public Point getPoint() {
-        return p;
+    public int getLootId() {
+        return lootId;
     }
 
-    public void setPoint(Point p) {
-        this.p = p;
+    public void setLootId(int lootId) {
+        this.lootId = lootId;
     }
 }

@@ -13,6 +13,10 @@ import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.competitor.PacketDeath;
 import com.cedricmartens.commons.networking.inventory.PacketInventory;
+import com.cedricmartens.commons.networking.inventory.PacketLoot;
+import com.cedricmartens.commons.networking.inventory.PacketLootUpdate;
+import com.cedricmartens.commons.storage.Lootbag;
+import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.esotericsoftware.minlog.Log;
 
@@ -34,10 +38,14 @@ public class Match
     private int animalId = 0;
     private List<Animal> animals;
 
+    private int lootbagId = 0;
+    private List<Lootbag> lootbags;
+
     public Match(int matchId)
     {
         this.hasStarted = false;
         this.players = new ArrayList<>();
+        this.lootbags = new ArrayList<>();
         this.animals = new ArrayList<>();
         for(int i = 0; i < 10; i++)
         {
@@ -225,5 +233,54 @@ public class Match
 
         hasStarted = true;
         startTime = System.currentTimeMillis();
+    }
+
+    public void dropItem(Player player, Item item, int qty)
+    {
+        if(player == null)
+            throw new IllegalArgumentException();
+
+        player.getInventory().removeItem(item, qty);
+
+        Lootbag closestLb = getClosestLootbag(player.getPosition().x, player.getPosition().x);
+        if(closestLb == null)
+        {
+            PacketLoot packetLoot = new PacketLoot();
+            packetLoot.setPoint(player.getPosition());
+            Inventory inventory = new Inventory(12);
+            inventory.addItem(item, qty);
+
+            Lootbag lootbag = new Lootbag(player.getPosition().x,
+                                          player.getPosition().y,
+                                            inventory);
+            lootbags.add(lootbag);
+            packetLoot.setInventory(inventory);
+            packetLoot.setLootId(lootbagId++);
+            sendToEveryone(packetLoot);
+        }else{
+            closestLb.getInventory().addItem(item, qty);
+            PacketLootUpdate packetLootUpdate = new PacketLootUpdate();
+            packetLootUpdate.setLootId(closestLb.getId());
+            packetLootUpdate.setInventory(closestLb.getInventory());
+        }
+    }
+
+    private Lootbag getClosestLootbag(float x, float y)
+    {
+        Lootbag bestLb = null;
+        float bestDis = Float.MAX_VALUE;
+        float pickUpRange = 25;
+
+        for(Lootbag lootbag : lootbags)
+        {
+            float dis = lootbag.getPosition().distanceBetweenPoints(x, y);
+            if(dis < pickUpRange && dis < bestDis)
+            {
+                bestDis = dis;
+                bestLb = lootbag;
+            }
+        }
+
+        return bestLb;
     }
 }

@@ -156,20 +156,8 @@ public class SocketConnection implements SocketListener {
                 }else if(packet instanceof PacketDropItem)
                 {
                     PacketDropItem packetDropItem = (PacketDropItem)packet;
-                    if(player != null)
-                    {
-                        Item item = packetDropItem.getItem();
-                        int qty = packetDropItem.getQty();
-                        player.getInventory().removeItem(item, qty);
-                        PacketLoot packetLoot = new PacketLoot();
-                        packetLoot.setPoint(player.getPosition());
-                        Inventory inventory = new Inventory(12);
-                        inventory.addItem(item, qty);
-                        packetLoot.setInventory(inventory);
-                        server.getMatchById(0).sendToEveryone(packetLoot);
-                    }else{
-                        throw new IllegalStateException();
-                    }
+                    server.getMatchById(0)
+                            .dropItem(player, packetDropItem.getItem(), packetDropItem.getQty());
                 }
 
             }catch (IOException e) {
