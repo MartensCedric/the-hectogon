@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.cedricmartens.commons.Point;
@@ -40,7 +39,6 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
-import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
@@ -53,7 +51,7 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.GroundInventory;
-import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryTable;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryManager;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
@@ -72,18 +70,15 @@ import static java.lang.Math.PI;
 public class WorldScreen extends StageScreen {
 
     private Map map;
-    private SpriteBatch batch, uiBatch;
+    private SpriteBatch batch;
     private ShapeRenderer debugRenderer;
     private OrthographicCamera worldCamera;
     private AssetManager assetManager;
     private Socket socket;
-    private InventoryUI inventoryUI;
-    private GroundInventory inventoryGround;
-    private Inventory playerInv;
     private Chest chest;
     private List<Competitor> competitors;
     private List<Entity> decorations;
-    private List<Lootbag> drops;
+    private InventoryManager inventoryManager;
     private Player player;
     private List<Animal> animals;
     private List<AnimalAnimation<?>> animalAnimations;
@@ -98,7 +93,6 @@ public class WorldScreen extends StageScreen {
         this.competitors = new ArrayList<>();
         this.messageBubbles = new ArrayList<>();
         this.decorations = new ArrayList<>();
-        this.drops = new ArrayList<>();
 
         for (int i = 0; i < 100; i++) {
             float x = Math.round(2500 * Math.cos((PI * i) / (100 / 2)));
@@ -107,6 +101,7 @@ public class WorldScreen extends StageScreen {
         }
         this.player = new Player(null, null,
                 new NetworkMovementListener(socket));
+        gameManager.player = player;
         this.debugRenderer = new ShapeRenderer();
         this.debugRenderer.setAutoShapeType(true);
         this.chest = new Chest(12);
@@ -114,44 +109,12 @@ public class WorldScreen extends StageScreen {
         this.assetManager = gameManager.assetManager;
         this.map = new Map(this.assetManager);
         this.batch = new SpriteBatch();
-        this.uiBatch = new SpriteBatch();
         this.worldCamera = new OrthographicCamera();
         this.worldCamera.setToOrtho(false);
         this.worldCamera.zoom = .5f;
         this.worldCamera.position.x = -25;
         this.worldCamera.position.y = 0;
         this.worldCamera.update();
-        this.playerInv = new Inventory(12);
-        inventoryUI = new InventoryUI(playerInv);
-        Texture textureInventory = gameManager.assetManager.get("ui/inventory.png", Texture.class);
-
-        inventoryUI.setBackground(new TextureRegionDrawable(new TextureRegion(
-                textureInventory)));
-        inventoryUI.setWidth(textureInventory.getWidth() * 2);
-        inventoryUI.setHeight(textureInventory.getHeight() * 2);
-        inventoryUI.setX(WIDTH - textureInventory.getWidth() * 2);
-        inventoryUI.setY(100);
-        inventoryUI.setDropListener((item, qty) -> {
-            PacketDropItem packetDropItem = new PacketDropItem();
-            packetDropItem.setItem(item);
-            packetDropItem.setQty(qty);
-            try {
-                Packet.writeHeader(PacketDropItem.class, socket.getOutputStream());
-                packetDropItem.writeTo(socket.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        this.inventoryGround = new GroundInventory();
-        this.inventoryGround.setVisible(false);
-        this.inventoryGround.setBackground(new TextureRegionDrawable(new TextureRegion(
-                textureInventory)));
-        inventoryGround.setX(WIDTH - textureInventory.getWidth() * 2);
-        inventoryGround.setY(500);
-        inventoryGround.setDebug(true);
-        getStage().addActor(inventoryGround);
-
 
         String[] icons = new String[]{"icons/backpack.png", "items/steel_sword.png"};
 
@@ -175,7 +138,8 @@ public class WorldScreen extends StageScreen {
             getStage().addActor(child);
         }
 
-        getStage().addActor(inventoryUI);
+        this.inventoryManager = new InventoryManager(gameManager);
+        getStage().addActor(inventoryManager);
 
         final Chat chat = new Chat(UiUtil.getHectogonSkin());
         chat.setWidth(WIDTH / 2.5f);
@@ -228,7 +192,7 @@ public class WorldScreen extends StageScreen {
                 }
 
                 if (inputService.openInventory(character)) {
-                    inventoryUI.setVisible(!inventoryUI.isVisible());
+                    //inventoryUI.setVisible(!inventoryUI.isVisible());
                 }
 
                 return super.keyTyped(event, character);
@@ -278,10 +242,10 @@ public class WorldScreen extends StageScreen {
                     } else if (packet instanceof PacketLoot) {
                         PacketLoot pl = (PacketLoot) packet;
                         Lootbag lootbag = new Lootbag(pl.getPoint().x, pl.getPoint().y, pl.getInventory());
-                        drops.add(lootbag);
+                        inventoryManager.addLoot(lootbag);
                     } else if (packet instanceof PacketInventory) {
                         PacketInventory packetInventory = (PacketInventory) packet;
-                        inventoryUI.setInventory(packetInventory.getInventory());
+                        inventoryManager.setPlayerInventory(packetInventory.getInventory());
                     } else if (packet instanceof PacketPositionCorrection) {
                         PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
                         Competitor c = getCompetitorById(ppc.getUserId());
@@ -383,8 +347,9 @@ public class WorldScreen extends StageScreen {
         float lbOffsetX = txtLb.getWidth() / 2;
         float lbOffsetY = txtLb.getHeight() / 2;
 
-        for (Lootbag l : drops)
-            batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
+
+        for (Lootbag l : inventoryManager.getLootbags())
+           batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);
 
         for (AnimationSequence<TextureRegion> a : animalAnimations)
             a.draw(batch);
@@ -417,24 +382,6 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.end();
 
         super.render(delta);
-
-        if (this.inventoryUI.getSelectedItem() != null) {
-            this.uiBatch.setProjectionMatrix(getStage().getCamera().combined);
-            this.uiBatch.begin();
-            TextureUtil textureUtil = TextureUtil.getTextureUtil();
-            Texture textureItem = textureUtil.getItemTexture(this.inventoryUI.getSelectedItem());
-            Viewport viewPort = getStage().getViewport();
-            Vector3 pos = getStage().getCamera().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0),
-                    viewPort.getScreenX(), viewPort.getScreenY(),
-                    viewPort.getScreenWidth(), viewPort.getScreenHeight());
-            this.uiBatch.draw(textureItem, pos.x - textureItem.getWidth(), pos.y - textureItem.getHeight(),
-                    textureItem.getWidth() * 2, textureItem.getHeight() * 2);
-            if (this.inventoryUI.getSelectedAmount() > 1)
-                textureUtil.getFont().draw(uiBatch,
-                        Integer.toString(inventoryUI.getSelectedAmount()),
-                        pos.x + textureItem.getWidth() / 2, pos.y - textureItem.getHeight() / 2);
-            this.uiBatch.end();
-        }
     }
 
     private void update(float delta)
@@ -460,42 +407,7 @@ public class WorldScreen extends StageScreen {
                 t.update(delta);
         }
 
-
-
-        if(!drops.isEmpty())
-        {
-            Lootbag closestDrop = getClosestDrop();
-
-            if(closestDrop != null &&
-                    closestDrop.getInventory() != inventoryGround.getInventory())
-            {
-                inventoryGround.setInventory(closestDrop.getInventory());
-                inventoryGround.setVisible(true);
-            }
-        }
-    }
-
-    private Lootbag getClosestDrop()
-    {
-        float bestDis = Float.MAX_VALUE;
-        Lootbag drop = null;
-        float range = 100;
-
-        for(Lootbag lootbag : drops)
-        {
-            float disPlayer = MathUtil.distanceToPoint(
-                    lootbag.getPosition().x,
-                    lootbag.getPosition().y,
-                    player.getPosition().x,
-                    player.getPosition().y);
-
-            if(disPlayer < Math.min(bestDis, range))
-            {
-                drop = lootbag;
-                bestDis = disPlayer;
-            }
-        }
-        return drop;
+        inventoryManager.update(delta);
     }
 
     private Competitor getCompetitorById(int id) {
