@@ -111,7 +111,6 @@ public class MainMenuScreen extends StageScreen
                                      break;
                              }
 
-
                              txtButtonConnect.setDisabled(false);
                          }
 

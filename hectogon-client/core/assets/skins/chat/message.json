@@ -20,7 +20,7 @@ com.badlogic.gdx.graphics.Color: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
-		font: munro32mono
+		font: munro14mono
 		fontColor: Black
 		background: msg_bubble
 	}

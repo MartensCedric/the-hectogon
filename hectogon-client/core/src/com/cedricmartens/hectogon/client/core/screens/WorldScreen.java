@@ -157,20 +157,26 @@ public class WorldScreen extends StageScreen {
                     message.setChatType(ChatType.GLOBAL);
 
                     chat.addMessage(message);
+
+                    MessageBubble messageBubble = new MessageBubble(player, message.getContents(), UiUtil.getChatSkin());
+                    messageBubbles.removeIf(mb -> mb.getTarget().getId() == player.getId());
+                    messageBubbles.add(messageBubble);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-        chatInput.setOnFocusChange(isFocus -> {
+        chatInput.setOnFocusChange(isFocus ->
+        {
             if (player != null) {
                 player.setInputEnabled(!isFocus);
             }
         });
 
         getStage().addActor(chatInput);
-        getStage().getRoot().addCaptureListener(new InputListener() {
+        getStage().getRoot().addCaptureListener(new InputListener()
+        {
             @Override
             public boolean keyTyped(InputEvent event, char character) {
 
@@ -184,7 +190,8 @@ public class WorldScreen extends StageScreen {
                     return true;
                 }
 
-                if (inputService.openInventory(character))
+                if (inputService.openInventory(character) &&
+                        getStage().getKeyboardFocus() != chatInput)
                     inventoryManager.togglePlayerInv();
 
                 return super.keyTyped(event, character);

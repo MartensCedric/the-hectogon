@@ -29,20 +29,20 @@ atlasData: {
 			name: munro32mono
 		}
 		{
-			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/skins/chat/msg_bubble.9.png"
+			file: "/home/cedric/Documents/Projects/the-hectogon/dev/skin/Message_data/munro24mono.png"
 			bgColor: {
-				r: 1
-				g: 1
-				b: 1
+				r: 0
+				g: 0
+				b: 0
 				a: 1
 			}
-			visible: true
+			visible: false
 			tint: null
 			tintName: null
-			name: msg_bubble
+			name: munro24mono
 		}
 		{
-			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/skins/chat/chatbox.9.png"
+			file: "/home/cedric/Documents/Projects/the-hectogon/dev/skin/Message_data/chatbox.9.png"
 			bgColor: {
 				r: 1
 				g: 1
@@ -55,17 +55,17 @@ atlasData: {
 			name: chatbox
 		}
 		{
-			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/fonts/munro24mono.png"
+			file: "/home/cedric/Documents/Projects/the-hectogon/dev/skin/Message_data/msg_bubble.9.png"
 			bgColor: {
-				r: 0
-				g: 0
-				b: 0
+				r: 1
+				g: 1
+				b: 1
 				a: 1
 			}
-			visible: false
+			visible: true
 			tint: null
 			tintName: null
-			name: munro24mono
+			name: msg_bubble
 		}
 	]
 }
@@ -91,7 +91,7 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.FontData
 			name: munro24mono
-			file: "/home/cedric/Documents/Projects/the-hectogon/hectogon-client/core/assets/fonts/munro24mono.fnt"
+			file: "/home/cedric/Documents/Projects/the-hectogon/dev/skin/Message_data/munro24mono.fnt"
 		}
 		{
 			class: com.ray3k.skincomposer.data.FontData
@@ -704,7 +704,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: munro32mono
+						value: munro14mono
 					}
 					fontColor: {
 						class: com.ray3k.skincomposer.data.StyleProperty
@@ -1592,7 +1592,7 @@ preferences: {
 	}
 	id: {
 		class: java.lang.Integer
-		value: 663477664
+		value: 554741889
 	}
 	resources-relative: {
 		class: java.lang.Boolean
