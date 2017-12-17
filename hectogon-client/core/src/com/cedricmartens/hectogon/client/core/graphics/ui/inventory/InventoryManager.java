@@ -189,4 +189,9 @@ public class InventoryManager extends WidgetGroup
     public void setPlayerInventory(Inventory playerInventory) {
         this.inventoryUI.setInventory(playerInventory);
     }
+
+    public void togglePlayerInv()
+    {
+        this.inventoryUI.setVisible(!inventoryUI.isVisible());
+    }
 }

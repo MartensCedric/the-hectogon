@@ -47,7 +47,6 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryManager;
-import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.LootbagNotFoundException;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 import com.cedricmartens.hectogon.client.core.world.StartStone;
@@ -185,9 +184,8 @@ public class WorldScreen extends StageScreen {
                     return true;
                 }
 
-                if (inputService.openInventory(character)) {
-                    //inventoryUI.setVisible(!inventoryUI.isVisible());
-                }
+                if (inputService.openInventory(character))
+                    inventoryManager.togglePlayerInv();
 
                 return super.keyTyped(event, character);
             }
@@ -213,6 +211,7 @@ public class WorldScreen extends StageScreen {
                         Competitor c = getCompetitorById(m.getSender().getUserId());
 
                         MessageBubble messageBubble = new MessageBubble(c, m.getContents(), UiUtil.getChatSkin());
+                        messageBubbles.removeIf(mb -> mb.getTarget().getId() == c.getId());
                         messageBubbles.add(messageBubble);
 
                     } else if (packet instanceof PacketCompetitor) {
@@ -266,32 +265,34 @@ public class WorldScreen extends StageScreen {
                             animal.setTarget(getCompetitorById(animal.getTarget().getId()));
 
                         boolean animalFound = false;
-                        for (int i = 0; i < animals.size() && !animalFound; i++) {
-                            if (animals.get(i).getId() == animal.getId()) {
-                                synchronized (animals) {
-                                    animals.set(i, animal);
-                                }
-
-                                for (int j = 0; j < animalAnimations.size(); j++) {
-                                    AnimalAnimation aa = animalAnimations.get(j);
-                                    if (aa.getAnimal().getId() == animal.getId()) {
-                                        aa.setAnimal(animal);
-                                        break;
+                        synchronized (animals) {
+                            for (int i = 0; i < animals.size() && !animalFound; i++) {
+                                if (animals.get(i).getId() == animal.getId()) {
+                                    synchronized (animals) {
+                                        animals.set(i, animal);
                                     }
+
+                                    for (int j = 0; j < animalAnimations.size(); j++) {
+                                        AnimalAnimation aa = animalAnimations.get(j);
+                                        if (aa.getAnimal().getId() == animal.getId()) {
+                                            aa.setAnimal(animal);
+                                            break;
+                                        }
+                                    }
+                                    animalFound = true;
                                 }
-                                animalFound = true;
-                            }
-                        }
-
-                        if (!animalFound) {
-                            animals.add(animal);
-                            if (animal instanceof Rabbit) {
-                                Rabbit rabbit = (Rabbit) animal;
-                                RabbitAnimation rabbitAnimation = new RabbitAnimation(rabbit);
-                                animalAnimations.add(rabbitAnimation);
                             }
 
-                            System.out.println("Animal added it's a " + animal.getClass().getSimpleName());
+                            if (!animalFound) {
+                                animals.add(animal);
+                                if (animal instanceof Rabbit) {
+                                    Rabbit rabbit = (Rabbit) animal;
+                                    RabbitAnimation rabbitAnimation = new RabbitAnimation(rabbit);
+                                    animalAnimations.add(rabbitAnimation);
+                                }
+
+                                System.out.println("Animal added it's a " + animal.getClass().getSimpleName());
+                            }
                         }
                     }
                 } catch (IOException e) {

@@ -38,4 +38,9 @@ public class MessageBubble extends Label
     {
         return System.currentTimeMillis() > creationTime + BUBBLE_TIME;
     }
+
+    public Entity getTarget()
+    {
+        return target;
+    }
 }
