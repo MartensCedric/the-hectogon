@@ -38,6 +38,7 @@ public class Hectogon extends SceneManager
 		assetManager.load("icons/perks/hunter_perk.png", Texture.class);
 		assetManager.load("icons/perks/tank_perk.png", Texture.class);
 
+		assetManager.load("items/fishing_rod.png", Texture.class);
 		assetManager.load("items/arr_wood.png", Texture.class);
 		assetManager.load("items/arrow_wood.png", Texture.class);
 		assetManager.load("items/apple.png", Texture.class);
