@@ -1,6 +1,7 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,8 @@ import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.entities.animal.AnimalState;
 import com.cedricmartens.commons.entities.animal.Rabbit;
+import com.cedricmartens.commons.entities.combat.Arrow;
+import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -35,6 +38,7 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.networking.inventory.PacketLootUpdate;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
+import com.cedricmartens.hectogon.client.core.game.manager.CombatManager;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
@@ -76,6 +80,7 @@ public class WorldScreen extends StageScreen {
     private List<Animal> animals;
     private List<AnimalAnimation<?>> animalAnimations;
     private List<MessageBubble> messageBubbles;
+    private CombatManager combatManager;
 
     public WorldScreen(GameManager gameManager) {
         super(gameManager);
@@ -86,6 +91,7 @@ public class WorldScreen extends StageScreen {
         this.competitors = new ArrayList<>();
         this.messageBubbles = new ArrayList<>();
         this.decorations = new ArrayList<>();
+        this.combatManager = new CombatManager(gameManager);
 
         for (int i = 0; i < 100; i++) {
             float x = Math.round(2500 * Math.cos((PI * i) / (100 / 2)));
@@ -364,6 +370,8 @@ public class WorldScreen extends StageScreen {
         for (Competitor c : competitors)
             batch.draw(playerDummy, c.getPosition().x - playerOffsetX, c.getPosition().y);
 
+        combatManager.draw(batch);
+
         for(int i = 0; i < messageBubbles.size(); i++)
         {
             MessageBubble messageBubble = messageBubbles.get(i);
@@ -415,6 +423,7 @@ public class WorldScreen extends StageScreen {
         }
 
         inventoryManager.update(delta);
+        combatManager.update(delta);
     }
 
     private Competitor getCompetitorById(int id) {

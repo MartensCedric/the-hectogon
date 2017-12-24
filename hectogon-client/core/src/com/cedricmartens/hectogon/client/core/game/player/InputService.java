@@ -22,11 +22,6 @@ public interface InputService
     }
     boolean down(int code, InputType inputType);
 
-    default boolean fire(int code) {
-        return fire(code, InputType.KEY);
-    }
-    boolean fire(int code, InputType inputType);
-
     default boolean toggleChatInput(int code) {
         return toggleChatInput(code, InputType.KEY);
     }

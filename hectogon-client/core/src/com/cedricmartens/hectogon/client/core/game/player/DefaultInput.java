@@ -1,14 +1,13 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class DefaultInput implements InputService {
 
-    @Override
-    public boolean fire(int code, InputType inputType) {
-        return inputType == InputType.KEY ? SPACE == code || LEFT == code : false;
-    }
 
     @Override
     public boolean toggleChatInput(int code, InputType inputType) {
