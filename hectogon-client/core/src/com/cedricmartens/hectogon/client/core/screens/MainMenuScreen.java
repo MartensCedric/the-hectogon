@@ -41,7 +41,7 @@ public class MainMenuScreen extends StageScreen
                 new Actor[]{widgetLogin, widgetRegister},
                 skin
         );
-        
+
         tabbedPanel.setX(Hectogon.WIDTH / 2);
         tabbedPanel.setY(Hectogon.HEIGHT / 2);
 
