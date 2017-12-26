@@ -58,7 +58,7 @@ public class CombatManager
                     break;
             }
 
-            batch.draw(new TextureRegion(textArrow), p.getPosition().x, p.getPosition().y, textArrow.getWidth()/2,
+            batch.draw(new TextureRegion(textArrow), p.getPosition().x - textArrow.getWidth()/2, p.getPosition().y, textArrow.getWidth()/2,
                     textArrow.getHeight()/2, textArrow.getWidth(), textArrow.getHeight(), 1, 1,
                     degrees);
         }
@@ -75,12 +75,13 @@ public class CombatManager
         InputService inputService = ServiceUtil.getServiceUtil().getInputService();
         if(currentCooldown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
         {
+            Texture textDummy = gameManager.assetManager.get("character/dummy.png", Texture.class);
             rotation.set(Gdx.input.getX() - Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 - Gdx.input.getY());
 
             currentCooldown = cooldown;
             Projectile arrow = new Arrow(1, rotation.angleRad());
             arrow.setPosition(new Point(gameManager.player.getPosition().x + (float)Math.cos(rotation.angleRad()) * 16,
-                                        gameManager.player.getPosition().y + (float)Math.sin(rotation.angleRad()) * 16));
+                                        gameManager.player.getPosition().y  + textDummy.getHeight()/2 + (float)Math.sin(rotation.angleRad()) * 16));
 
             addProjectile(arrow);
         }

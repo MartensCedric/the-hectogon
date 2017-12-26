@@ -392,6 +392,7 @@ public class WorldScreen extends StageScreen {
         this.debugRenderer.line(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
         this.debugRenderer.setProjectionMatrix(worldCamera.combined);
         this.debugRenderer.line(player.getPosition().x - 500, player.getPosition().y, player.getPosition().x + 500, player.getPosition().y);
+        this.debugRenderer.circle(player.getPosition().x, player.getPosition().y, 150);
         this.debugRenderer.rect(chest.getPosition().x, chest.getPosition().y, 64, 64);
         this.debugRenderer.rect(player.getPosition().x - playerOffsetX, player.getPosition().y, playerDummy.getWidth(), playerDummy.getHeight());
         this.debugRenderer.end();
