@@ -2,12 +2,14 @@ package com.cedricmartens.hectogon.server;
 
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.UserNotFoundException;
+import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketMovement;
 import com.cedricmartens.commons.networking.authentication.*;
+import com.cedricmartens.commons.networking.combat.PacketProjectile;
 import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.storage.inventory.Inventory;
@@ -158,6 +160,17 @@ public class SocketConnection implements SocketListener {
                     PacketDropItem packetDropItem = (PacketDropItem)packet;
                     server.getMatchById(0)
                             .dropItem(player, packetDropItem.getItem(), packetDropItem.getQty());
+                }else if(packet instanceof PacketProjectile)
+                {
+                    PacketProjectile packetProjectile = (PacketProjectile)packet;
+                    Projectile projectile = packetProjectile.getProjectile();
+
+                    if(player.getId() != projectile.getId())
+                        projectile.setSenderId(player.getId());
+
+                    Match m = server.getMatchById(0);
+                    m.addProjectile(projectile);
+                    m.send(p -> p.getId() != projectile.getSenderId(), packetProjectile);
                 }
 
             }catch (IOException e) {

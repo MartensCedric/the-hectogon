@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.entities.combat.Arrow;
 import com.cedricmartens.commons.entities.combat.Projectile;
+import com.cedricmartens.commons.networking.Packet;
+import com.cedricmartens.commons.networking.combat.PacketProjectile;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +72,20 @@ public class CombatManager
 
     public void update(float delta)
     {
+        synchronized (projectiles)
+        {
+            for(int i = 0; i < projectiles.size(); i++)
+            {
+                Projectile p = projectiles.get(i);
+                p.update(delta);
+                if(p.getTtl() < 0)
+                {
+                    projectiles.remove(i);
+                    i--;
+                }
+            }
+        }
+
         currentCooldown -= delta;
         currentCooldown = currentCooldown < 0 ? 0 : currentCooldown;
 
@@ -83,13 +100,17 @@ public class CombatManager
             arrow.setPosition(new Point(gameManager.player.getPosition().x + (float)Math.cos(rotation.angleRad()) * 16,
                                         gameManager.player.getPosition().y  + textDummy.getHeight()/2 + (float)Math.sin(rotation.angleRad()) * 16));
 
-            addProjectile(arrow);
-        }
+            arrow.setSenderId(gameManager.player.getId());
+            PacketProjectile packetProjectile = new PacketProjectile();
+            packetProjectile.setProjectile(arrow);
 
-        synchronized (projectiles)
-        {
-            for(Projectile p : projectiles)
-                p.update(delta);
+            try {
+                Packet.writeHeader(PacketProjectile.class, gameManager.socket.getOutputStream());
+                packetProjectile.writeTo(gameManager.socket.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            projectiles.add(arrow);
         }
     }
 }

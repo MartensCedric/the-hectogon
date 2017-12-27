@@ -30,6 +30,7 @@ import com.cedricmartens.commons.networking.PacketChat;
 import com.cedricmartens.commons.networking.actions.PacketCompetitorMovement;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
+import com.cedricmartens.commons.networking.combat.PacketProjectile;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.competitor.PacketDeath;
@@ -307,6 +308,10 @@ public class WorldScreen extends StageScreen {
                                 System.out.println("Animal added it's a " + animal.getClass().getSimpleName());
                             }
                         }
+                    }else if(packet instanceof PacketProjectile)
+                    {
+                        PacketProjectile packetProjectile = (PacketProjectile)packet;
+                        combatManager.addProjectile(packetProjectile.getProjectile());
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -359,7 +364,6 @@ public class WorldScreen extends StageScreen {
         Texture txtLb = assetManager.get("interactive/lootbag.png", Texture.class);
         float lbOffsetX = txtLb.getWidth() / 2;
         float lbOffsetY = txtLb.getHeight() / 2;
-
 
         for (Lootbag l : inventoryManager.getLootbags())
            batch.draw(txtLb, l.getPosition().x - lbOffsetX, l.getPosition().y - lbOffsetY);

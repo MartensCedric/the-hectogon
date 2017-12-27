@@ -9,6 +9,7 @@ import com.cedricmartens.commons.networking.authentication.PacketInLogin;
 import com.cedricmartens.commons.networking.authentication.PacketInRegister;
 import com.cedricmartens.commons.networking.authentication.PacketOutLogin;
 import com.cedricmartens.commons.networking.authentication.PacketOutRegister;
+import com.cedricmartens.commons.networking.combat.PacketProjectile;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
 import com.cedricmartens.commons.networking.competitor.PacketDeath;
@@ -35,7 +36,8 @@ public enum  PacketType
     CORRECTION(PacketPositionCorrection.class),
     DEATH(PacketDeath.class),
     ANIMAL_DEATH(PacketAnimalDeath.class),
-    ANIMAL_UPDATE(PacketAnimalUpdate.class)
+    ANIMAL_UPDATE(PacketAnimalUpdate.class),
+    PROJECTILE(PacketProjectile.class)
     ;
 
     private Class<? extends Packet> type;

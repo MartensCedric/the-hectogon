@@ -5,6 +5,7 @@ import com.cedricmartens.commons.UserNotFoundException;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.entities.animal.Rabbit;
+import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
@@ -37,6 +38,7 @@ public class Match
     private int tickIndex = 0;
     private int animalId = 0;
     private List<Animal> animals;
+    private List<Projectile> projectiles;
 
     private int lootbagId = 0;
     private List<Lootbag> lootbags;
@@ -47,6 +49,8 @@ public class Match
         this.players = new ArrayList<>();
         this.lootbags = new ArrayList<>();
         this.animals = new ArrayList<>();
+        this.projectiles = new ArrayList<>();
+
         for(int i = 0; i < 10; i++)
         {
             Rabbit rabbit = new Rabbit(2500 + i * 100, 30);
@@ -196,6 +200,17 @@ public class Match
             }
         }
 
+        for(int i = 0; i < projectiles.size(); i++)
+        {
+            Projectile projectile = projectiles.get(i);
+            projectile.update(delta);
+            if(projectile.getTtl() < 0)
+            {
+                projectiles.remove(i);
+                i--;
+            }
+        }
+
         if(tickIndex % 60 == 0)
             correctPlayerPositions();
 
@@ -284,5 +299,10 @@ public class Match
         }
 
         return bestLb;
+    }
+
+    public void addProjectile(Projectile projectile) {
+        //TODO projectile Id is currently useless
+        projectiles.add(projectile);
     }
 }

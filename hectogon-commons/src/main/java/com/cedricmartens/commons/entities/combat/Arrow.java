@@ -9,5 +9,11 @@ public class Arrow extends Projectile
     {
         this.speed = 450 * strength; //Should be redone so strength has a minimum value
         this.directionRad = direction;
+        this.ttl = 2f;
+    }
+
+    public Arrow()
+    {
+
     }
 }
