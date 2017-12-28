@@ -10,11 +10,10 @@ import com.cedricmartens.commons.entities.combat.Arrow;
 import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.combat.PacketProjectile;
+import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
-import com.cedricmartens.hectogon.client.core.game.player.InputService;
-import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,9 +64,6 @@ public class CombatManager
                     textArrow.getHeight()/2, textArrow.getWidth(), textArrow.getHeight(), 1, 1,
                     degrees);
         }
-
-        // draw(TextureRegion region, float x, float y, float originX, float originY,
-        // float width, float height, float scaleX, float scaleY, float rotation)
     }
 
     public void update(float delta)
@@ -89,8 +85,8 @@ public class CombatManager
         currentCooldown -= delta;
         currentCooldown = currentCooldown < 0 ? 0 : currentCooldown;
 
-        InputService inputService = ServiceUtil.getServiceUtil().getInputService();
-        if(currentCooldown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+        if(currentCooldown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)
+                && gameManager.player.getInventory().contains(Item.arr_wood))
         {
             Texture textDummy = gameManager.assetManager.get("character/dummy.png", Texture.class);
             rotation.set(Gdx.input.getX() - Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 - Gdx.input.getY());
@@ -110,6 +106,7 @@ public class CombatManager
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            gameManager.player.getInventory().removeItem(Item.arr_wood);
             projectiles.add(arrow);
         }
     }

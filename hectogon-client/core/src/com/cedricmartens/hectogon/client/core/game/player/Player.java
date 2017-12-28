@@ -5,12 +5,15 @@ import com.cedricmartens.commons.Point;
 import com.cedricmartens.commons.User;
 import com.cedricmartens.commons.entities.Competitor;
 import com.cedricmartens.commons.networking.actions.MovementAction;
+import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.TriggerableInventory;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 
 public class Player extends Competitor implements InputProcessor {
 
     private MovementListener movementListener;
     private boolean inputEnabled;
+    private TriggerableInventory inventory;
 
     public Player(User user, Point position, MovementListener movementListener) {
         super(user, position);
@@ -18,6 +21,7 @@ public class Player extends Competitor implements InputProcessor {
         movingDown = false;
         movingLeft = false;
         movingRight = false;
+        this.inventory = new TriggerableInventory(12);
         this.movementListener = movementListener;
         this.inputEnabled = true;
     }
@@ -138,5 +142,13 @@ public class Player extends Competitor implements InputProcessor {
             movementListener.move(MovementAction.UP_KEY_RELEASED);
             movementListener.move(MovementAction.DOWN_KEY_RELEASED);
         }
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(TriggerableInventory inventory) {
+        this.inventory = inventory;
     }
 }

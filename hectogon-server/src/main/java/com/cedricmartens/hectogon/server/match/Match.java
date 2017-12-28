@@ -304,10 +304,19 @@ public class Match
     }
 
     public void addProjectile(Projectile projectile) {
-        projectile.setId(projectileId++);
-        projectiles.add(projectile);
-        PacketProjectile packetProjectile = new PacketProjectile();
-        packetProjectile.setProjectile(projectile);
-        send(p -> p.getId() != projectile.getSenderId(), packetProjectile);
+        try {
+            Player player = getPlayerById(projectile.getSenderId());
+            if(player.getInventory().contains(Item.arr_wood))
+            {
+                player.getInventory().removeItem(Item.arr_wood);
+                projectile.setId(projectileId++);
+                projectiles.add(projectile);
+                PacketProjectile packetProjectile = new PacketProjectile();
+                packetProjectile.setProjectile(projectile);
+                send(p -> p.getId() != projectile.getSenderId(), packetProjectile);
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

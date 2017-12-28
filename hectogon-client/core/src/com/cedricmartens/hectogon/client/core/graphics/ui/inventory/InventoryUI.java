@@ -103,7 +103,6 @@ public class InventoryUI extends InventoryTable
     {
         return selectedItem;
     }
-
     public int getSelectedAmount()
     {
         return selectedAmount;

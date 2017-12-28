@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -17,9 +16,7 @@ import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
-import com.cedricmartens.hectogon.client.core.game.player.Player;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -34,7 +31,6 @@ public class InventoryManager extends WidgetGroup
     private InventoryUI inventoryUI;
     private GroundInventory groundInventory;
     private GameManager gameManager;
-    private Inventory playerInv;
     private List<Lootbag> lootbagList;
     private Lootbag currentLoot;
     private Batch uiBatch;
@@ -43,8 +39,7 @@ public class InventoryManager extends WidgetGroup
     public InventoryManager(GameManager gameManager)
     {
         this.gameManager = gameManager;
-        this.playerInv = new Inventory(12);
-        this.inventoryUI = new InventoryUI(playerInv);
+        this.inventoryUI = new InventoryUI(gameManager.player.getInventory());
         this.lootbagList = new ArrayList<>();
         this.uiBatch = new SpriteBatch();
 
@@ -193,5 +188,15 @@ public class InventoryManager extends WidgetGroup
     public void togglePlayerInv()
     {
         this.inventoryUI.setVisible(!inventoryUI.isVisible());
+    }
+
+    public void refresh()
+    {
+        inventoryUI.setInventory(gameManager.player.getInventory());
+    }
+
+    public void refreshUI()
+    {
+        inventoryUI.redraw();
     }
 }

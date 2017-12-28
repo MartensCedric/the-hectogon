@@ -7,8 +7,14 @@ import java.util.Iterator;
  */
 public class Inventory implements Iterable<InventorySlot>
 {
-    private int slotCount;
-    private InventorySlot[] slots;
+    protected int slotCount;
+    protected InventorySlot[] slots;
+
+    public Inventory(InventorySlot[] slots)
+    {
+        this.slotCount = slots.length;
+        this.slots = slots;
+    }
 
     public Inventory(int slotCount)
     {

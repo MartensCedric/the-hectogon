@@ -1,9 +1,6 @@
 package com.cedricmartens.hectogon.client.core.game.player;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-
 import static com.badlogic.gdx.Input.Keys.*;
 
 public class DefaultInput implements InputService {

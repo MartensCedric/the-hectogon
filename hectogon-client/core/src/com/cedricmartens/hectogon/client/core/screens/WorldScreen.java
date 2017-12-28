@@ -1,7 +1,6 @@
 package com.cedricmartens.hectogon.client.core.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,8 +21,6 @@ import com.cedricmartens.commons.entities.Entity;
 import com.cedricmartens.commons.entities.animal.Animal;
 import com.cedricmartens.commons.entities.animal.AnimalState;
 import com.cedricmartens.commons.entities.animal.Rabbit;
-import com.cedricmartens.commons.entities.combat.Arrow;
-import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.InvalidPacketDataException;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.PacketChat;
@@ -52,6 +49,7 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryManager;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.TriggerableInventory;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
 import com.cedricmartens.hectogon.client.core.world.StartStone;
@@ -258,7 +256,10 @@ public class WorldScreen extends StageScreen {
                         inventoryManager.updateLoot(plu.getLootId(), plu.getInventory());
                     } else if (packet instanceof PacketInventory) {
                         PacketInventory packetInventory = (PacketInventory) packet;
-                        inventoryManager.setPlayerInventory(packetInventory.getInventory());
+                        TriggerableInventory triggerableInventory = new TriggerableInventory(packetInventory.getInventory());
+                        triggerableInventory.setOnChangeListener(() -> inventoryManager.refreshUI());
+                        player.setInventory(triggerableInventory);
+                        inventoryManager.refresh();
                     } else if (packet instanceof PacketPositionCorrection) {
                         PacketPositionCorrection ppc = (PacketPositionCorrection) packet;
                         Competitor c = getCompetitorById(ppc.getUserId());
