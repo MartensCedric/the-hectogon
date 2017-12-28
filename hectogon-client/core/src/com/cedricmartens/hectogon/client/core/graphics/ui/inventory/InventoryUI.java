@@ -84,7 +84,7 @@ public class InventoryUI extends InventoryTable
                     }else
                     {
                         if(dropListener != null)
-                            dropListener.drop(selectedItem, 1);
+                            dropListener.drop(selectedItem, selectedAmount);
 
                         clearSelectedItem();
                     }

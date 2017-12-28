@@ -1,4 +1,4 @@
-package com.cedricmartens.hectogon.client.core.graphics.ui.inventory;
+package com.cedricmartens.hectogon.client.core.game.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,7 +15,9 @@ import com.cedricmartens.commons.networking.inventory.PacketDropItem;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
 import com.cedricmartens.commons.util.MathUtil;
-import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryGround;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
+import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.LootbagNotFoundException;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 import java.io.IOException;
 import java.net.Socket;
@@ -29,12 +31,11 @@ public class InventoryManager extends WidgetGroup
     private final static float PICK_UP_RANGE = 25;
 
     private InventoryUI inventoryUI;
-    private GroundInventory groundInventory;
+    private InventoryGround inventoryGround;
     private GameManager gameManager;
     private List<Lootbag> lootbagList;
     private Lootbag currentLoot;
     private Batch uiBatch;
-
 
     public InventoryManager(GameManager gameManager)
     {
@@ -65,17 +66,17 @@ public class InventoryManager extends WidgetGroup
             }
         });
 
-        groundInventory = new GroundInventory();
-        groundInventory.setVisible(false);
-        groundInventory.setBackground(new TextureRegionDrawable(new TextureRegion(
+        inventoryGround = new InventoryGround();
+        inventoryGround.setVisible(false);
+        inventoryGround.setBackground(new TextureRegionDrawable(new TextureRegion(
                 textureInventory)));
-        groundInventory.setWidth(textureInventory.getWidth() * 2);
-        groundInventory.setHeight(textureInventory.getHeight() * 2);
-        groundInventory.setX(WIDTH - textureInventory.getWidth() * 2);
-        groundInventory.setY(75 + textureInventory.getHeight() * 2);
+        inventoryGround.setWidth(textureInventory.getWidth() * 2);
+        inventoryGround.setHeight(textureInventory.getHeight() * 2);
+        inventoryGround.setX(WIDTH - textureInventory.getWidth() * 2);
+        inventoryGround.setY(75 + textureInventory.getHeight() * 2);
 
         addActor(inventoryUI);
-        addActor(groundInventory);
+        addActor(inventoryGround);
     }
 
     @Override
@@ -120,8 +121,8 @@ public class InventoryManager extends WidgetGroup
             if(dis > PICK_UP_RANGE)
             {
                 currentLoot = null;
-                groundInventory.setInventory(new Inventory(12));
-                groundInventory.setVisible(false);
+                inventoryGround.setInventory(new Inventory(12));
+                inventoryGround.setVisible(false);
             }
         }
 
@@ -130,11 +131,11 @@ public class InventoryManager extends WidgetGroup
             Lootbag closestDrop = getClosestDrop();
 
             if(closestDrop != null &&
-                    closestDrop.getInventory() != groundInventory.getInventory())
+                    closestDrop.getInventory() != inventoryGround.getInventory())
             {
                 this.currentLoot = closestDrop;
-                groundInventory.setInventory(closestDrop.getInventory());
-                groundInventory.setVisible(true);
+                inventoryGround.setInventory(closestDrop.getInventory());
+                inventoryGround.setVisible(true);
             }
         }
     }
@@ -198,5 +199,10 @@ public class InventoryManager extends WidgetGroup
     public void refreshUI()
     {
         inventoryUI.redraw();
+    }
+
+    public boolean hasSelection()
+    {
+        return this.inventoryUI.getSelectedItem() != null;
     }
 }

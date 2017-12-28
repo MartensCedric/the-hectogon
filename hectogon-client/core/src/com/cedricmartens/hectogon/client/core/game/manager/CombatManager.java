@@ -14,6 +14,7 @@ import com.cedricmartens.commons.storage.inventory.Item;
 import com.cedricmartens.commons.util.FuzzyDirection;
 import com.cedricmartens.commons.util.MathUtil;
 import com.cedricmartens.commons.util.Vector2;
+import com.cedricmartens.hectogon.client.core.game.Criteria;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,11 +27,16 @@ public class CombatManager
     private float cooldown = 0.5f;
     private float currentCooldown = 0;
     private Vector2 rotation = new Vector2();
+    private Criteria<Boolean> canFire;
 
-    public CombatManager(GameManager gameManager)
-    {
+    public CombatManager(GameManager gameManager) {
         this.gameManager = gameManager;
         projectiles = new ArrayList<>();
+    }
+
+    public void setFireCriteria(Criteria<Boolean> criteria)
+    {
+        canFire = criteria;
     }
 
     public void addProjectile(Projectile projectile)
@@ -86,7 +92,8 @@ public class CombatManager
         currentCooldown = currentCooldown < 0 ? 0 : currentCooldown;
 
         if(currentCooldown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)
-                && gameManager.player.getInventory().contains(Item.arr_wood))
+                && gameManager.player.getInventory().contains(Item.arr_wood)
+                && canFire.respectsCriteria().booleanValue())
         {
             Texture textDummy = gameManager.assetManager.get("character/dummy.png", Texture.class);
             rotation.set(Gdx.input.getX() - Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 - Gdx.input.getY());

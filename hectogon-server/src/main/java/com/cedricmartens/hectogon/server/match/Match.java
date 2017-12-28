@@ -101,6 +101,7 @@ public class Match
         player.getInventory().addItem(Item.arr_wood, 17);
         player.getInventory().addItem(Item.swd_steel, 2);
         player.getInventory().addItem(Item.carrot, 3);
+
         PacketInventory packetInventory = new PacketInventory();
         packetInventory.setInventory(player.getInventory());
         try {
@@ -299,7 +300,6 @@ public class Match
                 bestLb = lootbag;
             }
         }
-
         return bestLb;
     }
 

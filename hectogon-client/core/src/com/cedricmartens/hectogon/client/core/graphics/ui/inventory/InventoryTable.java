@@ -52,8 +52,7 @@ public class InventoryTable extends Table
         }
     }
 
-
-    protected void redraw()
+    public void redraw()
     {
         TextureUtil textureUtil = TextureUtil.getTextureUtil();
 
