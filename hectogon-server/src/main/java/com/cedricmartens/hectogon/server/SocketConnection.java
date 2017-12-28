@@ -170,7 +170,6 @@ public class SocketConnection implements SocketListener {
 
                     Match m = server.getMatchById(0);
                     m.addProjectile(projectile);
-                    m.send(p -> p.getId() != projectile.getSenderId(), packetProjectile);
                 }
 
             }catch (IOException e) {

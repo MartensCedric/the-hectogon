@@ -9,6 +9,7 @@ import com.cedricmartens.commons.entities.combat.Projectile;
 import com.cedricmartens.commons.networking.Packet;
 import com.cedricmartens.commons.networking.actions.PacketPositionCorrection;
 import com.cedricmartens.commons.networking.animal.PacketAnimalUpdate;
+import com.cedricmartens.commons.networking.combat.PacketProjectile;
 import com.cedricmartens.commons.networking.competitor.DeathReason;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitor;
 import com.cedricmartens.commons.networking.competitor.PacketCompetitorJoin;
@@ -37,6 +38,7 @@ public class Match
     private long startTime;
     private int tickIndex = 0;
     private int animalId = 0;
+    private int projectileId = 0;
     private List<Animal> animals;
     private List<Projectile> projectiles;
 
@@ -302,7 +304,10 @@ public class Match
     }
 
     public void addProjectile(Projectile projectile) {
-        //TODO projectile Id is currently useless
+        projectile.setId(projectileId++);
         projectiles.add(projectile);
+        PacketProjectile packetProjectile = new PacketProjectile();
+        packetProjectile.setProjectile(projectile);
+        send(p -> p.getId() != projectile.getSenderId(), packetProjectile);
     }
 }
