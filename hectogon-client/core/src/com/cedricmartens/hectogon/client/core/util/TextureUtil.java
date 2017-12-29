@@ -40,13 +40,18 @@ public class TextureUtil
 
     private void initItemMap()
     {
-        itemMap.put(Item.bomb, assetManager.get("items/bomb.png", Texture.class));
-        itemMap.put(Item.bow_wood, assetManager.get("items/bow_wood.png", Texture.class));
         itemMap.put(Item.arr_wood,assetManager.get("items/arr_wood.png", Texture.class));
-        itemMap.put(Item.swd_steel, assetManager.get("items/steel_sword.png", Texture.class));
-        itemMap.put(Item.carrot, assetManager.get("items/carrot.png", Texture.class));
         itemMap.put(Item.apple, assetManager.get("items/apple.png", Texture.class));
         itemMap.put(Item.banana, assetManager.get("items/banana.png", Texture.class));
+        itemMap.put(Item.bomb, assetManager.get("items/bomb.png", Texture.class));
+        itemMap.put(Item.bow_wood, assetManager.get("items/bow_wood.png", Texture.class));
+        itemMap.put(Item.carrot, assetManager.get("items/carrot.png", Texture.class));
+        itemMap.put(Item.fish_rod, assetManager.get("items/fishing_rod.png", Texture.class));
+        itemMap.put(Item.meat, assetManager.get("items/meat.png", Texture.class));
+        itemMap.put(Item.shield_reinforced, assetManager.get("items/reinforced_wooden_shield.png", Texture.class));
+        itemMap.put(Item.spear, assetManager.get("items/spear.png", Texture.class));
+        itemMap.put(Item.swd_gold, assetManager.get("items/gold_sword.png", Texture.class));
+        itemMap.put(Item.swd_steel, assetManager.get("items/steel_sword.png", Texture.class));
     }
 
     public static TextureUtil getTextureUtil()

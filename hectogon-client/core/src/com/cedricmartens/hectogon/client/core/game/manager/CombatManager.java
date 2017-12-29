@@ -27,14 +27,14 @@ public class CombatManager
     private float cooldown = 0.5f;
     private float currentCooldown = 0;
     private Vector2 rotation = new Vector2();
-    private Criteria<Boolean> canFire;
+    private Criteria canFire;
 
     public CombatManager(GameManager gameManager) {
         this.gameManager = gameManager;
         projectiles = new ArrayList<>();
     }
 
-    public void setFireCriteria(Criteria<Boolean> criteria)
+    public void setFireCriteria(Criteria criteria)
     {
         canFire = criteria;
     }
@@ -93,7 +93,7 @@ public class CombatManager
 
         if(currentCooldown == 0 && Gdx.input.isButtonPressed(Input.Buttons.LEFT)
                 && gameManager.player.getInventory().contains(Item.arr_wood)
-                && canFire.respectsCriteria().booleanValue())
+                && canFire.respectsCriteria())
         {
             Texture textDummy = gameManager.assetManager.get("character/dummy.png", Texture.class);
             rotation.set(Gdx.input.getX() - Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2 - Gdx.input.getY());

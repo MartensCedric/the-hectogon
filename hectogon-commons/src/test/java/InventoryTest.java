@@ -76,7 +76,7 @@ public class InventoryTest {
 
         inventory.addItem(Item.arr_wood, 18);
         assertEquals(62, inventory.getCapacityForItem(Item.arr_wood));
-        assertEquals(3, inventory.getCapacityForItem(Item.swd_wood));
+        assertEquals(3, inventory.getCapacityForItem(Item.swd_steel));
     }
 
     @Test (timeout = 1000)

@@ -1,6 +1,6 @@
 package com.cedricmartens.hectogon.client.core.game;
 
-public interface Criteria<T>
+public interface Criteria
 {
-    T respectsCriteria();
+    boolean respectsCriteria();
 }

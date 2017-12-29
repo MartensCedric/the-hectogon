@@ -32,7 +32,7 @@ public class Inventory implements Iterable<InventorySlot>
             throw new IllegalArgumentException();
 
         if(getCapacityForItem(item) < amount)
-            throw new InventoryOperationException("The inventory cannot add " + amount + " " + item.getName(), this);
+            throw new InventoryOperationException("The inventory cannot add " + amount + " " + item.name(), this);
 
         for(InventorySlot slot : slots)
         {
@@ -96,7 +96,7 @@ public class Inventory implements Iterable<InventorySlot>
             throw new IllegalArgumentException();
 
         if(getQuantity(item) < amount)
-            throw new InventoryOperationException("The inventory cannot remove " + amount + " " + item.getName(), this);
+            throw new InventoryOperationException("The inventory cannot remove " + amount + " " + item.name(), this);
 
         for(int i = 0; i < slots.length; i++)
         {
@@ -261,7 +261,7 @@ public class Inventory implements Iterable<InventorySlot>
 
         for(int i = 0; i < slots.length; i++)
         {
-            str += i + ". " + slots[i].getItem().getName();
+            str += i + ". " + slots[i].getItem().name();
 
             if(slots[i].getQuantity() > 1)
             {

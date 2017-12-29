@@ -138,12 +138,7 @@ public class WorldScreen extends StageScreen {
 
         this.inventoryManager = new InventoryManager(gameManager);
         this.combatManager = new CombatManager(gameManager);
-        this.combatManager.setFireCriteria(new Criteria<Boolean>() {
-            @Override
-            public Boolean respectsCriteria() {
-                return !inventoryManager.hasSelection();
-            }
-        });
+        this.combatManager.setFireCriteria(() -> !inventoryManager.hasSelection());
         getStage().addActor(inventoryManager);
 
         final Chat chat = new Chat(UiUtil.getHectogonSkin());
