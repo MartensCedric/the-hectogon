@@ -10,6 +10,7 @@ public class PacketDeath extends Packet
 {
     private int userId;
     private DeathReason deathReason;
+    private String argument = "";
 
     @Override
     public void readFrom(InputStream inputStream) throws IOException, InvalidPacketDataException {
@@ -21,6 +22,7 @@ public class PacketDeath extends Packet
             throw new InvalidPacketDataException(deathReasonCode + " is not a valid value for DeathReason");
 
         deathReason = DeathReason.values()[deathReasonCode];
+        argument = dataInputStream.readUTF();
     }
 
     @Override
@@ -28,6 +30,7 @@ public class PacketDeath extends Packet
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
         dataOutputStream.writeInt(userId);
         dataOutputStream.writeInt(deathReason.ordinal());
+        dataOutputStream.writeUTF(argument);
     }
 
     public int getUserId() {
@@ -44,5 +47,13 @@ public class PacketDeath extends Packet
 
     public void setDeathReason(DeathReason deathReason) {
         this.deathReason = deathReason;
+    }
+
+    public String getArgument() {
+        return argument;
+    }
+
+    public void setArgument(String argument) {
+        this.argument = argument;
     }
 }

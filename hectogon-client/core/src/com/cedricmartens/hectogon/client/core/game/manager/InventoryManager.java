@@ -19,6 +19,7 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryGro
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.InventoryUI;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.LootbagNotFoundException;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;

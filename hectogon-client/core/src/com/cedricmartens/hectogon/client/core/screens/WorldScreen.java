@@ -36,9 +36,9 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.networking.inventory.PacketLootUpdate;
 import com.cedricmartens.commons.storage.Chest;
 import com.cedricmartens.commons.storage.Lootbag;
-import com.cedricmartens.hectogon.client.core.game.Criteria;
 import com.cedricmartens.hectogon.client.core.game.manager.CombatManager;
 import com.cedricmartens.hectogon.client.core.game.manager.GameManager;
+import com.cedricmartens.hectogon.client.core.game.manager.InventoryManager;
 import com.cedricmartens.hectogon.client.core.game.player.InputService;
 import com.cedricmartens.hectogon.client.core.game.player.NetworkMovementListener;
 import com.cedricmartens.hectogon.client.core.game.player.Player;
@@ -49,7 +49,6 @@ import com.cedricmartens.hectogon.client.core.graphics.ui.UiUtil;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.Chat;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.ChatInput;
 import com.cedricmartens.hectogon.client.core.graphics.ui.chat.MessageBubble;
-import com.cedricmartens.hectogon.client.core.game.manager.InventoryManager;
 import com.cedricmartens.hectogon.client.core.graphics.ui.inventory.TriggerableInventory;
 import com.cedricmartens.hectogon.client.core.util.ServiceUtil;
 import com.cedricmartens.hectogon.client.core.world.Map;
@@ -91,6 +90,7 @@ public class WorldScreen extends StageScreen {
         this.competitors = new ArrayList<>();
         this.messageBubbles = new ArrayList<>();
         this.decorations = new ArrayList<>();
+        ServiceUtil.getServiceUtil().updateServices(gameManager);
 
         for (int i = 0; i < 100; i++) {
             float x = Math.round(2500 * Math.cos((PI * i) / (100 / 2)));
