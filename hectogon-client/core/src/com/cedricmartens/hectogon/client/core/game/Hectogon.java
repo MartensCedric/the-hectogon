@@ -47,9 +47,13 @@ public class Hectogon extends SceneManager
 		assetManager.load("items/bow_wood.png", Texture.class);
 		assetManager.load("items/banana.png", Texture.class);
 		assetManager.load("items/carrot.png", Texture.class);
+		assetManager.load("items/golden_carrot.png", Texture.class);
+		assetManager.load("items/spear.png", Texture.class);
 		assetManager.load("items/meat.png", Texture.class);
 		assetManager.load("items/steel_sword.png", Texture.class);
+		assetManager.load("items/gold_sword.png", Texture.class);
 		assetManager.load("items/reinforced_wooden_shield.png", Texture.class);
+		assetManager.load("items/wooden_stick.png", Texture.class);
 
 		assetManager.load("tiles/grass_tile.png", Texture.class);
 		assetManager.load("tiles/grassflowers_tile.png", Texture.class);

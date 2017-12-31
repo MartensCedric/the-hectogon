@@ -1,7 +1,10 @@
 package com.cedricmartens.hectogon.client.core.graphics.ui.inventory;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cedricmartens.commons.storage.inventory.InventorySlot;
 import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 
@@ -11,7 +14,6 @@ import com.cedricmartens.hectogon.client.core.util.TextureUtil;
 public class InventorySlotImage extends Image
 {
     private InventorySlot inventorySlot;
-
     public InventorySlotImage(InventorySlot inventorySlot) {
         super();
         this.inventorySlot = inventorySlot;
@@ -31,5 +33,6 @@ public class InventorySlotImage extends Image
         TextureUtil textureUtil = TextureUtil.getTextureUtil();
         if(this.inventorySlot.getQuantity() > 1)
             textureUtil.getFont().draw(batch, Integer.toString(inventorySlot.getQuantity()),getX() + getWidth() - 20, getY() + 15);
+
     }
 }

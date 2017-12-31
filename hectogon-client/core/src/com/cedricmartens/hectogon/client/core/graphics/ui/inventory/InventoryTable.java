@@ -3,7 +3,10 @@ package com.cedricmartens.hectogon.client.core.graphics.ui.inventory;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.cedricmartens.commons.storage.inventory.Inventory;
@@ -46,7 +49,15 @@ public class InventoryTable extends Table
         {
             for(int j = 0; j < COLUMNS; j++)
             {
-                add(inventorySlotImages[i * COLUMNS + j]).width(64).height(64).pad(5);
+                InventorySlotImage inventorySlotImage = inventorySlotImages[i * COLUMNS + j];
+                inventorySlotImage.addListener(new ClickListener(){
+                    @Override
+                    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                        super.enter(event, x, y, pointer, fromActor);
+                        System.out.println(inventorySlotImage.getInventorySlot().getItem().name());
+                    }
+                });
+                add(inventorySlotImage).width(64).height(64).pad(5);
             }
             row();
         }
