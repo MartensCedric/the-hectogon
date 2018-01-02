@@ -167,14 +167,31 @@ public class Match
 
     public void removePlayer(int playerId, DeathReason deathReason)
     {
-        PacketDeath packetDeath = new PacketDeath();
-        packetDeath.setUserId(playerId);
-        packetDeath.setDeathReason(deathReason);
-        send(p-> (deathReason != DeathReason.DISCONNECT)
-                        || p.getUser().getUserId() != playerId
-                ,packetDeath);
-        players.removeIf(p -> p.getUser().getUserId() == playerId);
-        Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name());
+        try {
+            Player player = getPlayerById(playerId);
+            PacketDeath packetDeath = new PacketDeath();
+            packetDeath.setUserId(playerId);
+            packetDeath.setDeathReason(deathReason);
+            send(p-> (deathReason != DeathReason.DISCONNECT)
+                            || p.getUser().getUserId() != playerId
+                    , packetDeath);
+            players.removeIf(p -> p.getUser().getUserId() == playerId);
+            Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name() +
+                    " " + packetDeath.getArgument());
+
+            PacketLoot packetLoot = new PacketLoot();
+            Lootbag lootbag = new Lootbag(player.getPosition().x,
+                    player.getPosition().y,
+                    player.getInventory());
+            lootbag.setId(lootbagId++);
+            lootbags.add(lootbag);
+            packetLoot.setPoint(player.getPosition());
+            packetLoot.setInventory(player.getInventory());
+            packetLoot.setLootId(lootbag.getId());
+            send(p-> p.getUser().getUserId() != playerId, packetLoot);
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public Player getPlayerById(int playerId) throws UserNotFoundException {

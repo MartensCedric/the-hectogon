@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -20,6 +21,8 @@ public class InventoryTable extends Table
     protected Inventory inventory;
     protected final int ROWS = 3;
     protected final int COLUMNS = 4;
+    protected InventorySlotImage currentHover = null;
+    protected Label lblHover = null;
 
     public void setInventory(Inventory inventory)
     {
