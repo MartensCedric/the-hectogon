@@ -19,6 +19,7 @@ import com.cedricmartens.commons.networking.inventory.PacketLoot;
 import com.cedricmartens.commons.networking.inventory.PacketLootUpdate;
 import com.cedricmartens.commons.storage.Lootbag;
 import com.cedricmartens.commons.storage.inventory.Inventory;
+import com.cedricmartens.commons.storage.inventory.InventorySlot;
 import com.cedricmartens.commons.storage.inventory.Item;
 import com.esotericsoftware.minlog.Log;
 
@@ -92,6 +93,19 @@ public class Match
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        }
+
+        for(Lootbag l : lootbags)
+        {
+            PacketLoot packetLoot = new PacketLoot();
+            packetLoot.setInventory(l.getInventory());
+            packetLoot.setLootId(l.getId());
+            packetLoot.setPoint(l.getPosition());
+            try {
+                player.sendPacket(packetLoot);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
@@ -179,16 +193,10 @@ public class Match
             Log.info("Player id : " + playerId + " dies with reason : "+ deathReason.name() +
                     " " + packetDeath.getArgument());
 
-            PacketLoot packetLoot = new PacketLoot();
-            Lootbag lootbag = new Lootbag(player.getPosition().x,
-                    player.getPosition().y,
-                    player.getInventory());
-            lootbag.setId(lootbagId++);
-            lootbags.add(lootbag);
-            packetLoot.setPoint(player.getPosition());
-            packetLoot.setInventory(player.getInventory());
-            packetLoot.setLootId(lootbag.getId());
-            send(p-> p.getUser().getUserId() != playerId, packetLoot);
+            for(InventorySlot is : player.getInventory())
+            {
+                dropItem(player, is.getItem(), is.getQuantity());
+            }
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
